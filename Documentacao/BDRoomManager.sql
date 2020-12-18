@@ -1,10 +1,5 @@
 CREATE DATABASE  IF NOT EXISTS `BDRoomManager` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `BDRoomManager`;
--- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
---
--- Host: localhost    Database: BDRoomManager
--- ------------------------------------------------------
--- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -17,91 +12,73 @@ USE `BDRoomManager`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `tbEvento`
---
 
-DROP TABLE IF EXISTS `tbEvento`;
+DROP TABLE IF EXISTS `tbEvent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbEvento` (
+CREATE TABLE `tbEvent` (
   `iID` int NOT NULL,
-  `vcNome` varchar(45) NOT NULL,
-  `iID_Sala` int NOT NULL,
-  `vc_Nome_Grupo` varchar(50) NOT NULL,
-  `dDataInicio` datetime NOT NULL,
-  `tDuracao` time NOT NULL,
+  `vcName` varchar(45) NOT NULL,
+  `iID_Room` int NOT NULL,
+  `vcName_Group` varchar(50) NOT NULL,
+  `dDateStart` datetime NOT NULL,
+  `tDuration` time NOT NULL,
   PRIMARY KEY (`iID`),
-  KEY `FK_ID_SALA_idx` (`iID_Sala`),
-  KEY `FK_NOME_GRUPO_idx` (`vc_Nome_Grupo`),
-  CONSTRAINT `FK_ID_SALA` FOREIGN KEY (`iID_Sala`) REFERENCES `tbSala` (`iID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_NOME_GRUPO` FOREIGN KEY (`vc_Nome_Grupo`) REFERENCES `tbGrupo` (`vcNome`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_ID_ROOM_idx` (`iID_Room`),
+  KEY `FK_NAME_GROUP_idx` (`vcName_Group`),
+  CONSTRAINT `FK_ID_ROOM` FOREIGN KEY (`iID_Room`) REFERENCES `tbRoom` (`iID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_NAME_GRUPO` FOREIGN KEY (`vcName_Group`) REFERENCES `tbGroup` (`vcName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `tbGrupo`
---
-
-DROP TABLE IF EXISTS `tbGrupo`;
+DROP TABLE IF EXISTS `tbGroup`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbGrupo` (
-  `vcNome` varchar(50) NOT NULL,
-  PRIMARY KEY (`vcNome`)
+CREATE TABLE `tbGroup` (
+  `vcName` varchar(50) NOT NULL,
+  PRIMARY KEY (`vcName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `tbInscricaoEvento`
---
 
-DROP TABLE IF EXISTS `tbInscricaoEvento`;
+DROP TABLE IF EXISTS `tbEventSubscription`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbInscricaoEvento` (
+CREATE TABLE `tbEventSubscription` (
   `iID` int NOT NULL,
-  `iID_Evento` int NOT NULL,
+  `iID_Event` int NOT NULL,
   `vcUsername` varchar(50) NOT NULL,
   PRIMARY KEY (`iID`),
   KEY `FK_USERNAME_idx` (`vcUsername`),
-  KEY `FK_ID_EVENTO_idx` (`iID_Evento`),
-  CONSTRAINT `FK_ID_EVENTO` FOREIGN KEY (`iID_Evento`) REFERENCES `tbEvento` (`iID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `FK_ID_EVENT_idx` (`iID_Event`),
+  CONSTRAINT `FK_ID_EVENT` FOREIGN KEY (`iID_Event`) REFERENCES `tbEvent` (`iID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_USERNAME` FOREIGN KEY (`vcUsername`) REFERENCES `tbUser` (`vcUsername`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `tbMembroGrupo`
---
-
-DROP TABLE IF EXISTS `tbMembroGrupo`;
+DROP TABLE IF EXISTS `tbGroupMember`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbMembroGrupo` (
+CREATE TABLE `tbGroupMember` (
   `iID` int NOT NULL,
-  `vcNome_Grupo` varchar(50) NOT NULL,
+  `vcName_Group` varchar(50) NOT NULL,
   `vcUsername` varchar(50) NOT NULL,
   PRIMARY KEY (`iID`),
-  KEY `FK_M_NOME_GRUPO_idx` (`vcNome_Grupo`),
+  KEY `FK_M_NAME_GROUP_idx` (vcName_Group),
   KEY `FK_M_USERNAME_idx` (`vcUsername`),
-  CONSTRAINT `FK_M_NOME_GRUPO` FOREIGN KEY (`vcNome_Grupo`) REFERENCES `tbGrupo` (`vcNome`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_M_NAME_GROUP` FOREIGN KEY (`vcName_Group`) REFERENCES `tbGroup` (`vcName`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_M_USERNAME` FOREIGN KEY (`vcUsername`) REFERENCES `tbUser` (`vcUsername`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `tbSala`
---
-
-DROP TABLE IF EXISTS `tbSala`;
+DROP TABLE IF EXISTS `tbRoom`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbSala` (
+CREATE TABLE `tbRoom` (
   `iID` int NOT NULL,
-  `vcNome` varchar(45) NOT NULL,
-  `vcCaracteristicas` varchar(500) DEFAULT NULL,
-  `iLotacao` int NOT NULL,
+  `vcName` varchar(45) NOT NULL,
+  `vcDetails` varchar(500) DEFAULT NULL,
+  `iCapacity` int NOT NULL,
   PRIMARY KEY (`iID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
