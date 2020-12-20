@@ -1,5 +1,6 @@
 package client;
 
+import client.communication.ClientCommunication;
 import client.gui.PaneOrganizer;
 import client.logic.ClientController;
 import client.logic.ClientObservable;
@@ -8,6 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import shared_data.helper.KeepAlive;
+
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class Client extends Application {
 
@@ -28,6 +34,17 @@ public class Client extends Application {
 
 
     public static void main(String[] args) {
+        try{
+            ClientCommunication clientCommunication = new ClientCommunication();
+            clientCommunication.run();
+        } catch (SocketException | UnknownHostException e) {
+            KeepAlive.emergencyExit(e,"Falha a criar a comunicação");
+        } catch (IOException e) {
+            KeepAlive.emergencyExit(e,"Falha ao enviar o priemiro contacto");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         launch(args);
     }
 }
