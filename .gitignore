@@ -24,4 +24,10 @@ hs_err_pid*
 
 # out folder
 out/
+
+# data sources
+.idea/dataSources
+.idea/dataSources.local.xml
+
+# MAC
 .DS_Store
