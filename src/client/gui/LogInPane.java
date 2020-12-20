@@ -1,12 +1,12 @@
 package client.gui;
 
 import client.logic.ClientObservable;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.TextField;
@@ -23,14 +23,17 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
 
+        setupLogo();
+        setupAvatar();
+        setupLoginInfo();
+        setupEntrar();
 
+    }
+
+    public void setupLogo() {
         ImageView img_logo = new ImageView(Images.getImage(Constants.LOGO));
-        ImageView img_avatar = new ImageView(Images.getImage(Constants.AVATAR));
         img_logo.setFitWidth(400);
         img_logo.setPreserveRatio(true);
-        img_avatar.setFitHeight(200);
-        img_avatar.setFitWidth(200);
-        img_avatar.setPreserveRatio(true);
 
         HBox boxLogo = new HBox();
 //        boxLogo.setStyle("-fx-background-color: red");
@@ -38,12 +41,24 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         boxLogo.setPadding(new Insets(75,0,75,0));
         boxLogo.getChildren().add(img_logo);
 
+        this.getChildren().add(boxLogo);
+    }
+
+    public void setupAvatar() {
+        ImageView img_avatar = new ImageView(Images.getImage(Constants.AVATAR));
+        img_avatar.setFitHeight(200);
+        img_avatar.setFitWidth(200);
+        img_avatar.setPreserveRatio(true);
+
         HBox boxAvatar = new HBox();
         boxAvatar.setAlignment(Pos.CENTER);
         boxAvatar.setPadding(new Insets(20));
         boxAvatar.getChildren().add(img_avatar);
 
+        this.getChildren().add(boxAvatar);
+    }
 
+    public void setupLoginInfo() {
         VBox boxLogin = new VBox(10);
         boxLogin.setAlignment(Pos.CENTER);
         boxLogin.setPadding(new Insets(10));
@@ -60,6 +75,10 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
         boxLogin.getChildren().addAll(txt_username, txt_password);
 
+        this.getChildren().add(boxLogin);
+    }
+
+    public void setupEntrar() {
         HBox boxEntrar = new HBox();
         boxEntrar.setSpacing(125);
         boxEntrar.setAlignment(Pos.CENTER);
@@ -68,13 +87,23 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         Button bt_entrar = new Button("Entrar");
         bt_entrar.setPrefWidth(150);
 
+        bt_entrar.setOnAction(new LoginListener());
+
         boxEntrar.getChildren().addAll(hl_registo, bt_entrar);
 
-        getChildren().addAll(boxLogo, boxAvatar, boxLogin, boxEntrar);
+        this.getChildren().add(boxEntrar);
+    }
 
+    class LoginListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent e){
+            //AQUI VAI DIZER AO OBSERVAVEL QUE QUER FAZER LOGIN E MANDAR LHE AS
+//            CREDENCIAIS QUE OBTEVE
+        }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        //ESTE MÉTODO É EXECUTADO SEMPRE QUE É FEITO ALGUM FIRE (HOUVER ALTERACAO)
     }
 }
