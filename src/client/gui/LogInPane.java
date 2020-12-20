@@ -78,4 +78,3 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
     public void propertyChange(PropertyChangeEvent evt) {
     }
 }
-
