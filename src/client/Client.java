@@ -38,7 +38,7 @@ public class Client extends Application {
 //        primaryStage.getIcons().add(Imagens.getImagem(Constants.SPACESHIP));
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Planet Bound - The Game");
+        primaryStage.setTitle("RoomManager - Autenticação");
         primaryStage.show();
     }
 
