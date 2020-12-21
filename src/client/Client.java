@@ -19,6 +19,16 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        try{
+            ClientCommunication clientCommunication = new ClientCommunication();
+            clientCommunication.run();
+        } catch (SocketException | UnknownHostException e) {
+            KeepAlive.emergencyExit(e,"Falha a criar a comunicação");
+        } catch (IOException e) {
+            KeepAlive.emergencyExit(e,"Falha ao enviar o priemiro contacto");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         ClientController controller = new ClientController();
         ClientObservable observable = new ClientObservable(controller);
 
@@ -34,17 +44,6 @@ public class Client extends Application {
 
 
     public static void main(String[] args) {
-        try{
-            ClientCommunication clientCommunication = new ClientCommunication();
-            clientCommunication.run();
-        } catch (SocketException | UnknownHostException e) {
-            KeepAlive.emergencyExit(e,"Falha a criar a comunicação");
-        } catch (IOException e) {
-            KeepAlive.emergencyExit(e,"Falha ao enviar o priemiro contacto");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
         launch(args);
     }
 }
