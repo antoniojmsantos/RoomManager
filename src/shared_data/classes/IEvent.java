@@ -1,4 +1,4 @@
-package client.logic.data;
+package shared_data.classes;
 
 public interface IEvent {
 }
