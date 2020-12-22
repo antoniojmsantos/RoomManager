@@ -57,14 +57,29 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         box_events.setPrefHeight(DIM_Y_FRAME);
         Label lb_user = new Label("Autenticado como: xpto@organizacao.pt");
 
-        ListView<String> list_events = new ListView<>();
+        VBox box_list = new VBox();
+        box_list.setStyle("-fx-border-color: black");
 
+        HBox header_list = new HBox(50);
+        header_list.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
+//        header_list.setAlignment(Pos.CENTER);
+
+        header_list.setPadding(new Insets(5, 0, 0, 5));
+        Label lbl = new Label("Eventos criados");
+        Button btn_new = new Button("+");
+
+        header_list.getChildren().addAll(lbl, btn_new);
+
+        ListView<String> list_events = new ListView<>();
+        list_events.setStyle("-fx-border-color: black");
         list_events.setPrefHeight(DIM_Y_FRAME);
         ObservableList<String> items = FXCollections.observableArrayList (
                 "Evento 1", "Evento 2", "Evento 3");
         list_events.setItems(items);
 
-        box_events.getChildren().addAll(lb_user, list_events);
+        box_list.getChildren().addAll(header_list, list_events);
+
+        box_events.getChildren().addAll(lb_user, box_list);
     }
 
     public void setupEventCalendar(){
@@ -141,9 +156,6 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         populateCalendar(currentYearMonth);
     }
 
-    /**
-     * Move the month forward by one. Repopulate the calendar with the correct dates.
-     */
     private void nextMonth() {
         currentYearMonth = currentYearMonth.plusMonths(1);
         populateCalendar(currentYearMonth);
