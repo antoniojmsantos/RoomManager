@@ -13,6 +13,7 @@ public class RMPane extends StackPane implements Constants, PropertyChangeListen
     private final ClientObservable observable;
 
     private LogInPane loginPane;
+    private RegisterPane registerPane;
     private MainHighLevelPane mainHighLevelPane;
 
 
@@ -31,10 +32,11 @@ public class RMPane extends StackPane implements Constants, PropertyChangeListen
         setMinSize(DIM_X_FRAME, DIM_Y_FRAME);
 
         loginPane = new LogInPane(observable);
+        registerPane = new RegisterPane(observable);
         mainHighLevelPane = new MainHighLevelPane(observable);
 
         //CRIA SE O PAINEL E ADICIONA SE SEMPRE AOS FILHOS DO PAINEL "PAI(RMPane)"
-        getChildren().addAll(mainHighLevelPane, loginPane);
+        getChildren().addAll(mainHighLevelPane, loginPane, registerPane);
     }
 
     @Override

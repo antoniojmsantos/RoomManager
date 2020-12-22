@@ -96,6 +96,7 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         boxEntrar.setSpacing(125);
         boxEntrar.setAlignment(Pos.CENTER);
         Hyperlink hl_registo = new Hyperlink("Não tem conta? Registe-se aqui");
+        hl_registo.setOnAction(e-> observable.setStateRegister());
         hl_registo.setFocusTraversable(false);
         bt_entrar = new Button("Entrar");
         bt_entrar.setPrefWidth(150);
