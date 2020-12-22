@@ -17,6 +17,7 @@ public class ClientCommunication {
     private String multicastGroup;
     private Socket socketTCP;
 
+
     public ClientCommunication() throws SocketException {
         this.PORT_MULTICAST = 54321;
         this.multicastGroup = "239.3.2.1";
@@ -38,5 +39,12 @@ public class ClientCommunication {
         ResponseFirstContact responseFirstContact = (ResponseFirstContact)SendAndReceiveData.receiveDataUDP(socketFirstContact);
         System.out.println(responseFirstContact.getIpServerTCP() + " " + responseFirstContact.getPortTCP());
         return responseFirstContact;
+    }
+
+    public boolean Authenticate(String usr, String password){
+//        User user(usr, password);
+//        SendAndReceiveData.sendData();
+
+        return true;
     }
 }

@@ -11,4 +11,27 @@ public class ClientObservable extends PropertyChangeSupport {
         this.controller = controller;
     }
 
+    public void logout(){
+        controller.logout();
+
+        firePropertyChange(null, null, null);
+    }
+
+
+    public boolean isStateAuthentication(){
+        return controller.isStateAuthentication();
+    }
+
+    public boolean isStateMain(){
+        return controller.isStateMain();
+    }
+
+    public boolean Authentication(String usr, String password){
+        if(controller.Authentication(usr, password)){
+            firePropertyChange(null, null, null);
+            return true;
+        }
+        else
+            return false;
+    }
 }

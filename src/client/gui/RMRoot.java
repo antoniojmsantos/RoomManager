@@ -2,6 +2,9 @@ package client.gui;
 
 import client.logic.ClientController;
 import client.logic.ClientObservable;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -19,7 +22,8 @@ public class RMRoot extends VBox implements PropertyChangeListener {
     private final ClientObservable observable;
     private final RMPane RMPane;
 
-    private MenuItem newMenuItem;
+    private MenuItem logoutMenuItem;
+
 
     public RMRoot(ClientObservable observable) {
 
@@ -32,10 +36,7 @@ public class RMRoot extends VBox implements PropertyChangeListener {
 
         getChildren().addAll(menuBar, RMPane);
 
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+        propertyChange(null);
 
     }
 
@@ -43,29 +44,20 @@ public class RMRoot extends VBox implements PropertyChangeListener {
         MenuBar menuBar = new MenuBar();
 
         // game menu
-        Menu gameMenu = new Menu("_File");
+        Menu actionsMenu = new Menu("Ações");
 
-        newMenuItem = new MenuItem("Novo");
-        newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+        logoutMenuItem = new MenuItem("Terminar Sessão");
+        logoutMenuItem.setOnAction(new LogoutObjMenuBarListener());
 
-        MenuItem readMenuItem = new MenuItem("_Carregar");
-        readMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-
-        MenuItem saveMenuItem = new MenuItem("_Guardar");
-        saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-
-        MenuItem exitMenuItem = new MenuItem("E_xit");
+        MenuItem exitMenuItem = new MenuItem("Sair");
         exitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
+        exitMenuItem.setOnAction(e-> Platform.exit());
 
-        gameMenu.getItems().addAll(newMenuItem, readMenuItem, saveMenuItem,new SeparatorMenuItem(), exitMenuItem);
-//
-//        newMenuItem.setOnAction(new NewObjMenuBarListener());
-//        readMenuItem.setOnAction(new LoadObjMenuBarListener());
-//        saveMenuItem.setOnAction(new SaveObjMenuBarListener());
-//        exitMenuItem.setOnAction(new ExitListener());
+        actionsMenu.getItems().addAll(logoutMenuItem, new SeparatorMenuItem(), exitMenuItem);
 
-        // help menu
-        Menu helpMenu = new Menu("_Help");
+        Menu configMenu = new Menu("Configurações");
+
+        Menu helpMenu = new Menu("Ajuda");
 
         MenuItem helpContentMenuItem = new MenuItem("Help Contents");
         helpContentMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
@@ -75,11 +67,23 @@ public class RMRoot extends VBox implements PropertyChangeListener {
 
         helpMenu.getItems().addAll(helpContentMenuItem, aboutMenuItem);
 
-        menuBar.getMenus().addAll(gameMenu,helpMenu);
+        menuBar.getMenus().addAll(actionsMenu,configMenu, helpMenu);
 
 //        helpContentMenuItem.setOnAction(new HelpContentListener());
 //        aboutMenuItem.setOnAction(new AboutListener());
 
         return menuBar;
+    }
+
+    class LogoutObjMenuBarListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent t) {
+            observable.logout();
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        logoutMenuItem.setDisable((observable.isStateAuthentication()));
     }
 }
