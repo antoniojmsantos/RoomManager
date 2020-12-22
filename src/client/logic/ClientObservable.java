@@ -22,6 +22,10 @@ public class ClientObservable extends PropertyChangeSupport {
         return controller.isStateAuthentication();
     }
 
+    public boolean isStateRegister(){
+        return controller.isStateRegister();
+    }
+
     public boolean isStateMain(){
         return controller.isStateMain();
     }
@@ -33,5 +37,9 @@ public class ClientObservable extends PropertyChangeSupport {
         }
         else
             return false;
+    }
+
+    public void setStateRegister(){
+        controller.setStateRegister();
     }
 }

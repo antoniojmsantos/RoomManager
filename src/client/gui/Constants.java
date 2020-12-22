@@ -8,6 +8,9 @@ public interface Constants {
 //    int DIM_X_SOUTH_PANEL = DIM_X_FRAME;
 //    int DIM_Y_SOUTH_PANEL = 65;
 
+    String ICON = "icon";
+    String PATH_IMG_ICON = "images/icon.png";
+
     String LOGO = "logo";
     String PATH_IMG_LOGO = "images/logo.png";
 

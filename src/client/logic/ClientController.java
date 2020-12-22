@@ -31,11 +31,17 @@ public class ClientController {
             return false;
     }
 
+    public boolean isStateRegister(){ return state.isRegister();}
+
     public boolean isStateAuthentication() {
         return state.isAuthentication();
     }
 
     public boolean isStateMain() {
         return state.isMain();
+    }
+
+    public void setStateRegister(){
+        state.setType(State.TYPE.REGISTER);
     }
 }
