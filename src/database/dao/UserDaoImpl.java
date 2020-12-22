@@ -23,6 +23,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> get(String username) {
         PreparedStatement st = null;
         ResultSet rs = null;
+
         try {
             st = conn.prepareStatement(
                     "select * from tb_user where vc_username = ?"
@@ -56,7 +57,6 @@ public class UserDaoImpl implements UserDao {
             while(rs.next()) {
                 users.add(build(rs));
             }
-            return users;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -69,12 +69,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void insert(User user) {
         PreparedStatement st = null;
-        ResultSet rs = null;
 
         try {
             st = conn.prepareStatement(
                     "insert into tb_user(vc_username, vc_name, vc_password, b_permissions) " +
-                            "VALUES (?,?,?,?)"
+                            "values (?,?,?,?)"
             );
             st.setString(1,user.getUsername());
             st.setString(2,user.getName());
@@ -85,7 +84,6 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
         } finally {
             DBManager.closeStatement(st);
-            DBManager.closeResultSet(rs);
         }
     }
 
@@ -106,7 +104,20 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updatePermissions(User user, boolean permissions) {
+        PreparedStatement st = null;
 
+        try {
+            st = conn.prepareStatement(
+                    "update tb_user set b_permissions = ? where vc_username = ?"
+            );
+            st.setBoolean(1, permissions);
+            st.setString(2, user.getUsername());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
     }
 
     @Override

@@ -42,6 +42,7 @@ public class SendAndReceiveData {
             byte[] resultByte = ConstructPacket.verifyingChecksum(datagramPacket);
             DatagramPacket feedbackPacket;
 
+
             if(resultByte != null) {
                 String checksum = ConstructPacket.calculateChecksum(resultByte,0,resultByte.length);
                 if(!lastChecksum.equals(checksum)){
@@ -83,18 +84,22 @@ public class SendAndReceiveData {
     public static Object receiveDataUDP(DatagramSocket socket) throws IOException, ClassNotFoundException {
         ArrayList<byte[]> infoObject = new ArrayList<>();
         String lastChecksum = "";
+
         while(true) {
             DatagramPacket datagramPacket = new DatagramPacket(new byte[BUFFER_SIZE + 1000],BUFFER_SIZE + 1000);
-
+            System.out.println("CHEGOU AAQUI");
             socket.receive(datagramPacket);
+            System.out.println("PASSOU AQUI");
 
             //verifica se é o ultimo packet por causa do tamanho 0
             if(datagramPacket.getLength() == 0) {
                 socket.send(new DatagramPacket(new byte [0], 0,datagramPacket.getAddress(),datagramPacket.getPort()));
+                System.out.println("IM HERE");
                 break;
             }
 
             byte[] resultByte = ConstructPacket.verifyingChecksum(datagramPacket);
+
             DatagramPacket feedbackPacket;
 
             if(resultByte != null) {
@@ -123,6 +128,8 @@ public class SendAndReceiveData {
             tam = tam + a.length;
         }
 
+        System.out.println("Tam " +tam);
+
         byte[] finalObjectBytes = new byte[tam];
 
         int index = 0;
@@ -132,6 +139,9 @@ public class SendAndReceiveData {
                 index++;
             }
         }
+
+//        System.out.println(infoObject.get(0).length);
+//        System.out.println(finalObjectBytes.length);
         return Serializer.byteArrayToObject(finalObjectBytes);
     }
     /**
@@ -144,6 +154,7 @@ public class SendAndReceiveData {
     public static void sendDataUDP(Object sendingObjectUdp, DatagramSocket socket, InetAddress ip, int port) throws IOException{
 
         byte[] objectBytes = Serializer.objectToByteArray(sendingObjectUdp); //serializar o objeto
+
         int sentBytes = 0;
         int countTimeouts = 0;
         //verificar o bytes enviados com os bytes total do objeto
@@ -159,7 +170,7 @@ public class SendAndReceiveData {
             else{
                 bufferSize = BUFFER_SIZE; //envio de 5000 bytes
             }
-
+            System.out.println(objectBytes.length);
             DatagramPacket packet = ConstructPacket.constructDatagramPacket(objectBytes, sentBytes, bufferSize, ip, port);
             socket.send(packet);
             DatagramPacket responsePacket = new DatagramPacket(new byte[1],1);
