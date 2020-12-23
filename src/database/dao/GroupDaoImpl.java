@@ -1,6 +1,5 @@
 package database.dao;
 
-import database.RecordNotFound;
 import database.DBManager;
 import shared_data.entities.Group;
 

@@ -1,6 +1,5 @@
 package database.dao;
 
-import database.RecordNotFound;
 import shared_data.entities.User;
 
 import java.util.List;
