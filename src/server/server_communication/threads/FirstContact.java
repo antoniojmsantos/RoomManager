@@ -38,6 +38,8 @@ public class FirstContact extends Thread{
         while (KeepAlive.getKeepAlive()){
             try {
                 RequestFirstContact requestFirstContact = (RequestFirstContact) SendAndReceiveData.receiveDataUDP(this.listenNewFirstContact);
+                if(requestFirstContact == null)
+                    continue;
                 ResponseFirstContact responseFirstContact = new ResponseFirstContact(InetAddress.getLocalHost().getHostAddress(), PORT_MULTICAST, InetAddress.getLocalHost().getHostAddress(), portTCP);
                 SendAndReceiveData.sendDataUDP(responseFirstContact, sendResponseSocket, InetAddress.getByName(requestFirstContact.getIp()), requestFirstContact.getPort());
                 System.out.println(responseFirstContact.getIpServerTCP() + " " + responseFirstContact.getPortTCP());
