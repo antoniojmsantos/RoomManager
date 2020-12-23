@@ -121,6 +121,32 @@ public class UserDao implements IUserDao {
         }
     }
 
+    @Override
+    public boolean authenticate(String username, String password) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "select exists(select * from tb_user where  vc_username = ? and vc_password = ?) as res;"
+            );
+            st.setString(1, username);
+            st.setString(2, password);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                // todo: could be getInt instead
+                return rs.getBoolean("res");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeResultSet(rs);
+            DBManager.closeStatement(st);
+        }
+        return false;
+    }
+
     // own
     private User build(ResultSet rs) throws SQLException {
         return User.make(

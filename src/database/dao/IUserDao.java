@@ -10,4 +10,6 @@ public interface IUserDao {
     void insert (User user);
     void updatePermissions(User user, boolean permissions);
     void delete(User user);
+
+    boolean authenticate(String username, String password);
 }
