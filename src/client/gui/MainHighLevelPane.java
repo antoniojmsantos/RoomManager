@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 import javafx.scene.layout.GridPane;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
@@ -56,17 +58,22 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
         box_events.setPrefHeight(DIM_Y_FRAME);
         Label lb_user = new Label("Autenticado como: xpto@organizacao.pt");
+        lb_user.setFont(Font.font("verdana", FontWeight.BOLD, 10));
 
         VBox box_list = new VBox();
         box_list.setStyle("-fx-border-color: black");
 
-        HBox header_list = new HBox(50);
+        AnchorPane header_list = new AnchorPane();
         header_list.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
-//        header_list.setAlignment(Pos.CENTER);
-
-        header_list.setPadding(new Insets(5, 0, 0, 5));
+//        header_list.setPadding(new Insets(5));
         Label lbl = new Label("Eventos criados");
+        lbl.setFont(Font.font("verdana", FontWeight.BOLD, 11));
+
         Button btn_new = new Button("+");
+        AnchorPane.setTopAnchor(lbl, 5.0);
+        AnchorPane.setLeftAnchor(lbl, 2.0);
+        AnchorPane.setTopAnchor(btn_new, 0.0);
+        AnchorPane.setRightAnchor(btn_new, 0.0);
 
         header_list.getChildren().addAll(lbl, btn_new);
 
@@ -85,9 +92,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     public void setupEventCalendar(){
         box_calendar = new VBox();
 
+
         currentYearMonth = YearMonth.now();
 
         GridPane calendar = new GridPane();
+        calendar.setStyle("-fx-background-color: white;" + "-fx-border-color: black");
         calendar.setPrefSize(950, 650);
         calendar.setGridLinesVisible(true);
         // Create rows and columns with anchor panes for the calendar
@@ -104,28 +113,39 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 new Text("Quarta-feira"), new Text("Quinta-feira"), new Text("Sexta-feira"),
                 new Text("Sábado") };
         GridPane dayLabels = new GridPane();
+
+        dayLabels.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
         dayLabels.setPrefWidth(600);
         Integer col = 0;
         for (Text txt : dayNames) {
             AnchorPane ap = new AnchorPane();
-            ap.setPrefSize(200, 10);
+            ap.setPrefSize(200, 50);
             ap.setBottomAnchor(txt, 5.0);
             ap.getChildren().add(txt);
             dayLabels.add(ap, col++, 0);
         }
         // Create calendarTitle and buttons to change current month
         calendarTitle = new Text();
+        calendarTitle.setFont(Font.font("verdana", FontWeight.BOLD, 16));
         Button previousMonth = new Button("<<");
         previousMonth.setOnAction(e -> previousMonth());
         Button nextMonth = new Button(">>");
         nextMonth.setOnAction(e -> nextMonth());
-        HBox titleBar = new HBox(previousMonth, calendarTitle, nextMonth);
-        titleBar.setAlignment(Pos.BASELINE_CENTER);
+        AnchorPane titleBar = new AnchorPane(previousMonth, calendarTitle, nextMonth);
+        titleBar.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
+
+        AnchorPane.setLeftAnchor(calendarTitle, 400.0);
+        AnchorPane.setTopAnchor(calendarTitle, 5.0);
+
+        AnchorPane.setBottomAnchor(previousMonth, 0.0);
+        AnchorPane.setBottomAnchor(nextMonth, 0.0);
+        AnchorPane.setRightAnchor(nextMonth, 0.0);
+
         // Populate calendar with the appropriate day numbers
         populateCalendar(currentYearMonth);
         // Create the calendar view
 
-        box_calendar.getChildren().addAll(previousMonth, nextMonth, titleBar, dayLabels, calendar);
+        box_calendar.getChildren().addAll(titleBar, dayLabels, calendar);
     }
 
     public void populateCalendar(YearMonth yearMonth) {
