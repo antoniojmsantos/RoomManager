@@ -70,6 +70,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         lbl.setFont(Font.font("verdana", FontWeight.BOLD, 11));
 
         Button btn_new = new Button("+");
+        btn_new.setOnAction(e-> observable.setStateCreate());
         AnchorPane.setTopAnchor(lbl, 5.0);
         AnchorPane.setLeftAnchor(lbl, 2.0);
         AnchorPane.setTopAnchor(btn_new, 0.0);
