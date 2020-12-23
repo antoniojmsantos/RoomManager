@@ -9,18 +9,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
     private final Connection conn;
 
+    // constructor
     public UserDaoImpl(Connection conn) {
         this.conn = conn;
     }
 
     @Override
-    public Optional<User> get(String username) {
+    public User get(String username) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDao {
             st.setString(1, username);
             rs = st.executeQuery();
             if (rs.next()) {
-                return Optional.of(build(rs));
+                return build(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
             DBManager.closeStatement(st);
             DBManager.closeResultSet(rs);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -53,7 +53,6 @@ public class UserDaoImpl implements UserDao {
                     "select * from tb_user"
             );
             rs = st.executeQuery();
-
             while(rs.next()) {
                 users.add(build(rs));
             }
@@ -88,11 +87,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUsername(User user, String username) {
-
-    }
-
-    @Override
     public void updateName(User user, String name) {
 
     }
@@ -122,15 +116,28 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(User user) {
+        PreparedStatement st = null;
 
+        try {
+            st = conn.prepareStatement(
+                    "delete from tb_user where vc_username = ?"
+            );
+            st.setString(1, user.getUsername());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
     }
 
     // own
     private User build(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getString("username"),
-                rs.getString("name"),
-                rs.getString("password"),
-                rs.getBoolean("permissions"));
+        return User.make(
+                rs.getString("vc_username"),
+                rs.getString("vc_name"),
+                rs.getString("vc_password"),
+                rs.getBoolean("b_permissions")
+        );
     }
 }

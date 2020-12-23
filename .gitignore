@@ -28,6 +28,7 @@ out/
 # data sources
 .idea/dataSources
 .idea/dataSources.local.xml
+.idea/dataSources.xml
 
 # MAC
 .DS_Store

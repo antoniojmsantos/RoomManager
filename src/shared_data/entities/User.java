@@ -1,18 +1,26 @@
 package shared_data.entities;
 
-public class User {
+public class User implements Comparable<User> {
 
-    String username;
-    String name;
-    String password;
-    boolean permissions;
+    private String username;
+    private String name;
+    private String password;
+    private boolean permissions;
 
-    public User(String username, String name, String password, boolean permissions) {
+    // constructor
+    public User(
+            String username,
+            String name,
+            String password,
+            boolean permissions
+    ) {
         this.username = username;
         this.name = name;
         this.password = password;
         this.permissions = permissions;
     }
+
+    // getter & setter
 
     public String getUsername() {
         return username;
@@ -44,5 +52,20 @@ public class User {
 
     public void setPermissions(boolean permissions) {
         this.permissions = permissions;
+    }
+
+    // make
+    public static User make(
+            String username,
+            String name,
+            String password,
+            boolean permissions
+    ) {
+        return new User(username, name, password, permissions);
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return username.compareTo(o.getUsername());
     }
 }

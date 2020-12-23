@@ -1,7 +1,6 @@
 package database;
 
-import database.dao.UserDao;
-import database.dao.UserDaoImpl;
+import database.dao.*;
 
 import java.sql.*;
 
@@ -11,12 +10,15 @@ public abstract class DBManager {
 
     // dao's
     private static UserDao userDao;
+    private static GroupDao groupDao;
+    private static GroupMemberDao groupMemberDao;
 
     public static void init(String URL, String username, String password) {
         try {
             conn = DriverManager.getConnection(URL, username, password);
 
             userDao = new UserDaoImpl(conn);
+            groupDao = new GroupDaoImpl(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -28,6 +30,14 @@ public abstract class DBManager {
 
     public static UserDao getUserDao() {
         return userDao;
+    }
+
+    public static GroupDao getGroupDao() {
+        return groupDao;
+    }
+
+    public static GroupMemberDao getGroupMemberDao() {
+        return groupMemberDao;
     }
 
     public static void closeConnection(Connection conn) {
