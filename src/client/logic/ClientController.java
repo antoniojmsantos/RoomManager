@@ -41,7 +41,15 @@ public class ClientController {
         return state.isMain();
     }
 
+    public boolean isStateCreate(){return state.isCreate();}
+
+    public void setStateCreate(){
+        state.setType(State.TYPE.CREATE_EVENT);
+    }
+
     public void setStateRegister(){
         state.setType(State.TYPE.REGISTER);
     }
+
+
 }

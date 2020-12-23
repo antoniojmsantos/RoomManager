@@ -30,6 +30,8 @@ public class ClientObservable extends PropertyChangeSupport {
         return controller.isStateMain();
     }
 
+    public boolean isStateCreate(){return controller.isStateCreate();}
+
     public boolean Authentication(String usr, String password){
         if(controller.Authentication(usr, password)){
             firePropertyChange(null, null, null);
@@ -41,5 +43,11 @@ public class ClientObservable extends PropertyChangeSupport {
 
     public void setStateRegister(){
         controller.setStateRegister();
+        firePropertyChange(null, null, null);
+    }
+
+    public void setStateCreate(){
+        controller.setStateCreate();
+        firePropertyChange(null,null,null);
     }
 }

@@ -33,6 +33,10 @@ public class State implements Serializable {
         return type == TYPE.REGISTER;
     }
 
+    public boolean isCreate(){
+        return type == TYPE.CREATE_EVENT;
+    }
+
 
     public boolean isMain(){
         return type == TYPE.MAIN;
