@@ -1,6 +1,5 @@
 package database.dao;
 
-import database.RecordNotFound;
 import database.DBManager;
 import shared_data.entities.Group;
 import shared_data.entities.User;
@@ -12,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class GroupMemberDaoImpl implements GroupMemberDao {
 
