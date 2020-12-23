@@ -87,16 +87,6 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public void updateName(User user, String name) {
-
-    }
-
-    @Override
-    public void updatePassword(User user, String password) {
-
-    }
-
-    @Override
     public void updatePermissions(User user, boolean permissions) {
         PreparedStatement st = null;
 
