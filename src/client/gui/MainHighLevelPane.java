@@ -2,14 +2,12 @@ package client.gui;
 
 import client.logic.ClientObservable;
 import client.logic.State;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -85,6 +83,36 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 "Evento 1", "Evento 2", "Evento 3");
         list_events.setItems(items);
 
+        list_events.setCellFactory(lv -> {
+
+            ListCell<String> cell = new ListCell<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+
+
+            MenuItem editItem = new MenuItem();
+            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
+            editItem.setOnAction(event -> {
+                String item = cell.getItem();
+                // code to edit item...
+            });
+            MenuItem deleteItem = new MenuItem();
+            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+            deleteItem.setOnAction(event -> list_events.getItems().remove(cell.getItem()));
+            contextMenu.getItems().addAll(editItem, deleteItem);
+
+            cell.textProperty().bind(cell.itemProperty());
+
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(contextMenu);
+                }
+            });
+            return cell ;
+        });
+
         box_list.getChildren().addAll(header_list, list_events);
 
         box_events.getChildren().addAll(lb_user, box_list);
@@ -116,11 +144,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         GridPane dayLabels = new GridPane();
 
         dayLabels.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
-        dayLabels.setPrefWidth(600);
+        dayLabels.setPrefWidth(800);
         Integer col = 0;
         for (Text txt : dayNames) {
             AnchorPane ap = new AnchorPane();
-            ap.setPrefSize(200, 50);
+            ap.setPrefSize(200, 10);
             ap.setBottomAnchor(txt, 5.0);
             ap.getChildren().add(txt);
             dayLabels.add(ap, col++, 0);
@@ -163,8 +191,6 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
             }
             Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
             ap.setDate(calendarDate);
-//            ap.setTopAnchor(txt, 5.0);
-//            ap.setLeftAnchor(txt, 5.0);
             ap.getChildren().add(txt);
             calendarDate = calendarDate.plusDays(1);
         }
