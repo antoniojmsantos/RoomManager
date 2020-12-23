@@ -25,4 +25,9 @@ public class ResponseFirstContact extends Response implements Serializable {
     public int getPortTCP() {
         return portTCP;
     }
+
+    @Override
+    public String toString() {
+        return "First Contact @ "+ipServerTCP +":"+ portTCP;
+    }
 }

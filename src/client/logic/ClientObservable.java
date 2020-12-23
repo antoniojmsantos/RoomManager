@@ -1,22 +1,33 @@
 package client.logic;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class ClientObservable extends PropertyChangeSupport {
+public class ClientObservable {
 
     private ClientController controller;
+    private PropertyChangeSupport support;
 
-    public ClientObservable(ClientController controller) {
-        super(controller);
-        this.controller = controller;
+    public ClientObservable() {
+        controller = new ClientController();
+        support = new PropertyChangeSupport(this);
+    }
+
+    public void init() {
+        controller.init();
     }
 
     public void logout(){
         controller.logout();
-
-        firePropertyChange(null, null, null);
+        support.firePropertyChange(null, null, null);
     }
 
+    /* property change support */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    // state
 
     public boolean isStateAuthentication(){
         return controller.isStateAuthentication();
@@ -32,9 +43,9 @@ public class ClientObservable extends PropertyChangeSupport {
 
     public boolean isStateCreate(){return controller.isStateCreate();}
 
-    public boolean Authentication(String usr, String password){
-        if(controller.Authentication(usr, password)){
-            firePropertyChange(null, null, null);
+    public boolean Authentication(String username, String password){
+        if(controller.Authentication(username, password)){
+            support.firePropertyChange(null, null, null);
             return true;
         }
         else
@@ -43,11 +54,13 @@ public class ClientObservable extends PropertyChangeSupport {
 
     public void setStateRegister(){
         controller.setStateRegister();
-        firePropertyChange(null, null, null);
+        support.firePropertyChange(null, null, null);
     }
 
     public void setStateCreate(){
         controller.setStateCreate();
-        firePropertyChange(null,null,null);
+        support.firePropertyChange(null,null,null);
     }
+
+
 }

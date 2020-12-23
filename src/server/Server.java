@@ -1,8 +1,8 @@
 package server;
 
-import server.server_communication.ServerCommunication;
-import server.server_interface.ServerInterface;
-import server.server_logic.ServerLogic;
+import server.communication.ServerCommunication;
+import server.ui.ServerInterface;
+import server.logic.ServerLogic;
 import shared_data.helper.KeepAlive;
 
 import java.io.IOException;

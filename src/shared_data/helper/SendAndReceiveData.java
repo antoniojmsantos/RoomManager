@@ -128,6 +128,7 @@ public class SendAndReceiveData {
         for (byte[] a: infoObject) {
             tam = tam + a.length;
         }
+
         byte[] finalObjectBytes = new byte[tam];
 
         int index = 0;

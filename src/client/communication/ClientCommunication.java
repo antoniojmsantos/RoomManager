@@ -1,50 +1,71 @@
 package client.communication;
 
-import shared_data.communication.requests.RequestFirstContact;
+import shared_data.communication.request.RequestAuthentication;
+import shared_data.communication.request.RequestFirstContact;
+import shared_data.communication.response.ResponseAuthentication;
 import shared_data.communication.response.ResponseFirstContact;
+import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
+import java.rmi.UnexpectedException;
 
 public class ClientCommunication {
 
-    private DatagramSocket socketFirstContact;
-    private int PORT_MULTICAST;
-    private String multicastGroup;
+    private final int MULTICAST_PORT = 54321;
+    private final String MULTICAST_GROUP = "239.3.2.1";
+
     private Socket socketTCP;
 
-
-    public ClientCommunication() throws SocketException {
-        this.PORT_MULTICAST = 54321;
-        this.multicastGroup = "239.3.2.1";
-        this.socketFirstContact = new DatagramSocket();
+    public void run() {
+        try {
+            firstContact();
+        } catch (SocketException | UnexpectedException e ) {
+            KeepAlive.emergencyExit(e, "Falha a criar comunicação");
+        } catch (IOException e) {
+            KeepAlive.emergencyExit(e, "Falha ao enviar o primeiro contato");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void run() throws IOException, ClassNotFoundException {
-        ResponseFirstContact responseFirstContact = firstContact();
-        connectToServer(responseFirstContact);
-    }
+    public void firstContact() throws IOException, ClassNotFoundException {
+        DatagramSocket socketFirstContact = new DatagramSocket();
 
-    private void connectToServer(ResponseFirstContact responseFirstContact) throws IOException {
-        this.socketTCP = new Socket(responseFirstContact.getIpServerTCP(),responseFirstContact.getPortTCP());
-    }
+        // send first contact
+        SendAndReceiveData.sendDataUDP(
+                new RequestFirstContact(InetAddress.getLocalHost().getHostAddress(), socketFirstContact.getLocalPort()),
+                socketFirstContact,
+                InetAddress.getByName(MULTICAST_GROUP),
+                MULTICAST_PORT
+        );
 
-    public ResponseFirstContact firstContact() throws IOException, ClassNotFoundException {
-        RequestFirstContact requestFirstContact = new RequestFirstContact(InetAddress.getLocalHost().getHostAddress(),socketFirstContact.getLocalPort());
-        SendAndReceiveData.sendDataUDP(requestFirstContact,socketFirstContact,InetAddress.getByName(multicastGroup),PORT_MULTICAST);
+        // get response
         ResponseFirstContact responseFirstContact = (ResponseFirstContact)SendAndReceiveData.receiveDataUDP(socketFirstContact);
-        System.out.println(responseFirstContact.getIpServerTCP() + " " + responseFirstContact.getPortTCP());
-        return responseFirstContact;
+        System.out.println(responseFirstContact);
+
+        // create server socket
+        socketTCP = new Socket(responseFirstContact.getIpServerTCP(),responseFirstContact.getPortTCP());
     }
 
-    public boolean Authenticate(String usr, String password){
-//        User user(usr, password);
-//        SendAndReceiveData.sendData();
+    public boolean Authenticate(String username, String password) {
+            if (socketTCP != null) {
+                try {
+                    SendAndReceiveData.sendData(
+                            new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort()),
+                            socketTCP
+                    );
 
-        return true;
+                    //ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
+
+                    //System.out.println("Authentication: "+response.isAuthenticated());
+
+                    //return response.isAuthenticated();
+                } catch (IOException /*| ClassNotFoundException*/ e) {
+                    e.printStackTrace();
+                }
+            }
+        return false;
     }
 }

@@ -4,17 +4,14 @@ import client.communication.ClientCommunication;
 
 public class ClientController {
 
-    ClientCommunication communication;
-    State state;
+    private final ClientCommunication communication = new ClientCommunication();
+    private final State state =  new State(State.TYPE.AUTHENTICATE);
 
-    public ClientController(ClientCommunication com){
-        this.communication = com;
-        state = new State(State.TYPE.AUTHENTICATE);
-
+    public void init() {
+        communication.run();
     }
 
     public State getState(){
-
         return state;
     }
 
@@ -22,9 +19,9 @@ public class ClientController {
         state.setType(State.TYPE.AUTHENTICATE);
     }
 
-    public boolean Authentication(String usr, String password){
-        if(communication.Authenticate(usr, password)){
-            state.setType(State.TYPE.MAIN);
+    public boolean Authentication(String username, String password){
+        if(communication.Authenticate(username, password)){
+            setStateMain();
             return true;
         }
         else
@@ -43,6 +40,10 @@ public class ClientController {
 
     public boolean isStateCreate(){return state.isCreate();}
 
+    public void setStateMain() {
+        state.setType(State.TYPE.MAIN);
+    }
+
     public void setStateCreate(){
         state.setType(State.TYPE.CREATE_EVENT);
     }
@@ -50,6 +51,4 @@ public class ClientController {
     public void setStateRegister(){
         state.setType(State.TYPE.REGISTER);
     }
-
-
 }

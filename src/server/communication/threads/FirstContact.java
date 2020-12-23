@@ -1,7 +1,7 @@
-package server.server_communication.threads;
+package server.communication.threads;
 
-import server.server_logic.ServerLogic;
-import shared_data.communication.requests.RequestFirstContact;
+import server.logic.ServerLogic;
+import shared_data.communication.request.RequestFirstContact;
 import shared_data.communication.response.ResponseFirstContact;
 import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
@@ -34,20 +34,18 @@ public class FirstContact extends Thread{
 
     @Override
     public void run() {
-
         while (KeepAlive.getKeepAlive()){
             try {
-                RequestFirstContact requestFirstContact = (RequestFirstContact) SendAndReceiveData.receiveDataUDP(this.listenNewFirstContact);
+                RequestFirstContact requestFirstContact = (RequestFirstContact) SendAndReceiveData.receiveDataUDP(listenNewFirstContact);
                 if(requestFirstContact == null)
                     continue;
+
                 ResponseFirstContact responseFirstContact = new ResponseFirstContact(InetAddress.getLocalHost().getHostAddress(), PORT_MULTICAST, InetAddress.getLocalHost().getHostAddress(), portTCP);
                 SendAndReceiveData.sendDataUDP(responseFirstContact, sendResponseSocket, InetAddress.getByName(requestFirstContact.getIp()), requestFirstContact.getPort());
                 System.out.println(responseFirstContact.getIpServerTCP() + " " + responseFirstContact.getPortTCP());
             } catch (SocketTimeoutException e){
-                continue;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+                //e.printStackTrace();
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }

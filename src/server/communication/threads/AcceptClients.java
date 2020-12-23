@@ -1,6 +1,6 @@
-package server.server_communication.threads;
+package server.communication.threads;
 
-import server.server_logic.ServerLogic;
+import server.logic.ServerLogic;
 import shared_data.helper.KeepAlive;
 
 import java.io.IOException;

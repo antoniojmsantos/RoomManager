@@ -23,23 +23,10 @@ import java.net.UnknownHostException;
 
 public class Client extends Application {
 
-    ClientCommunication clientCommunication;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        clientCommunication = new ClientCommunication();
-//        try{
-//            clientCommunication = new ClientCommunication();
-//            clientCommunication.run();
-//        } catch (SocketException | UnknownHostException e) {
-//            KeepAlive.emergencyExit(e,"Falha a criar a comunicação");
-//        } catch (IOException e) {
-//            KeepAlive.emergencyExit(e,"Falha ao enviar o priemiro contacto");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-        ClientController controller = new ClientController(clientCommunication);
-        ClientObservable observable = new ClientObservable(controller);
+        ClientObservable observable = new ClientObservable();
+        observable.init();
 
         PaneOrganizer organizer = new PaneOrganizer(observable);
         Scene scene = new Scene(organizer.getRoot());
@@ -62,7 +49,6 @@ public class Client extends Application {
         }
 
     }
-
 
     public static void main(String[] args) {
         launch(args);

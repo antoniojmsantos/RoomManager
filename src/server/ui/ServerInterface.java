@@ -1,6 +1,6 @@
-package server.server_interface;
+package server.ui;
 
-import server.server_logic.ServerLogic;
+import server.logic.ServerLogic;
 import shared_data.helper.KeepAlive;
 
 import java.util.Scanner;

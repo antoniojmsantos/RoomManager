@@ -1,4 +1,4 @@
-package shared_data.communication.requests;
+package shared_data.communication.request;
 
 import shared_data.communication.Request;
 

@@ -1,6 +1,6 @@
-package server.server_communication.threads;
+package server.communication.threads;
 
-import server.server_logic.ServerLogic;
+import server.logic.ServerLogic;
 import shared_data.communication.Request;
 import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
@@ -12,6 +12,7 @@ public class AttendanceClients extends Thread{
 
     private Socket socketClient;
     private ServerLogic serverLogic;
+
     public AttendanceClients(Socket socketNewClient, ServerLogic serverLogic){
         this.socketClient = socketNewClient;
         this.serverLogic = serverLogic;
@@ -33,6 +34,7 @@ public class AttendanceClients extends Thread{
     }
 
     public void verifyRequest(Request request){
-
+        String requestType = request.getClass().toString();
+        System.out.println(requestType);
     }
 }
