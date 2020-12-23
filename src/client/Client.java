@@ -50,10 +50,7 @@ public class Client extends Application {
         primaryStage.setTitle("RoomManager");
         primaryStage.show();
 
-        Taskbar taskbar=Taskbar.getTaskbar();
-        Image img = Images.getImage(Constants.ICON);
-        BufferedImage image = SwingFXUtils.fromFXImage(img, null);
-        taskbar.setIconImage(image);
+        
     }
 
 
