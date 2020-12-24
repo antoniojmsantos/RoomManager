@@ -38,14 +38,14 @@ public class Client extends Application {
         primaryStage.show();
 
         try{
-            //CÓDIGO PARA POR ICON NO MACOS (THROWS EXCEPTION NO WINDOWS)
+            //CÓDIGO PARA POR ICON NO MACOS
             Taskbar taskbar=Taskbar.getTaskbar();
             Image img = Images.getImage(Constants.ICON);
             BufferedImage image = SwingFXUtils.fromFXImage(img, null);
             taskbar.setIconImage(image);
         }
         catch (Exception e){
-
+            //(THROWS EXCEPTION NO WINDOWS)
         }
 
     }
