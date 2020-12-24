@@ -7,6 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" exported="" name="libUnix" level="project" />
+    <orderEntry type="library" exported="" name="libWindows" level="project" />
   </component>
 </module>

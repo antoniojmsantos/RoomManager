@@ -1,7 +1,6 @@
 <component name="libraryTable">
-  <library name="lib">
+  <library name="libUnix">
     <CLASSES>
-      <root url="file://$USER_HOME$/Program Files/Java/javafx-sdk-11.0.2/lib" />
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib" />
     </CLASSES>
     <JAVADOC />
@@ -9,7 +8,6 @@
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib" />
     </NATIVE>
     <SOURCES>
-      <root url="file://$USER_HOME$/Program Files/Java/javafx-sdk-11.0.2/lib" />
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib" />
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib/src/javafx.base" />
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib/src/javafx.controls" />
@@ -20,8 +18,6 @@
       <root url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib/src/javafx.web" />
     </SOURCES>
     <jarDirectory url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib" recursive="false" />
-    <jarDirectory url="file://$USER_HOME$/Program Files/Java/javafx-sdk-11.0.2/lib" recursive="false" />
     <jarDirectory url="file:///Library/Java/JavaVirtualMachines/javafx-sdk-11.0.2/lib" recursive="false" type="SOURCES" />
-    <jarDirectory url="file://$USER_HOME$/Program Files/Java/javafx-sdk-11.0.2/lib" recursive="false" type="SOURCES" />
   </library>
 </component>
