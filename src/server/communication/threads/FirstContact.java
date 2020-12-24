@@ -7,10 +7,7 @@ import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.SocketTimeoutException;
+import java.net.*;
 
 public class FirstContact extends Thread{
 
@@ -27,6 +24,13 @@ public class FirstContact extends Thread{
         this.listenNewFirstContact = new MulticastSocket(PORT_MULTICAST);
         this.listenNewFirstContact.setSoTimeout(2000);
         this.listenNewFirstContact.joinGroup(InetAddress.getByName(multicastGroup));
+        try{
+            this.listenNewFirstContact.setNetworkInterface(NetworkInterface.getByName("en0"));
+        }catch(SocketException e){
+            //Throws exception if its Windows
+            //This line is needed on Mac and only god knows why
+        }
+
         this.sendResponseSocket = new DatagramSocket();
         this.serverLogic = logic;
         this.portTCP = portTCP;
