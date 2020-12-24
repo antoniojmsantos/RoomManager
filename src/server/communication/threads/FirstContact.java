@@ -23,13 +23,13 @@ public class FirstContact extends Thread{
         this.multicastGroup = "239.3.2.1";
         this.listenNewFirstContact = new MulticastSocket(PORT_MULTICAST);
         this.listenNewFirstContact.setSoTimeout(2000);
-        this.listenNewFirstContact.joinGroup(InetAddress.getByName(multicastGroup));
         try{
             this.listenNewFirstContact.setNetworkInterface(NetworkInterface.getByName("en0"));
         }catch(SocketException e){
             //Throws exception if its Windows
             //This line is needed on Mac and only god knows why
         }
+        this.listenNewFirstContact.joinGroup(InetAddress.getByName(multicastGroup));
 
         this.sendResponseSocket = new DatagramSocket();
         this.serverLogic = logic;
