@@ -84,6 +84,6 @@ public class RMRoot extends VBox implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        logoutMenuItem.setDisable((observable.isStateAuthentication()));
+        logoutMenuItem.setDisable((observable.isStateAuthentication() || observable.isStateRegister()));
     }
 }

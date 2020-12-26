@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.time.Month;
 
 
 import java.time.*;
@@ -178,6 +180,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     }
 
     public void populateCalendar(YearMonth yearMonth) {
+        LocalDate currentdate = LocalDate.now();
         // Get the date we want to start with on the calendar
         LocalDate calendarDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 1);
         // Dial back the day until it is SUNDAY (unless the month starts on a sunday)
@@ -190,6 +193,8 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 ap.getChildren().remove(0);
             }
             Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
+            if(calendarDate.getDayOfMonth() == currentdate.getDayOfMonth())
+                txt.setFill(Color.web("#0093ff"));
             ap.setDate(calendarDate);
             ap.getChildren().add(txt);
             calendarDate = calendarDate.plusDays(1);

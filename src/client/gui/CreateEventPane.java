@@ -42,7 +42,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         lv_rooms = new ListView();
 
 //        n_lot = new IntegerField();
-        setupLogo();
+
         setupEventoInfo();
         setupRoomType();
         showRooms();
@@ -52,23 +52,10 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     }
 
-    public void setupLogo() {
-        ImageView img_logo = new ImageView(Images.getImage(Constants.LOGO));
-        img_logo.setFitWidth(400);
-        img_logo.setPreserveRatio(true);
-
-        HBox boxLogo = new HBox();
-//        boxLogo.setStyle("-fx-background-color: red");
-        boxLogo.setAlignment(Pos.CENTER);
-        boxLogo.setPadding(new Insets(75,0,75,0));
-        boxLogo.getChildren().add(img_logo);
-
-        this.getChildren().add(boxLogo);
-    }
 
     public void setupEventoInfo(){
         VBox boxEvent = new VBox(10);
-       // boxEvent.setAlignment(Pos.TOP_CENTER);
+        boxEvent.setAlignment(Pos.TOP_CENTER);
         //boxEvent.setPadding(new Insets(0));
 
         HBox boxSub0Event = new HBox(10);

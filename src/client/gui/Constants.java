@@ -16,4 +16,13 @@ public interface Constants {
 
     String AVATAR = "avatar_default";
     String PATH_IMG_AVATAR = "images/avatar.png";
+
+    String QUESTION = "question";
+    String PATH_IMG_QUESTION = "images/question.png";
+
+    String UPLOAD = "upload";
+    String PATH_IMG_UPLOAD = "images/upload.png";
+
+    String DELETE = "delete";
+    String PATH_IMG_DELETE = "images/delete.png";
 }

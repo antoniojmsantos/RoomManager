@@ -8,8 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.CheckBox;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -18,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.Stack;
 
 public class RegisterPane extends VBox implements Constants, PropertyChangeListener{
 
@@ -40,10 +43,8 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
 
         setupLogo();
-        setupAvatar();
         setupRegisterInfo();
-
-        setupEntrar();
+        setupRegister();
 
         propertyChange(null);
 
@@ -63,82 +64,137 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         this.getChildren().add(boxLogo);
     }
 
-    public void setupAvatar() {
-        ImageView img_avatar = new ImageView(Images.getImage(Constants.AVATAR));
-        img_avatar.setFitHeight(200);
-        img_avatar.setFitWidth(200);
-        img_avatar.setPreserveRatio(true);
 
-        HBox boxAvatar = new HBox();
-        boxAvatar.setAlignment(Pos.CENTER_RIGHT);
-       // boxAvatar.setPadding(new Insets(-10));
-       // boxAvatar.getSpacing();
-        boxAvatar.getChildren().add(img_avatar);
-
-        this.getChildren().add(boxAvatar);
-    }
 
     public void setupRegisterInfo() {
 
-        VBox boxRegister = new VBox(10);
-        boxRegister.setAlignment(Pos.TOP_CENTER);
-        boxRegister.setPadding(new Insets(0));
+        VBox boxRegisterInfo = new VBox(20);
+        boxRegisterInfo.setPadding(new Insets(0, 0, 0, 150));
+        boxRegisterInfo.setMinWidth(DIM_X_FRAME-500);
+        boxRegisterInfo.setAlignment(Pos.CENTER_LEFT);
 
 
 
+        HBox boxType = new HBox(10);
+        boxType.setPadding(new Insets(0,0,60,0));
+        boxType.setAlignment(Pos.CENTER_LEFT);
+
+        Label lblType = new Label("Registar como:");
         cb_rank.getItems().add("Aluno/Funcionário");
         cb_rank.getItems().add("Docente/Encarregado/Chefe de Equipa");
         cb_rank.setValue("Aluno/Funcionário");
 
+        ImageView img_question = new ImageView(Images.getImage(Constants.QUESTION));
+        img_question.setFitHeight(20);
+        img_question.setFitWidth(20);
+        img_question.setPreserveRatio(true);
+
+        Tooltip tooltip = new Tooltip("Este estatuto terá de ser aprovado pelo administrador.");
+        tooltip.setShowDelay(Duration.seconds(0.1));
+        Tooltip.install(img_question, tooltip);
+
+        boxType.getChildren().addAll(lblType, cb_rank, img_question);
+
+
 
         txt_username.setPromptText("Nome");
-        txt_username.setMaxWidth(450);
-        txt_username.setFocusTraversable(true);
-
         txt_email.setPromptText("Email da Organização");
-        txt_email.setMaxWidth(450);
-        txt_email.setFocusTraversable(true);
-
         txt_password.setPromptText("Palavra-Passe");
-        txt_password.setMaxWidth(450);
-        txt_password.setFocusTraversable(true);
+
+
+        boxRegisterInfo.getChildren().addAll(boxType, txt_username, txt_email, txt_password );
 
 
 
 
 
+        VBox boxAvatar = new VBox();
 
-        //Aqui também passa a adicionar o email? txt_email
-        boxRegister.getChildren().addAll(cb_rank, txt_username, txt_email, txt_password );
+        boxAvatar.setMinWidth(500);
+        boxAvatar.setAlignment(Pos.CENTER);
+//        boxAvatar.setPadding(new Insets(0,100,0,0));
 
 
-        this.getChildren().add(boxRegister);
+        ImageView imgAvatar = new ImageView(Images.getImage(Constants.AVATAR));
+
+        imgAvatar.setFitHeight(150);
+        imgAvatar.setFitWidth(150);
+        imgAvatar.setPreserveRatio(true);
+
+        AnchorPane boxAvatarControls = new AnchorPane();
+        boxAvatarControls.setMaxWidth(150);
+        boxAvatarControls.setStyle("-fx-background-color: lightgrey");
+        ImageView imgUpload = new ImageView(Images.getImage(Constants.UPLOAD));
+        imgUpload.setCursor(Cursor.HAND);
+        imgUpload.setFitHeight(20);
+        imgUpload.setFitWidth(20);
+        imgUpload.setPreserveRatio(false);
+
+        ImageView imgDelete = new ImageView(Images.getImage(Constants.DELETE));
+        imgDelete.setCursor(Cursor.HAND);
+        imgDelete.setFitHeight(20);
+        imgDelete.setFitWidth(20);
+        imgDelete.setPreserveRatio(true);
+
+        AnchorPane.setRightAnchor(imgDelete, 0.0);
+
+        boxAvatarControls.getChildren().addAll(imgUpload, imgDelete);
+
+
+        boxAvatar.getChildren().addAll(boxAvatarControls, imgAvatar);
+
+
+
+        HBox boxMergeInfoAvatar = new HBox();
+        boxMergeInfoAvatar.getChildren().addAll(boxRegisterInfo, boxAvatar);
+
+
+        this.getChildren().add(boxMergeInfoAvatar);
     }
 
-    public void setupEntrar() {
-        HBox boxEntrar = new HBox();
-        boxEntrar.setSpacing(-100);
-        boxEntrar.setAlignment(Pos.CENTER);
-
-        CheckBox check = new CheckBox("Concordo que os meus dados irão ser submetidos de modo a serem analisados, e o\n administrador proceda à aprovação do meu perfil");
-        check.setAlignment(Pos.CENTER_RIGHT);
-        boxEntrar.setSpacing(100);
-
-        bt_entrar = new Button("Enviar formulário para aprovação");
-        bt_entrar.setPrefWidth(450);
+    public void setupRegister() {
+        AnchorPane boxMerge = new AnchorPane();
+//        boxMerge.setPadding(new Insets(100,0,0,100));
+        VBox boxEntrar = new VBox(15);
 
 
-        Hyperlink hl_registo = new Hyperlink("Já tem uma conta? Efetuar Autenticação");
-        hl_registo.setOnAction(e-> observable.logout());
-        hl_registo.setFocusTraversable(false);
+        boxEntrar.setPrefWidth(DIM_X_FRAME-600);
+//
+
+//        boxEntrar.setAlignment(Pos.CENTER);
+
+        CheckBox check = new CheckBox("Concordo que os meus dados irão ser submetidos de modo a serem analisados," +
+                " para que o administrador proceda à aprovação do meu estatuto.");
+        check.setWrapText(true);
+//        check.setAlignment(Pos.CENTER_RIGHT);
+
+        bt_entrar = new Button("Efetuar registo");
+        bt_entrar.setMaxWidth(Double.MAX_VALUE);
+
+
+        Pane boxLogin = new Pane();
+
+        Hyperlink hlLogin = new Hyperlink("Já tem uma conta? Efetuar Autenticação");
+        hlLogin.setOnAction(e-> observable.logout());
+        hlLogin.setFocusTraversable(false);
+//        setMargin(hl_registo, new Insets(500,0,0,0));
+        boxLogin.getChildren().add(hlLogin);
 
         bt_entrar.setOnAction(new RegisterPane.RegisterListener());
 
-        boxEntrar.getChildren().addAll(hl_registo, bt_entrar);
+        boxEntrar.getChildren().addAll(check, bt_entrar);
+
+//        boxMerge.setStyle("-fx-background-color: black");
+
+        boxMerge.getChildren().addAll(boxEntrar, boxLogin);
+
+        AnchorPane.setTopAnchor(boxEntrar, 100.0);
+        AnchorPane.setLeftAnchor(boxEntrar, 150.0);
+        AnchorPane.setBottomAnchor(boxLogin, 0.0);
+        AnchorPane.setLeftAnchor(boxLogin, 875.0);
 
 
-
-        this.getChildren().addAll( check, bt_entrar, boxEntrar);
+        this.getChildren().addAll(boxMerge);
 
     }
 
