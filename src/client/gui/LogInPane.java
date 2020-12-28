@@ -10,8 +10,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import org.w3c.dom.events.Event;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,8 +33,7 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
 
-        txt_username = new TextField();
-        txt_password = new PasswordField();
+
 
         setupLogo();
         setupAvatar();
@@ -80,12 +82,14 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         boxLogin.setAlignment(Pos.CENTER);
         boxLogin.setPadding(new Insets(10));
 
-
+        txt_username = new TextField();
+        txt_username.setOnKeyPressed(new EnterListener());
         txt_username.setPromptText("Email da Organização");
         txt_username.setMaxWidth(450);
         txt_username.setFocusTraversable(true);
 
-
+        txt_password = new PasswordField();
+        txt_password.setOnKeyPressed(new EnterListener());
         txt_password.setPromptText("Palavra-Passe");
         txt_password.setMaxWidth(450);
         txt_password.setFocusTraversable(true);
@@ -106,7 +110,7 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         bt_entrar = new Button("Entrar");
         bt_entrar.setPrefWidth(150);
 
-        bt_entrar.setOnAction(new LoginListener());
+        bt_entrar.setOnAction(e->doLogin());
         boxEntrar.getChildren().addAll(hl_registo, bt_entrar);
 
 
@@ -115,26 +119,29 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
     }
 
-    class LoginListener implements EventHandler<ActionEvent> {
+    class EnterListener implements EventHandler<KeyEvent> {
         @Override
-        public void handle(ActionEvent e){
-            //AQUI VAI DIZER AO OBSERVAVEL QUE QUER FAZER LOGIN E MANDAR LHE AS
-            //CREDENCIAIS QUE OBTEVE
-
-            Alert alert = new Alert( Alert.AlertType.ERROR);
-            alert.setTitle("");
-            alert.setHeaderText( "Erro ao autenticar!" );
-
-            if(txt_username.getText().trim().equals("") || txt_password.getText().trim().equals("")){
-                alert.setContentText( "É obrigatório preencher todos os campos." );
-                alert.showAndWait();
+        public void handle(KeyEvent k) {
+            if (k.getCode().equals(KeyCode.ENTER))
+            {
+                doLogin();
             }
-            else if(!observable.Authentication(txt_username.getText(), txt_password.getText())){
+        }
+    }
 
-                alert.setContentText( "Verifique os seus dados e tente novamente" );
-                alert.showAndWait();
-            }
+    public void doLogin(){
+        Alert alert = new Alert( Alert.AlertType.ERROR);
+        alert.setTitle("");
+        alert.setHeaderText( "Erro ao autenticar!" );
 
+        if(txt_username.getText().trim().equals("") || txt_password.getText().trim().equals("")){
+            alert.setContentText( "É obrigatório preencher todos os campos." );
+            alert.showAndWait();
+        }
+        else if(!observable.Authentication(txt_username.getText(), txt_password.getText())){
+
+            alert.setContentText( "Verifique os seus dados e tente novamente" );
+            alert.showAndWait();
         }
     }
 

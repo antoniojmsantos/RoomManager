@@ -206,32 +206,30 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
     class RegisterListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e){
-            Alert alert = new Alert(Alert.AlertType.NONE);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("");
 
             String email = txt_email.getText().trim(); //TEM DE APANHAR AQUI PQ SENAO NAO MOSTRA NO ALERT PQ JA MUDOU DE PANE E DEU RESET.
 
             if(txt_name.getText().trim().equals("") || txt_name.getText().trim().equals("") || txt_password.getText().trim().equals("")){
-                alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText( "Erro ao criar novo registo!" );
                 alert.setContentText( "É obrigatório preencher todos os campos." );
                 alert.showAndWait();
             }
             else if(!cbAccept.isSelected())
             {
-                alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText( "Erro ao criar novo registo!" );
                 alert.setContentText( "É obrigatório aceitar as condições de registo." );
                 alert.showAndWait();
             }
             else if(!observable.Register(txt_name.getText(), txt_email.getText(), txt_password.getText())){
-                alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText( "Erro ao criar novo registo!" );
                 alert.setContentText( "Já existe uma conta com este email." );
                 alert.showAndWait();
             }
             else{
                 alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.setTitle("");
                 alert.setHeaderText( "Registado com sucesso!" );
                 alert.setContentText( "A sua conta '" + email + "' foi criada com sucesso.\n" +
                         "Pode agora efetuar Autenticação." );
