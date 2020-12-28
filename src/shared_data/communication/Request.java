@@ -11,6 +11,9 @@ public class Request implements Serializable {
         this.ip = ip;
         this.port = port;
     }
+    public Request(){
+
+    }
 
     public String getIp() {
         return ip;

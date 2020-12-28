@@ -1,6 +1,8 @@
 package shared_data.entities;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
 
     public enum Feature {
         AR_CONDICIONADO,
