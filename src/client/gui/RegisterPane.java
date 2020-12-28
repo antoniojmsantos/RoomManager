@@ -209,6 +209,7 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("");
 
+            String email = txt_email.getText().trim(); //TEM DE APANHAR AQUI PQ SENAO NAO MOSTRA NO ALERT PQ JA MUDOU DE PANE E DEU RESET.
 
             if(txt_name.getText().trim().equals("") || txt_name.getText().trim().equals("") || txt_password.getText().trim().equals("")){
                 alert.setAlertType(Alert.AlertType.ERROR);
@@ -232,7 +233,7 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
             else{
                 alert.setAlertType(Alert.AlertType.INFORMATION);
                 alert.setHeaderText( "Registado com sucesso!" );
-                alert.setContentText( "A sua conta '" + txt_email.getText().trim() + "' foi criada com sucesso.\n" +
+                alert.setContentText( "A sua conta '" + email + "' foi criada com sucesso.\n" +
                         "Pode agora efetuar Autenticação." );
                 alert.showAndWait();
             }
