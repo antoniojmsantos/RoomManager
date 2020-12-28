@@ -66,8 +66,9 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public void insert(User user) {
+    public boolean insert(User user) {
         PreparedStatement st = null;
+        int rows = 0;
 
         try {
             st = conn.prepareStatement(
@@ -78,12 +79,14 @@ public class UserDao implements IUserDao {
             st.setString(2,user.getName());
             st.setString(3,user.getPassword());
             st.setBoolean(4,user.isPermissions());
-            st.executeUpdate();
+            rows = st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBManager.closeStatement(st);
         }
+
+        return rows > 0;
     }
 
     @Override

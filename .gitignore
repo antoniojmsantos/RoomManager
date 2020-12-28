@@ -32,3 +32,9 @@ out/
 
 # MAC
 .DS_Store
+
+# IntelliJ
+GPS_RoomManager.iml
+.idea/libraries/libWindows.xml
+.idea/libraries/libUnix.xml
+.idea/libraries/lib.xml
