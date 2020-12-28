@@ -10,7 +10,7 @@ import java.util.List;
 public interface IUserDao {
     User get(String username);
     List<User> getAll();
-    boolean insert (User user);
+    boolean insert(String username, String name, String password, Boolean permissions);
     void updatePermissions(String username, boolean permissions);
     void delete(String username);
 

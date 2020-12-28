@@ -67,7 +67,7 @@ public class GroupDao implements IGroupDao {
     }
 
     @Override
-    public void insert(Group group) {
+    public void insert(String name) {
         PreparedStatement st = null;
 
         try {
@@ -75,7 +75,7 @@ public class GroupDao implements IGroupDao {
                     "insert into tb_group(vc_name) " +
                             "values (?)"
             );
-            st.setString(1,group.getName());
+            st.setString(1,name);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

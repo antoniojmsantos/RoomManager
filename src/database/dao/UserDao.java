@@ -67,7 +67,7 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public boolean insert(User user) {
+    public boolean insert(String username, String name, String password, Boolean permissions) {
         PreparedStatement st = null;
         int rows = 0;
 
@@ -76,10 +76,10 @@ public class UserDao implements IUserDao {
                     "insert into tb_user(vc_username, vc_name, vc_password, b_permissions) " +
                             "values (?,?,?,?)"
             );
-            st.setString(1,user.getUsername());
-            st.setString(2,user.getName());
-            st.setString(3,user.getPassword());
-            st.setBoolean(4,user.isPermissions());
+            st.setString(1,username);
+            st.setString(2,name);
+            st.setString(3,password);
+            st.setBoolean(4,permissions);
             rows = st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

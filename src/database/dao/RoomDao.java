@@ -65,17 +65,16 @@ public class RoomDao implements IRoomDao {
     }
 
     @Override
-    public void insert(Room room) {
+    public void insert(String name, int capacity) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
-                    "insert into tb_room(i_id, vc_name, i_capacity) " +
-                            "values (?,?,?)"
+                    "insert into tb_room(vc_name, i_capacity) " +
+                            "values (?,?)"
             );
-            st.setInt(1,room.getId());
-            st.setString(2,room.getName());
-            st.setInt(3,room.getCapacity());
+            st.setString(1,name);
+            st.setInt(2,capacity);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,7 +164,8 @@ public class RoomDao implements IRoomDao {
     }
 
     // own
-    private Room build(ResultSet rs) throws SQLException {
+    @Override
+    public final Room build(ResultSet rs) throws SQLException {
         return new Room(
                 rs.getInt("i_id"),
                 rs.getString("vc_name"),

@@ -10,7 +10,7 @@ import java.util.List;
 public interface IGroupDao {
     Group get(String name);
     List<Group> getAll();
-    void insert(Group group);
+    void insert(String name);
     void delete(String name);
 
     // group member
