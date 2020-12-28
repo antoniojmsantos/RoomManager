@@ -39,7 +39,17 @@ public class ClientObservable {
 
     public boolean isStateCreate(){return controller.isStateCreate();}
 
+    public boolean isHighPermission(){
+        return controller.isHighPermission();
+    }
 
+    public boolean isAuthenticated(){
+        return controller.isAuthenticated();
+    }
+
+    public String getUsername(){
+        return controller.getUsername();
+    }
 
     public void setStateRegister(){
         controller.setStateRegister();
@@ -61,6 +71,8 @@ public class ClientObservable {
         controller.Logout();
         support.firePropertyChange(null, null, null);
     }
+
+
 
     public boolean Authentication(String username, String password){
         if(controller.Authentication(username, password)){

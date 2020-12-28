@@ -18,7 +18,6 @@ public class ClientController {
     }
 
 
-
     public boolean isStateRegister(){ return state.isRegister();}
 
     public boolean isStateAuthentication() {
@@ -30,6 +29,19 @@ public class ClientController {
     }
 
     public boolean isStateCreate(){return state.isCreate();}
+
+    public boolean isHighPermission(){
+        return communication.getLoggedUser().isPermissions();
+    }
+
+    public boolean isAuthenticated(){
+        return communication.getLoggedUser() != null;
+    }
+
+    public String getUsername(){
+        return communication.getLoggedUser().getUsername();
+    }
+
 
     public void setStateAuthentication() {
         state.setType(State.TYPE.AUTHENTICATE);
@@ -71,7 +83,5 @@ public class ClientController {
     }
 
 
-    public String getUsername(){
-        return communication.getLoggedUser().getUsername();
-    }
+
 }

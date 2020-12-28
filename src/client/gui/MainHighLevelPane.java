@@ -38,9 +38,13 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     private VBox box_events;
     private VBox box_calendar;
 
+    Label lbUser;
+
     public MainHighLevelPane(ClientObservable observable){
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
+
+        lbUser = new Label();
 
         this.setPadding(new Insets(30));
         setSpacing(30);
@@ -57,8 +61,8 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         box_events = new VBox(20);
 
         box_events.setPrefHeight(DIM_Y_FRAME);
-        Label lb_user = new Label("Autenticado como: xpto@organizacao.pt");
-        lb_user.setFont(Font.font("verdana", FontWeight.BOLD, 10));
+
+        lbUser.setFont(Font.font("verdana", FontWeight.BOLD, 10));
 
         VBox box_list = new VBox();
         box_list.setStyle("-fx-border-color: black");
@@ -117,7 +121,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
         box_list.getChildren().addAll(header_list, list_events);
 
-        box_events.getChildren().addAll(lb_user, box_list);
+        box_events.getChildren().addAll(lbUser, box_list);
     }
 
     public void setupEventCalendar(){
@@ -217,6 +221,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         setVisible(observable.isStateMain());
+
+        if(observable.isAuthenticated())
+            lbUser.setText("Autenticado como: " + observable.getUsername());
+
+//        setVisible(observable.isStateMain() && observable.isHighPermission());
         //TODO: FALTA VERIFICAR TAMBÉM SE O USER TEM PERMISSAO ALTA
     }
 
