@@ -12,6 +12,8 @@ public abstract class DBManager {
     private static IUserDao userDao;
     private static IGroupDao groupDao;
     private static IGroupMemberDao groupMemberDao;
+    private static IEventDao IEventDao;
+    private static IRoomDao IRoomDao;
 
     public static void init(String URL, String username, String password) {
         if (!isClosed()) {
@@ -21,6 +23,8 @@ public abstract class DBManager {
                 userDao = new UserDao(conn);
                 groupDao = new GroupDao(conn);
                 groupMemberDao = new GroupMemberDao(conn);
+              //  eventDao = new EventDao(conn);
+             //   roomDao = new RoomDao(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -41,6 +45,14 @@ public abstract class DBManager {
 
     public static IGroupMemberDao getGroupMemberDao() {
         return groupMemberDao;
+    }
+
+    public static IEventDao getEventDao(){
+        return IEventDao;
+    }
+
+    public static IRoomDao getRoomDao(){
+        return IRoomDao;
     }
 
     private static boolean isClosed() {

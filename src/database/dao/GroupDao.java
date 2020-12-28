@@ -30,7 +30,7 @@ public class GroupDao implements IGroupDao {
             st.setString(1, name);
             rs = st.executeQuery();
             if (rs.next()) {
-                build(rs);
+               return build(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();

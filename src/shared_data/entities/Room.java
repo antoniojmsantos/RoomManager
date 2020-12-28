@@ -2,10 +2,10 @@ package shared_data.entities;
 
 public class Room {
 
-    int id;
-    String name;
-    String details;
-    int capacity;
+    private int id;
+    private String name;
+    private String details;
+    private int capacity;
 
     public Room(int id,String name, String details, int capacity) {
         this.id=id;
@@ -13,6 +13,7 @@ public class Room {
         this.details = details;
         this.details = details;
     }
+
 
     public int getId(){return id;}
     public void setId(int id){this.id=id;}

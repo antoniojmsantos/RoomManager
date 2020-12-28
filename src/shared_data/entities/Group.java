@@ -66,8 +66,7 @@ public class Group {
 
     // make
     public static Group make(
-            String name, Map<String,
-            User> users
+            String name, Map<String, User> users
     ) {
         return new Group(name, users);
     }
