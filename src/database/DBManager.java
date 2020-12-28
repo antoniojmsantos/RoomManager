@@ -11,22 +11,20 @@ public abstract class DBManager {
     // dao's
     private static IUserDao userDao;
     private static IGroupDao groupDao;
-    private static IGroupMemberDao groupMemberDao;
-    private static IEventDao IEventDao;
-    private static IRoomDao IRoomDao;
+    private static IEventDao eventDao;
+    private static IRoomDao roomDao;
 
     public static void init(String URL, String username, String password) {
         try {
-            conn = DriverManager.getConnection(URL, username, password);
+                conn = DriverManager.getConnection(URL, username, password);
 
-            userDao = new UserDao(conn);
-            groupDao = new GroupDao(conn);
-            groupMemberDao = new GroupMemberDao(conn);
-          //  eventDao = new EventDao(conn);
-         //   roomDao = new RoomDao(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                userDao = new UserDao(conn);
+                groupDao = new GroupDao(conn);
+                eventDao = new EventDao(conn);
+                roomDao = new RoomDao(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     public static Connection getConnection() {
@@ -41,16 +39,12 @@ public abstract class DBManager {
         return groupDao;
     }
 
-    public static IGroupMemberDao getGroupMemberDao() {
-        return groupMemberDao;
-    }
-
     public static IEventDao getEventDao(){
-        return IEventDao;
+        return eventDao;
     }
 
     public static IRoomDao getRoomDao(){
-        return IRoomDao;
+        return roomDao;
     }
 
     private static boolean isClosed() {

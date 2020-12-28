@@ -1,6 +1,7 @@
 package database.dao;
 
 import database.DBManager;
+import shared_data.entities.Group;
 import shared_data.entities.User;
 
 import java.sql.Connection;
@@ -90,7 +91,7 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public void updatePermissions(User user, boolean permissions) {
+    public void updatePermissions(String username, boolean permissions) {
         PreparedStatement st = null;
 
         try {
@@ -98,7 +99,7 @@ public class UserDao implements IUserDao {
                     "update tb_user set b_permissions = ? where vc_username = ?"
             );
             st.setBoolean(1, permissions);
-            st.setString(2, user.getUsername());
+            st.setString(2, username);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,14 +109,14 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(String username) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
                     "delete from tb_user where vc_username = ?"
             );
-            st.setString(1, user.getUsername());
+            st.setString(1, username);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -150,8 +151,34 @@ public class UserDao implements IUserDao {
         return false;
     }
 
+    @Override
+    public List<Group> getGroups(String username) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        List<Group> groups = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "select * from tb_group_member where vc_user_username = ?"
+            );
+            st.setString(1, username);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                groups.add(DBManager.getGroupDao().build(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+
+        return groups;
+    }
+
     // own
-    private User build(ResultSet rs) throws SQLException {
+    @Override
+    public final User build(ResultSet rs) throws SQLException {
         return User.make(
                 rs.getString("vc_username"),
                 rs.getString("vc_name"),

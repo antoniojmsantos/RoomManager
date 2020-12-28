@@ -41,7 +41,14 @@ public class Event {
     public Duration getDuration(){return duration;}
     public void setDuration(Duration duration){this.duration=duration;}
 
-    public static Event make(int id, String name, Room room , Group group, LocalDateTime start, Duration duration){
+    public static Event make(
+            int id,
+            String name,
+            Room room ,
+            Group group,
+            LocalDateTime start,
+            Duration duration)
+    {
         return new Event(id, name, room,group, start, duration);
     }
 

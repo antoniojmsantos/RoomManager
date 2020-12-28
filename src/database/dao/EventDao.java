@@ -70,7 +70,7 @@ public class EventDao implements IEventDao {
 
         try {
             st = conn.prepareStatement(
-                    "insert into tb_user(i_id, vc_name, i_room, vc_group_name, d_date_start, t_duration) " +
+                    "insert into tb_event(i_id, vc_name, i_room_id, vc_group_name, d_date_start, t_duration) " +
                             "values (?,?,?,?,?,?)"
             );
             st.setInt(1,event.getId());
@@ -107,10 +107,14 @@ public class EventDao implements IEventDao {
     private Event build(ResultSet rs) throws SQLException {
         Room room = DBManager.getRoomDao().get(rs.getInt("i_room_id"));
         Group group = DBManager.getGroupDao().get(rs.getString("vc_group_name"));
-        if (room == null || group == null) {
-           return null;
-        }
-        return Event.make(rs.getInt("id_int"), rs.getString("vc_name"), room,group, ((LocalDateTime)rs.getObject("d_date_start")), ((Duration)rs.getObject("t_duration")));
-    }
 
+        return (room == null || group == null) ? null : Event.make(
+                rs.getInt("id_int"),
+                rs.getString("vc_name"),
+                room,
+                group,
+                ((LocalDateTime)rs.getObject("d_date_start")),
+                ((Duration)rs.getObject("t_duration"))
+            );
+    }
 }

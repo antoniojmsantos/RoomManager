@@ -17,7 +17,6 @@ public class RoomDao implements IRoomDao {
 
     public RoomDao(Connection conn) {this.conn = conn;}
 
-
     @Override
     public Room get(int id) {
         PreparedStatement st = null;
@@ -71,13 +70,12 @@ public class RoomDao implements IRoomDao {
 
         try {
             st = conn.prepareStatement(
-                    "insert into tb_user(i_id, vc_name, vc_details, i_capacity) " +
-                            "values (?,?,?,?)"
+                    "insert into tb_room(i_id, vc_name, i_capacity) " +
+                            "values (?,?,?)"
             );
             st.setInt(1,room.getId());
             st.setString(2,room.getName());
-            st.setString(3,room.getDetails());
-            st.setInt(4,room.getCapacity());
+            st.setInt(3,room.getCapacity());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,14 +85,77 @@ public class RoomDao implements IRoomDao {
     }
 
     @Override
-    public void delete(Room room) {
+    public void delete(int roomId) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
                     "delete from tb_room where i_id= ?"
             );
-            st.setInt(1,room.getId());
+            st.setInt(1,roomId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
+    }
+
+    @Override
+    public List<String> getFeatures(int id) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        List<String> features = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "select * from tb_room_feature where i_room_id = ?"
+            );
+            st.setInt(1,  id);
+            rs = st.executeQuery();
+            while(rs.next()) {
+                features.add(
+                        rs.getString("vc_name")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+
+        return features;
+    }
+
+    @Override
+    public void insertFeature(int id, Room.Feature feature) {
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "insert into tb_room_feature(i_room_id, vc_name) values (?,?)"
+            );
+            st.setInt(1, id);
+            st.setString(2,feature.toString());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
+    }
+
+    @Override
+    public void deleteFeature(int id, Room.Feature feature) {
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "delete from tb_room_feature where i_room_id = ? and vc_name = ?"
+            );
+            st.setInt(1,id);
+            st.setString(2,feature.toString());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,9 +167,8 @@ public class RoomDao implements IRoomDao {
     // own
     private Room build(ResultSet rs) throws SQLException {
         return new Room(
-                rs.getInt("id"),
-                rs.getString("nome"),
-                rs.getString("details"),
-                rs.getInt("capacity"));
+                rs.getInt("i_id"),
+                rs.getString("vc_name"),
+                rs.getInt("i_capacity"));
     }
 }

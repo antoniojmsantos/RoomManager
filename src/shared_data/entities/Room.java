@@ -2,20 +2,26 @@ package shared_data.entities;
 
 public class Room {
 
-    private int id;
-    private String name;
-    private String details;
-    private int capacity;
-
-    public Room(int id,String name, String details, int capacity) {
-        this.id=id;
-        this.name = name;
-        this.details = details;
-        this.details = details;
+    public enum Feature {
+        AR_CONDICIONADO,
+        COMPUTADORES_MAC,
+        COMPUTADORES_WINDOWS,
+        PROJETOR,
+        QUADRO_INTERATIVO
     }
 
+    private int id;
+    private String name;
+    private int capacity;
+
+    public Room(int id,String name, int capacity) {
+        this.id=id;
+        this.name = name;
+        this.capacity = capacity;
+    }
 
     public int getId(){return id;}
+
     public void setId(int id){this.id=id;}
 
     public String getName() {
@@ -24,14 +30,6 @@ public class Room {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public int getCapacity() {
