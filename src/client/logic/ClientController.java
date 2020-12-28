@@ -59,8 +59,8 @@ public class ClientController {
             return false;
     }
 
-    public boolean Register(Boolean permissionLvl, String name, String username, String password){
-        if(communication.Register(permissionLvl, name, username, password)){
+    public boolean Register(String name, String username, String password){
+        if(communication.Register(name, username, password)){
             setStateAuthentication();
             return true;
         }

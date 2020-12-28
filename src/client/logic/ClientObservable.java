@@ -70,4 +70,13 @@ public class ClientObservable {
         else
             return false;
     }
+
+    public boolean Register(String name, String username, String password){
+        if(controller.Register(name, username, password)){
+            support.firePropertyChange(null, null, null);
+            return true;
+        }
+        else
+            return false;
+    }
 }

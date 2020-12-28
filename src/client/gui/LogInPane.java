@@ -42,6 +42,11 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
     }
 
+    public void resetControls(){
+        txt_username.clear();
+        txt_password.clear();
+    }
+
     public void setupLogo() {
         ImageView img_logo = new ImageView(Images.getImage(Constants.LOGO));
         img_logo.setFitWidth(400);
@@ -116,25 +121,17 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
             //AQUI VAI DIZER AO OBSERVAVEL QUE QUER FAZER LOGIN E MANDAR LHE AS
             //CREDENCIAIS QUE OBTEVE
 
-            if(!observable.Authentication(txt_username.getText(), txt_password.getText())){
-                Alert alert = new Alert( Alert.AlertType.ERROR);
-                alert.setTitle("");
-                alert.setHeaderText( "Erro ao autenticar!" );
+            Alert alert = new Alert( Alert.AlertType.ERROR);
+            alert.setTitle("");
+            alert.setHeaderText( "Erro ao autenticar!" );
+
+            if(txt_username.getText().trim().equals("") || txt_password.getText().trim().equals("")){
+                alert.setContentText( "É obrigatório preencher todos os campos." );
+                alert.showAndWait();
+            }
+            else if(!observable.Authentication(txt_username.getText(), txt_password.getText())){
+
                 alert.setContentText( "Verifique os seus dados e tente novamente" );
-
-                Timeline idlestage = new Timeline( new KeyFrame( Duration.seconds(3), new EventHandler<ActionEvent>()
-                {
-
-                    @Override
-                    public void handle( ActionEvent event )
-                    {
-                        alert.setResult(ButtonType.CANCEL);
-                        alert.hide();
-                    }
-                } ) );
-                idlestage.setCycleCount( 1 );
-                idlestage.play();
-
                 alert.showAndWait();
             }
 
@@ -145,7 +142,7 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
     public void propertyChange(PropertyChangeEvent evt) {
         //ESTE MÉTODO É EXECUTADO SEMPRE QUE É FEITO ALGUM FIRE (HOUVER ALTERACAO)
 
-        //NORMALMENTE SÒ SE POE ISTO
+        resetControls();
 //        setVisible(observable.isStateAuthentication());
 
         if(observable.isStateAuthentication()) {
@@ -153,8 +150,7 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
             bt_entrar.requestFocus();
         }
         else{
-            txt_password.clear();
-            txt_username.clear();
+            resetControls();
             setVisible(false);
         }
 

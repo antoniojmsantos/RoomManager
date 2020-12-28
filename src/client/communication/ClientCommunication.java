@@ -83,7 +83,7 @@ public class ClientCommunication {
         return true;
     }
 
-    public boolean Register(Boolean permissionLvl, String name, String username, String password){
+    public boolean Register(String name, String username, String password){
 
         // permissionLvl(0) = aluno, etc. permissionLvl(1) = docente, etc.
 
