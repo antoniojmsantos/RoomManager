@@ -2,6 +2,8 @@ package client.gui;
 
 import client.logic.ClientObservable;
 import com.sun.javafx.scene.control.IntegerField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -18,12 +20,12 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     private ClientObservable observable;
 
+    VBox boxEventFilters;
+
     TextField txt_nome, txt_grupo, txt_sala, txt_horainicio;
     TextField txt_lotacao, txt_duracao;
 
-    ListView lv_rooms;
-
-    Button bt_criaevento;
+    ListView<String> listRooms;
 
     CheckBox cb_anfi, cb_lab, cb_salareuniao;
     CheckBox cb2_projetor, cb2_mesareuniao, cb2_windows, cb2_macos, cb2_quadroiterativo, cb2_arcondicionado;
@@ -39,124 +41,123 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         txt_lotacao = new TextField();
         txt_duracao = new TextField();
 
-        lv_rooms = new ListView();
 
-//        n_lot = new IntegerField();
+        boxEventFilters = new VBox(10);
+        boxEventFilters.setPadding(new Insets(30));
 
-        setupEventoInfo();
-        setupRoomType();
+        setupEventFilters();
         showRooms();
         setupButton();
+
+        this.getChildren().add(boxEventFilters);
 
        propertyChange(null);
 
     }
 
 
-    public void setupEventoInfo(){
-        VBox boxEvent = new VBox(10);
-        boxEvent.setAlignment(Pos.TOP_CENTER);
-        //boxEvent.setPadding(new Insets(0));
+    public void setupEventFilters(){
 
-        HBox boxSub0Event = new HBox(10);
-        boxSub0Event.setAlignment(Pos.TOP_CENTER);
-        //boxSub0Event.setPadding(new Insets(0));
+        VBox boxAux = new VBox(10); //Auxiliar box because it will have 2 vertical lines of info
 
-        HBox boxSub1Event = new HBox(10);
-        boxSub1Event.setAlignment(Pos.TOP_CENTER);
-        //boxSub1Event.setPadding(new Insets(0));
-
+        HBox boxFilters1 = new HBox(10);
 
         txt_nome.setPromptText("Nome Evento");
-        txt_nome.setMaxWidth(450);
-        txt_nome.setFocusTraversable(true);
-
         txt_grupo.setPromptText("Grupo Pertencente");
-        txt_grupo.setMaxWidth(450);
-        txt_grupo.setFocusTraversable(true);
-
-        txt_sala.setPromptText("Nome da Sala");
-        txt_sala.setMaxWidth(700);
-        txt_sala.setFocusTraversable(true);
-
-        txt_duracao.setPromptText("Lotação");
-
         txt_horainicio.setPromptText("Hora Início");
 
+        boxFilters1.getChildren().addAll(txt_nome, txt_grupo, txt_horainicio);
+
+
+        HBox boxFilters2 = new HBox(10);
+
+        txt_sala.setPromptText("Nome da Sala");
+        txt_duracao.setPromptText("Lotação");
         txt_lotacao.setPromptText("Duração");
 
-        boxSub0Event.getChildren().addAll(txt_nome, txt_grupo, txt_horainicio );
+        boxFilters2.getChildren().addAll(txt_sala, txt_duracao, txt_lotacao);
 
-        boxSub1Event.getChildren().addAll(txt_sala, txt_lotacao, txt_duracao);
+        boxAux.getChildren().addAll(boxFilters1, boxFilters2);
 
-        boxEvent.getChildren().addAll(boxSub0Event, boxSub1Event);
-        this.getChildren().addAll(boxEvent);
+        boxEventFilters.getChildren().add(boxAux);
 
-
+        setupRoomType();
     }
 
     public void setupRoomType(){
 
-        HBox boxFiltro1 = new HBox(10);
-        boxFiltro1.setAlignment(Pos.TOP_CENTER);
-        //boxFiltro1.setPadding(new Insets(10,0,0,0));
+        HBox boxAux = new HBox(10);
 
-        HBox boxFiltro2 = new HBox(10);
 
-        VBox boxSub0Filtro = new VBox(10);
-        boxSub0Filtro.setAlignment(Pos.TOP_LEFT);
-        boxSub0Filtro.setPadding(new Insets(10,10,0,0));
-
-        VBox boxSub1Filtro = new VBox(10);
-        //boxSub1Filtro.setAlignment(Pos.TOP_RIGHT);
-        boxSub1Filtro.setPadding(new Insets(10, 0, 0, 50));
-
-        VBox boxSub2Filtro = new VBox(10);
-        //boxSub2Filtro.setAlignment(Pos.TOP_RIGHT);
-        //boxSub2Filtro.setPadding(new Insets(BAIXO, ESQUERDA, CIMA, DIREITA));
-        boxSub2Filtro.setPadding(new Insets(10, 0, 0, 0));
-
+        TitledPane paneFilterType = new TitledPane();
+        paneFilterType.setText("Tipo de Sala");
+        paneFilterType.setCollapsible(false);
+        VBox boxFilterType = new VBox(10);
         cb_anfi = new CheckBox("Anfiteatro");
         cb_lab = new CheckBox("Laboratório");
         cb_salareuniao = new CheckBox("Sala Reunião");
 
+        boxFilterType.getChildren().addAll(cb_anfi, cb_lab, cb_salareuniao);
+        paneFilterType.setContent(boxFilterType);
+
+
+//        VBox boxFilterDetails = new VBox(10);
+        TitledPane paneFilterDetails = new TitledPane();
+        paneFilterDetails.setText("Características");
+        paneFilterDetails.setCollapsible(false);
+        HBox boxAux1 = new HBox();
+        VBox boxVAux = new VBox(10);
+        VBox boxVAux1 = new VBox(10);
         cb2_projetor = new CheckBox("Projetor");
         cb2_mesareuniao = new CheckBox("Mesa Reunião");
         cb2_windows = new CheckBox("Computadores Windows");
+        boxVAux.getChildren().addAll(cb2_projetor, cb2_mesareuniao, cb2_windows);
         cb2_macos = new CheckBox("Computadores MacOS");
         cb2_quadroiterativo = new CheckBox("Quadro Iterativo");
-        cb2_arcondicionado = new CheckBox("Ar Comdicionado");
+        cb2_arcondicionado = new CheckBox("Ar Condicionado");
+        boxVAux1.getChildren().addAll(cb2_macos, cb2_quadroiterativo, cb2_arcondicionado);
 
-        boxSub0Filtro.getChildren().addAll(cb_anfi, cb_lab, cb_salareuniao);
+        boxAux1.getChildren().addAll(boxVAux, boxVAux1);
 
-        boxSub1Filtro.getChildren().addAll(cb2_projetor, cb2_mesareuniao, cb2_windows );
+        paneFilterDetails.setContent(boxAux1);
 
-        boxSub2Filtro.getChildren().addAll(cb2_macos, cb2_quadroiterativo, cb2_arcondicionado );
 
-        boxFiltro2.getChildren().addAll(boxSub1Filtro, boxSub2Filtro);
+        boxAux.getChildren().addAll(paneFilterType, paneFilterDetails);
 
-        boxFiltro1.getChildren().addAll(boxSub0Filtro,boxFiltro2);
+        boxEventFilters.getChildren().add(boxAux);
 
-        this.getChildren().add(boxFiltro1);
     }
 
     public void showRooms(){
-        //AQUI É SUPOSTO SEREM MOSTRADAS AS SALAS QUE CORRESPONDAM AO QUE FOI FILTRADO PELO UTILIZADOR
-        HBox boxRooms = new HBox(10);
-        boxRooms.setAlignment(Pos.BASELINE_CENTER);
+//        //AQUI É SUPOSTO SEREM MOSTRADAS AS SALAS QUE CORRESPONDAM AO QUE FOI FILTRADO PELO UTILIZADOR
 
-        this.getChildren().add(boxRooms);
+        TitledPane paneRooms = new TitledPane();
+        paneRooms.setText("Salas com estes filtros");
+        paneRooms.setCollapsible(false);
+
+        listRooms = new ListView<>();
+//        listRooms.setStyle("-fx-border-color: black");
+//        listRooms.setPrefHeight(DIM_Y_FRAME);
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Sala 1", "Sala 2", "Sala 3");
+        listRooms.setItems(items);
+
+        paneRooms.setContent(listRooms);
+
+        boxEventFilters.getChildren().add(paneRooms);
 
     }
 
     public void setupButton(){
-        HBox boxCreate = new HBox();
-        boxCreate.setAlignment(Pos.BASELINE_CENTER);
-        boxCreate.setPadding(new Insets(20, 0, 0, 385));
-        bt_criaevento = new Button("Criar Evento");
+        HBox boxCreate = new HBox(10);
+        boxCreate.setAlignment(Pos.CENTER_RIGHT);
+        Button btCreate = new Button("Criar Evento");
+        Button btCancel = new Button("Cancelar");
+        btCancel.setOnAction(e-> observable.setStateMain());
 
-        boxCreate.getChildren().add(bt_criaevento);
-        this.getChildren().add(boxCreate);
+        boxCreate.getChildren().addAll(btCreate, btCancel);
+
+        boxEventFilters.getChildren().add(boxCreate);
     }
 
     @Override

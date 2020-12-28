@@ -62,5 +62,8 @@ public class ClientObservable {
         support.firePropertyChange(null,null,null);
     }
 
-
+    public void setStateMain(){
+        controller.setStateMain();
+        support.firePropertyChange(null, null, null);
+    }
 }
