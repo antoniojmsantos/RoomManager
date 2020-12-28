@@ -65,20 +65,19 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public void insert(Event event) {
+    public void insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
-                    "insert into tb_event(i_id, vc_name, i_room_id, vc_group_name, d_date_start, t_duration) " +
-                            "values (?,?,?,?,?,?)"
+                    "insert into tb_event(vc_name, i_room_id, vc_group_name, d_date_start, t_duration) " +
+                            "values (?,?,?,?,?)"
             );
-            st.setInt(1,event.getId());
-            st.setString(2,event.getName());
-            st.setInt(3,event.getRoom().getId());
-            st.setString(4,event.getGroup().getName());
-            st.setObject(5,event.getStart());
-            st.setObject(6,event.getDuration());
+            st.setString(1,name);
+            st.setInt(2,roomId);
+            st.setString(3,groupName);
+            st.setObject(4,startDate);
+            st.setObject(5,duration);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,14 +87,14 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public void delete(Event event) {
+    public void delete(int id) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
                     "delete from tb_event where i_id= ?"
             );
-            st.setInt(1,event.getId());
+            st.setInt(1,id);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,7 +103,8 @@ public class EventDao implements IEventDao {
         }
     }
 
-    private Event build(ResultSet rs) throws SQLException {
+    @Override
+    public final Event build(ResultSet rs) throws SQLException {
         Room room = DBManager.getRoomDao().get(rs.getInt("i_room_id"));
         Group group = DBManager.getGroupDao().get(rs.getString("vc_group_name"));
 

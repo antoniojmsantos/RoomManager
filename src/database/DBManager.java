@@ -8,7 +8,6 @@ public abstract class DBManager {
 
     private static Connection conn = null;
 
-    // dao's
     private static IUserDao userDao;
     private static IGroupDao groupDao;
     private static IEventDao eventDao;
