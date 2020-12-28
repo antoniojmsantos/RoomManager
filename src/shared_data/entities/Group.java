@@ -2,9 +2,10 @@ package shared_data.entities;
 
 import shared_data.helper.Pair;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Group {
+public class Group implements Serializable {
 
     private String name;
 

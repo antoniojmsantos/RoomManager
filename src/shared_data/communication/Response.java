@@ -11,6 +11,9 @@ public class Response implements Serializable {
         this.ip = ip;
         this.port = port;
     }
+    public Response(){
+
+    }
 
     public String getIp() {
         return ip;

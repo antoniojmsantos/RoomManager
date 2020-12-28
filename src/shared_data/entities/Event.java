@@ -1,12 +1,13 @@
 package shared_data.entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.lang.Object;
 
-public class Event {
+public class Event implements Serializable {
     private int id;
     private String name;
     private Room room;

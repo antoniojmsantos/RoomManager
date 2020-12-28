@@ -1,6 +1,8 @@
 package client.communication;
 
+import client.communication.threads.ThreadListenPendentEvents;
 import shared_data.communication.request.RequestAuthentication;
+import shared_data.communication.request.RequestCreateEvent;
 import shared_data.communication.request.RequestFirstContact;
 import shared_data.communication.request.RequestRegister;
 import shared_data.communication.response.ResponseAuthentication;
@@ -14,17 +16,22 @@ import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.*;
 import java.rmi.UnexpectedException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ClientCommunication {
 
     private final int MULTICAST_PORT = 54321;
     private final String MULTICAST_GROUP = "239.3.2.1";
 
+    private ServerSocket clientSocket;
+
     private Socket socketTCP;
+    private Socket socketCallBack;
 
     private User loggedUser;
 
@@ -32,6 +39,7 @@ public class ClientCommunication {
 
     public void run() {
         try {
+            clientSocket = new ServerSocket(0);
             firstContact();
         } catch (SocketException | UnexpectedException e ) {
             KeepAlive.emergencyExit(e, "Falha a criar comunicação");
@@ -63,9 +71,14 @@ public class ClientCommunication {
 
     public boolean Authenticate(String username, String password) {
         try {
-           SendAndReceiveData.sendData(new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort(),username,password), socketTCP);
+           SendAndReceiveData.sendData(new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort(),username,password,clientSocket.getLocalPort()), socketTCP);
            ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
-           this.loggedUser = response.getUser();
+           if(response.isAuthenticated()){
+               socketCallBack = clientSocket.accept();
+               this.loggedUser = response.getUser();
+               ThreadListenPendentEvents threadListenPendentEvents = new ThreadListenPendentEvents(socketCallBack);
+               threadListenPendentEvents.start();
+           }
            return response.isAuthenticated();
         } catch (IOException | ClassNotFoundException e) {
            e.printStackTrace();
@@ -113,7 +126,14 @@ public class ClientCommunication {
         return false;
     }
 
-    public boolean CreateEvent(Boolean permissionLvl, String name, String username, String password){
+    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, Duration duration){
+        try{
+            RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup,duration,name,initialDate);
+            SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         //TODO: CRIAR UM OBJETO EVENT COM OS DADOS Q RECEBEU DO CONTROLADOR E MANDA LO AO SERVIDOR PARA INSERIR NA DB.
 
@@ -131,7 +151,6 @@ public class ClientCommunication {
     }
 
     public ArrayList<Event> getPendingUserEvents(){
-
         //TODO: PEDE AO SERVIDOR OS EVENTOS PENDENTES DO "currentUser"
         return null;
     }
