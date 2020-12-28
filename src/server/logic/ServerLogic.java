@@ -12,10 +12,12 @@ public final class ServerLogic {
         );
     }
 
-    public void getAuthenticate(String username, String password) {
+    public boolean getAuthenticate(String username, String password) {
         if (DBManager.getUserDao().authenticate(username, password)) {
+            return true;
             // success
         } else {
+            return false;
             // failure
         }
     }

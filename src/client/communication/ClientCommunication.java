@@ -50,22 +50,18 @@ public class ClientCommunication {
     }
 
     public boolean Authenticate(String username, String password) {
-            if (socketTCP != null) {
-                try {
-                    SendAndReceiveData.sendData(
-                            new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort()),
-                            socketTCP
-                    );
+        try {
+            SendAndReceiveData.sendData(new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort(),username,password), socketTCP);
 
-                    //ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
+            ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
 
-                    //System.out.println("Authentication: "+response.isAuthenticated());
+            System.out.println("Authentication: "+response.isAuthenticated());
 
-                    //return response.isAuthenticated();
-                } catch (IOException /*| ClassNotFoundException*/ e) {
-                    e.printStackTrace();
-                }
-            }
-        return true;
+            return response.isAuthenticated();
+        } catch (IOException | ClassNotFoundException /*| ClassNotFoundException*/ e) {
+            e.printStackTrace();
+        }
+        //se chegar aqui ocorreu um erro no try
+        return false;
     }
 }
