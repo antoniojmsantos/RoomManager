@@ -33,13 +33,7 @@ public final class ServerLogic {
         }
     }
     public boolean registerUsers(RequestRegister register){
-        User user = new User(register.getUsername(), register.getUser(),register.getPassword(),register.getPermissionLevel());
-        System.out.println(DBManager.getUserDao());
-        if(DBManager.getUserDao().insert(user)){
-           return true;
-        }else {
-            return false;
-        }
+        return DBManager.getUserDao().insert(register.getUsername(), register.getUser(), register.getPassword(), register.getPermissionLevel());
     }
 
     public void addToClientInfo(Socket socketCallBack, User user) {
