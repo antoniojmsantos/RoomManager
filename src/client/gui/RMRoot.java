@@ -78,7 +78,7 @@ public class RMRoot extends VBox implements PropertyChangeListener {
     class LogoutObjMenuBarListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent t) {
-            observable.logout();
+            observable.Logout();
         }
     }
 

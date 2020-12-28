@@ -175,7 +175,7 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         Pane boxLogin = new Pane();
 
         Hyperlink hlLogin = new Hyperlink("Já tem uma conta? Efetuar Autenticação");
-        hlLogin.setOnAction(e-> observable.logout());
+        hlLogin.setOnAction(e-> observable.Logout());
         hlLogin.setFocusTraversable(false);
 //        setMargin(hl_registo, new Insets(500,0,0,0));
         boxLogin.getChildren().add(hlLogin);

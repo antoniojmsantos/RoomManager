@@ -17,10 +17,6 @@ public class ClientObservable {
         controller.init();
     }
 
-    public void logout(){
-        controller.logout();
-        support.firePropertyChange(null, null, null);
-    }
 
     /* property change support */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -43,14 +39,7 @@ public class ClientObservable {
 
     public boolean isStateCreate(){return controller.isStateCreate();}
 
-    public boolean Authentication(String username, String password){
-        if(controller.Authentication(username, password)){
-            support.firePropertyChange(null, null, null);
-            return true;
-        }
-        else
-            return false;
-    }
+
 
     public void setStateRegister(){
         controller.setStateRegister();
@@ -65,5 +54,20 @@ public class ClientObservable {
     public void setStateMain(){
         controller.setStateMain();
         support.firePropertyChange(null, null, null);
+    }
+
+
+    public void Logout(){
+        controller.Logout();
+        support.firePropertyChange(null, null, null);
+    }
+
+    public boolean Authentication(String username, String password){
+        if(controller.Authentication(username, password)){
+            support.firePropertyChange(null, null, null);
+            return true;
+        }
+        else
+            return false;
     }
 }

@@ -15,18 +15,7 @@ public class ClientController {
         return state;
     }
 
-    public void logout(){
-        state.setType(State.TYPE.AUTHENTICATE);
-    }
 
-    public boolean Authentication(String username, String password){
-        if(communication.Authenticate(username, password)){
-            setStateMain();
-            return true;
-        }
-        else
-            return false;
-    }
 
     public boolean isStateRegister(){ return state.isRegister();}
 
@@ -40,6 +29,10 @@ public class ClientController {
 
     public boolean isStateCreate(){return state.isCreate();}
 
+    public void setStateAuthentication() {
+        state.setType(State.TYPE.AUTHENTICATE);
+    }
+
     public void setStateMain() {
         state.setType(State.TYPE.MAIN);
     }
@@ -50,5 +43,33 @@ public class ClientController {
 
     public void setStateRegister(){
         state.setType(State.TYPE.REGISTER);
+    }
+
+
+    public void Logout(){
+        setStateAuthentication();
+    }
+
+    public boolean Authentication(String username, String password){
+        if(communication.Authenticate(username, password)){
+            setStateMain();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public boolean Register(Boolean permissionLvl, String name, String username, String password){
+        if(communication.Register(permissionLvl, name, username, password)){
+            setStateAuthentication();
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+    public String getUsername(){
+        return communication.getLoggedUser().getUsername();
     }
 }
