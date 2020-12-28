@@ -2,7 +2,9 @@ package shared_data.communication.request;
 
 import shared_data.communication.Request;
 
-public class RequestAuthentication extends Request {
+import java.io.Serializable;
+
+public class RequestAuthentication extends Request implements Serializable {
 
     private String username;
     private String password;

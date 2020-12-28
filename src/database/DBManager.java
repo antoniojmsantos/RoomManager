@@ -16,18 +16,16 @@ public abstract class DBManager {
     private static IRoomDao IRoomDao;
 
     public static void init(String URL, String username, String password) {
-        if (!isClosed()) {
-            try {
-                conn = DriverManager.getConnection(URL, username, password);
+        try {
+            conn = DriverManager.getConnection(URL, username, password);
 
-                userDao = new UserDao(conn);
-                groupDao = new GroupDao(conn);
-                groupMemberDao = new GroupMemberDao(conn);
-              //  eventDao = new EventDao(conn);
-             //   roomDao = new RoomDao(conn);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            userDao = new UserDao(conn);
+            groupDao = new GroupDao(conn);
+            groupMemberDao = new GroupMemberDao(conn);
+          //  eventDao = new EventDao(conn);
+         //   roomDao = new RoomDao(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

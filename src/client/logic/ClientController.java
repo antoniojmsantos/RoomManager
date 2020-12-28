@@ -2,6 +2,8 @@ package client.logic;
 
 import client.communication.ClientCommunication;
 
+import java.io.IOException;
+
 public class ClientController {
 
     private final ClientCommunication communication = new ClientCommunication();
@@ -59,7 +61,7 @@ public class ClientController {
             return false;
     }
 
-    public boolean Register(String name, String username, String password){
+    public boolean Register(String name, String username, String password) {
         if(communication.Register(name, username, password)){
             setStateAuthentication();
             return true;

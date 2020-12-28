@@ -3,7 +3,10 @@ package server.communication.threads;
 import server.logic.ServerLogic;
 import shared_data.communication.Request;
 import shared_data.communication.request.RequestAuthentication;
+import shared_data.communication.request.RequestRegister;
 import shared_data.communication.response.ResponseAuthentication;
+import shared_data.communication.response.ResponseRegister;
+import shared_data.entities.User;
 import shared_data.helper.KeepAlive;
 import shared_data.helper.SendAndReceiveData;
 
@@ -29,6 +32,7 @@ public class AttendanceClients extends Thread{
                 Request request = (Request)SendAndReceiveData.receiveData(socketClient);
                 verifyRequest(request);
             } catch (IOException e) {
+                e.printStackTrace();
                 break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -38,14 +42,26 @@ public class AttendanceClients extends Thread{
     }
 
     public void verifyRequest(Request request) throws IOException {
-        if(request instanceof RequestAuthentication){
+        if(request instanceof RequestAuthentication) {
             RequestAuthentication authentication = (RequestAuthentication) request;
-            if(serverLogic.getAuthenticate(authentication.getUsername(), authentication.getPassword())){
-                ResponseAuthentication responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),true);
-                SendAndReceiveData.sendData(responseAuthentication,socketClient);
+            User user = serverLogic.getAuthenticate(authentication.getUsername(), authentication.getPassword());
+            ResponseAuthentication responseAuthentication;
+            if(user != null){
+                responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), true, user);
             }else{
-                ResponseAuthentication responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),false);
-                SendAndReceiveData.sendData(responseAuthentication,socketClient);
+                responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), false, null);
+            }
+            SendAndReceiveData.sendData(responseAuthentication,socketClient);
+        }
+        else if(request instanceof RequestRegister) {
+            RequestRegister register = (RequestRegister) request;
+            System.out.println(register.getUsername() + " "+ register.getPermissionLevel());
+            if (serverLogic.registerUsers(register)){
+                ResponseRegister responseRegister = new ResponseRegister(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),true);
+                SendAndReceiveData.sendData(responseRegister,socketClient);
+            }else {
+                ResponseRegister responseRegister = new ResponseRegister(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),false);
+                SendAndReceiveData.sendData(responseRegister,socketClient);
             }
         }
     }

@@ -2,8 +2,10 @@ package client.communication;
 
 import shared_data.communication.request.RequestAuthentication;
 import shared_data.communication.request.RequestFirstContact;
+import shared_data.communication.request.RequestRegister;
 import shared_data.communication.response.ResponseAuthentication;
 import shared_data.communication.response.ResponseFirstContact;
+import shared_data.communication.response.ResponseRegister;
 import shared_data.entities.Event;
 import shared_data.entities.Group;
 import shared_data.entities.Room;
@@ -60,37 +62,55 @@ public class ClientCommunication {
     }
 
     public boolean Authenticate(String username, String password) {
-//        try {
-//            SendAndReceiveData.sendData(new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort(),username,password), socketTCP);
-//
-//            ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
-//
-//            System.out.println("Authentication: "+response.isAuthenticated());
-//
-//            return response.isAuthenticated();
-//        } catch (IOException | ClassNotFoundException /*| ClassNotFoundException*/ e) {
-//            e.printStackTrace();
-//        }
-//        //se chegar aqui ocorreu um erro no try
-//        return false;
-//                    //TODO: TEM DE RECEBER UM OBJETO USER E ARMAZENALO NO MEMBRO PRIVADO DESTA CLASSE.
-//
-//                    //return response.isAuthenticated();
-//                } catch (IOException /*| ClassNotFoundException*/ e) {
-//                    e.printStackTrace();
-//                }
-//            }
-        return true;
+        try {
+           SendAndReceiveData.sendData(new RequestAuthentication(InetAddress.getLocalHost().getHostAddress(), socketTCP.getLocalPort(),username,password), socketTCP);
+           ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
+           this.loggedUser = response.getUser();
+           return response.isAuthenticated();
+        } catch (IOException | ClassNotFoundException e) {
+           e.printStackTrace();
+        }
+        System.out.println("se chegar aqui ocorreu um erro no try");
+        return false;
     }
 
     public boolean Register(String name, String username, String password){
+        String[] data = username.split("@");
+        String typeOfUser = data[0];
+        Boolean permission = true;
 
-        // permissionLvl(0) = aluno, etc. permissionLvl(1) = docente, etc.
+        try{
+            if(typeOfUser.length() == 9){
+                if(typeOfUser.charAt(0) == 'a'){
+                    for(int i = 1; i < 9;i++){
+                        try{
+                            Integer.parseInt(String.valueOf(typeOfUser.charAt(i)));
+                            permission = false;
+                        } catch (NumberFormatException e) {
+                            permission = true;
+                            break;
+                        }
+                    }
+                    System.out.println(username + " " + name +" " + password+" " + permission);
+                    RequestRegister requestRegister = new RequestRegister(InetAddress.getLocalHost().getHostAddress(), socketTCP.getPort(),username,name,password,permission);
+                    SendAndReceiveData.sendData(requestRegister,socketTCP);
+                }
+            }else {
+                RequestRegister requestRegister = new RequestRegister(InetAddress.getLocalHost().getHostAddress(), socketTCP.getPort(),username,name,password,true);
+                SendAndReceiveData.sendData(requestRegister,socketTCP);
+            }
 
-        //TODO: CRIAR UM OBJETO USER COM OS DADOS QUE RECEBEU DO CONTROLADOR E MANDA LO AO SERVIDOR PARA INSERIR NA DB.
+            ResponseRegister responseRegister = (ResponseRegister) SendAndReceiveData.receiveData(socketTCP);
 
-        //TODO: RETORNA 0 SE NAO FOI CRIADO COM SUCESSO OU 1 SE FOI CRIADO COM SUCESSO
-        return true;
+            return responseRegister.getResult();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean CreateEvent(Boolean permissionLvl, String name, String username, String password){

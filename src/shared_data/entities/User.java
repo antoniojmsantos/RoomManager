@@ -1,6 +1,8 @@
 package shared_data.entities;
 
-public class User implements Comparable<User> {
+import java.io.Serializable;
+
+public class User implements Comparable<User>, Serializable {
 
     private String username;
     private String name;
