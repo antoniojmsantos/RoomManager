@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface IEventDao {
     Event get(int id);
     List<Event> getAll();
-    void insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration);
+    int insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration);
     void delete(int id);
 
     // own

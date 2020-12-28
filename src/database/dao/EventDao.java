@@ -65,9 +65,11 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public void insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration) {
+    public int insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration) {
         PreparedStatement st = null;
+        ResultSet rs = null;
 
+        int id = 0;
         try {
             st = conn.prepareStatement(
                     "insert into tb_event(vc_name, i_room_id, vc_group_name, d_date_start, t_duration) " +
@@ -79,11 +81,19 @@ public class EventDao implements IEventDao {
             st.setObject(4,startDate);
             st.setObject(5,duration);
             st.executeUpdate();
+
+            st = conn.prepareStatement("select LAST_INSERT_ID()");
+            rs = st.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
         }
+        return id;
     }
 
     @Override
