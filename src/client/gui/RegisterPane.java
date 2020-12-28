@@ -26,21 +26,19 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
     private ClientObservable observable;
 
-    TextField txt_username;
+    TextField txt_name;
     TextField txt_email;
     PasswordField txt_password;
-    ChoiceBox<String> cb_rank;
-    Button bt_entrar;
+    CheckBox cbAccept;
+    Button btRegister;
 
     public RegisterPane(ClientObservable observable){
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
 
-        txt_username = new TextField();
+        txt_name = new TextField();
         txt_email = new TextField();
         txt_password = new PasswordField();
-        cb_rank = new ChoiceBox<>();
-
 
         setupLogo();
         setupRegisterInfo();
@@ -48,6 +46,13 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
         propertyChange(null);
 
+    }
+
+    public void resetControls(){
+        txt_name.clear();
+        txt_email.clear();
+        txt_password.clear();
+        cbAccept.setSelected(false);
     }
 
     public void setupLogo() {
@@ -75,34 +80,34 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
 
 
-        HBox boxType = new HBox(10);
-        boxType.setPadding(new Insets(0,0,60,0));
-        boxType.setAlignment(Pos.CENTER_LEFT);
+//        HBox boxType = new HBox(10);
+//        boxType.setPadding(new Insets(0,0,60,0));
+//        boxType.setAlignment(Pos.CENTER_LEFT);
+//
+//        Label lblType = new Label("Registar como:");
+//        cb_rank.getItems().add("Aluno/Funcionário");
+//        cb_rank.getItems().add("Docente/Encarregado/Chefe de Equipa");
+//        cb_rank.setValue("Aluno/Funcionário");
+//
+//        ImageView img_question = new ImageView(Images.getImage(Constants.QUESTION));
+//        img_question.setFitHeight(20);
+//        img_question.setFitWidth(20);
+//        img_question.setPreserveRatio(true);
+//
+//        Tooltip tooltip = new Tooltip("Este estatuto terá de ser aprovado pelo administrador.");
+//        tooltip.setShowDelay(Duration.seconds(0.1));
+//        Tooltip.install(img_question, tooltip);
+//
+//        boxType.getChildren().addAll(lblType, cb_rank, img_question);
 
-        Label lblType = new Label("Registar como:");
-        cb_rank.getItems().add("Aluno/Funcionário");
-        cb_rank.getItems().add("Docente/Encarregado/Chefe de Equipa");
-        cb_rank.setValue("Aluno/Funcionário");
-
-        ImageView img_question = new ImageView(Images.getImage(Constants.QUESTION));
-        img_question.setFitHeight(20);
-        img_question.setFitWidth(20);
-        img_question.setPreserveRatio(true);
-
-        Tooltip tooltip = new Tooltip("Este estatuto terá de ser aprovado pelo administrador.");
-        tooltip.setShowDelay(Duration.seconds(0.1));
-        Tooltip.install(img_question, tooltip);
-
-        boxType.getChildren().addAll(lblType, cb_rank, img_question);
 
 
-
-        txt_username.setPromptText("Nome");
+        txt_name.setPromptText("Nome");
         txt_email.setPromptText("Email da Organização");
         txt_password.setPromptText("Palavra-Passe");
 
 
-        boxRegisterInfo.getChildren().addAll(boxType, txt_username, txt_email, txt_password );
+        boxRegisterInfo.getChildren().addAll(txt_name, txt_email, txt_password );
 
 
 
@@ -163,13 +168,13 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
 //        boxEntrar.setAlignment(Pos.CENTER);
 
-        CheckBox check = new CheckBox("Concordo que os meus dados irão ser submetidos de modo a serem analisados," +
+       cbAccept = new CheckBox("Concordo que os meus dados irão ser submetidos de modo a serem analisados," +
                 " para que o administrador proceda à aprovação do meu estatuto.");
-        check.setWrapText(true);
+        cbAccept.setWrapText(true);
 //        check.setAlignment(Pos.CENTER_RIGHT);
 
-        bt_entrar = new Button("Efetuar registo");
-        bt_entrar.setMaxWidth(Double.MAX_VALUE);
+        btRegister = new Button("Efetuar registo");
+        btRegister.setMaxWidth(Double.MAX_VALUE);
 
 
         Pane boxLogin = new Pane();
@@ -180,9 +185,9 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 //        setMargin(hl_registo, new Insets(500,0,0,0));
         boxLogin.getChildren().add(hlLogin);
 
-        bt_entrar.setOnAction(new RegisterPane.RegisterListener());
+        btRegister.setOnAction(new RegisterPane.RegisterListener());
 
-        boxEntrar.getChildren().addAll(check, bt_entrar);
+        boxEntrar.getChildren().addAll(cbAccept, btRegister);
 
 //        boxMerge.setStyle("-fx-background-color: black");
 
@@ -201,37 +206,46 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
     class RegisterListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e){
-            //AQUI VAI DIZER AO OBSERVAVEL QUE QUER FAZER register E MANDAR LHE AS
-            //CREDENCIAIS QUE OBTEVE, para validar que não existem outra iguais e senão existirem, guardar na base de dados
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("");
 
 
-           /* if(!observable.Authentication(txt_username.getText(), txt_password.getText())){
-                Alert alert = new Alert( Alert.AlertType.ERROR);
-                alert.setTitle("");
-                alert.setHeaderText( "Erro ao autenticar!" );
-                alert.setContentText( "Verifique os seus dados e tente novamente" );
-
-                Timeline idlestage = new Timeline( new KeyFrame( Duration.seconds(3), new EventHandler<ActionEvent>()
-                {
-
-                    @Override
-                    public void handle( ActionEvent event )
-                    {
-                        alert.setResult(ButtonType.CANCEL);
-                        alert.hide();
-                    }
-                } ) );
-                idlestage.setCycleCount( 1 );
-                idlestage.play();
-
+            if(txt_name.getText().trim().equals("") || txt_name.getText().trim().equals("") || txt_password.getText().trim().equals("")){
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText( "Erro ao criar novo registo!" );
+                alert.setContentText( "É obrigatório preencher todos os campos." );
                 alert.showAndWait();
-            }*/
-
+            }
+            else if(!cbAccept.isSelected())
+            {
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText( "Erro ao criar novo registo!" );
+                alert.setContentText( "É obrigatório aceitar as condições de registo." );
+                alert.showAndWait();
+            }
+            else if(!observable.Register(txt_name.getText(), txt_email.getText(), txt_password.getText())){
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText( "Erro ao criar novo registo!" );
+                alert.setContentText( "Já existe uma conta com este email." );
+                alert.showAndWait();
+            }
+            else{
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.setHeaderText( "Registado com sucesso!" );
+                alert.setContentText( "A sua conta '" + txt_email.getText().trim() + "' foi criada com sucesso.\n" +
+                        "Pode agora efetuar Autenticação." );
+                alert.showAndWait();
+            }
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        setVisible(observable.isStateRegister());
+        if(observable.isStateRegister())
+            setVisible(true);
+        else{
+            resetControls();
+            setVisible(false);
+        }
     }
 }
