@@ -4,6 +4,7 @@ import database.DBManager;
 import shared_data.communication.request.RequestCreateEvent;
 import shared_data.communication.request.RequestRegister;
 import shared_data.entities.Event;
+import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.entities.User;
 import shared_data.helper.ClientInfo;
@@ -82,5 +83,9 @@ public final class ServerLogic {
 
     public ArrayList<Event> getUserPendingEvents(User user) {
         return (ArrayList<Event>) DBManager.getUserDao().getEventsPending(user.getUsername());
+    }
+
+    public ArrayList<Group> getAllGroups() {
+        return (ArrayList<Group>) DBManager.getGroupDao().getAll();
     }
 }

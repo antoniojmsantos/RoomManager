@@ -130,23 +130,52 @@ public class ClientCommunication {
         try{
             RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup,duration,name,initialDate);
             SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
-        } catch (IOException e) {
+            ResponseCreateEvent responseCreateEvent = (ResponseCreateEvent) SendAndReceiveData.receiveData(socketTCP);
+            if(responseCreateEvent.getEvent() != null){
+                return true;
+            }
+            else{
+                return false;
+            }
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
+    }
 
+    public ArrayList<Event> getPendingEvents(){
+        try{
+            RequestPendingEvents requestPendingEvents = new RequestPendingEvents(this.loggedUser);
+            SendAndReceiveData.sendData(requestPendingEvents,socketTCP);
+            ResponsePendingEvents responsePendingEvents = (ResponsePendingEvents)SendAndReceiveData.receiveData(socketTCP);
+            return responsePendingEvents.getUserEvents();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-        //TODO: CRIAR UM OBJETO EVENT COM OS DADOS Q RECEBEU DO CONTROLADOR E MANDA LO AO SERVIDOR PARA INSERIR NA DB.
-
-        //TODO: ATENCAO!!! PELO QUE ESTIVE A VER, ASSIM QUE FOR CRIADO UM EVENTO VAI TER DE SER ADICIONADO À
-        // TABELA DE SUBSCRICOES UM REGISTO PARA TODOS OS UTILIZADORES E VAI TER DE TER UM CAMPO QUE DIGA SE ACEITOU OU REJEITOU.
-
-        //TODO: RETORNA 0 SE NAO FOI CRIADO COM SUCESSO OU 1 SE FOI CRIADO COM SUCESSO
-        return true;
+    public ArrayList<Event> getUserEvents(){
+        try{
+            RequestUserEvents requestUserEvents = new RequestUserEvents(this.loggedUser);
+            SendAndReceiveData.sendData(requestUserEvents,socketTCP);
+            ResponseUserEvents responseUserEvents = (ResponseUserEvents)SendAndReceiveData.receiveData(socketTCP);
+            return responseUserEvents.getUserEvents();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ArrayList<Group> getAllGroups(){
-        //TODO: RECEBE TODOS OS GRUPOS QUE EXISTEM NA BD, DE MODO A PODER APRESENTA-LOS COMO DICIONARIO NO CRIA EVENTO
-
+        try{
+            RequestGetGroups requestGetGroups = new RequestGetGroups();
+            SendAndReceiveData.sendData(requestGetGroups,socketTCP);
+            ResponseGetGroup  responseGetGroup = (ResponseGetGroup)SendAndReceiveData.receiveData(socketTCP);
+            return responseGetGroup.getGroups();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

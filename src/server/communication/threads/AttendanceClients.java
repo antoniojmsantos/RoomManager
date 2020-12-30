@@ -100,5 +100,19 @@ public class AttendanceClients extends Thread{
             ResponseGetRooms responseGetRooms = new ResponseGetRooms(serverLogic.getAllRooms());
             SendAndReceiveData.sendData(responseGetRooms,socketClient);
         }
+        else if(request instanceof RequestGetGroups){
+            ResponseGetGroup responseGetGroup = new ResponseGetGroup(serverLogic.getAllGroups());
+            SendAndReceiveData.sendData(responseGetGroup,socketClient);
+        }
+        else if(request instanceof  RequestUserEvents){
+            RequestUserEvents requestUserEvents = (RequestUserEvents)request;
+            ResponseUserEvents responseUserEvents = new ResponseUserEvents(serverLogic.getUserEvents(requestUserEvents.getUser()));
+            SendAndReceiveData.sendData(responseUserEvents,socketClient);
+        }
+        else if(request instanceof RequestPendingEvents){
+            RequestPendingEvents requestPendingEvents = (RequestPendingEvents)request;
+            ResponsePendingEvents responsePendingEvents = new ResponsePendingEvents(serverLogic.getUserPendingEvents(requestPendingEvents.getUser()));
+            SendAndReceiveData.sendData(responsePendingEvents,socketClient);
+        }
     }
 }
