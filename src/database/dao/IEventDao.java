@@ -15,6 +15,8 @@ public interface IEventDao {
     int insert(String name, int roomId, String groupName, LocalDateTime startDate, int duration);
     void delete(int id);
 
+    List<Event> getEventsInRoom(int id_room);
+
     // own
     Event build(ResultSet rs) throws SQLException;
 }
