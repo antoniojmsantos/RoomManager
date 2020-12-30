@@ -275,13 +275,16 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         cb2_arcondicionado.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-
+        dtInitialDate.valueProperty().addListener(obs->{
+            calculatePredicate();
+        });
 
         paneRooms.setContent(listRooms);
 
         boxEventFilters.getChildren().add(paneRooms);
 
     }
+
 
     private void calculatePredicate() {
         String filterTxt = txtRoomName.getText();
@@ -295,11 +298,19 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         boolean cbMacOSCap = cb2_macos.isSelected();
         boolean cbQuadroInterativoCap = cb2_quadroiterativo.isSelected();
         boolean cbArCondicionadoCap = cb2_arcondicionado.isSelected();
+        LocalDateTime dtInitialDateCap = dtInitialDate.getDateTimeValue();
 
         filteredRoomsList.setPredicate(s -> {
             boolean availableMatch = observable.isRoomAvailable(s.getId()); //CHECKS AND ONLY SHOWS IF ROOM SCHEDULE IS AVAILABLE
             boolean txtMatch = filterTxt.isEmpty() || s.getName().contains(filterTxt);
             boolean capMatch = filterCap == 0 || s.getCapacity() == filterCap;
+           /* boolean datadisponivel = false;
+            for(int i = 0; i< s.getTIme().size(); i++){
+                if(dtInitialDate.getDateTimeValue() == s.getTime().get(i)){
+                    datadisponivel = true;
+                }
+            }*/
+
 //            boolean cbAnfiMatch = cbAnfiCap;
 //            boolean cbLabMatch =;
 //            boolean cbSalaReuniaoMatch =;
