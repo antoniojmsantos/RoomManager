@@ -1,8 +1,8 @@
 package client;
 
-import client.gui.aux.Constants;
-import client.gui.aux.Images;
-import client.gui.aux.PaneOrganizer;
+import client.gui.auxiliar.Constants;
+import client.gui.auxiliar.Images;
+import client.gui.auxiliar.PaneOrganizer;
 import client.logic.ClientObservable;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;

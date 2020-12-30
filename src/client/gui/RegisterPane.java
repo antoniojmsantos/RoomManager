@@ -1,7 +1,7 @@
 package client.gui;
 
-import client.gui.aux.Constants;
-import client.gui.aux.Images;
+import client.gui.auxiliar.Constants;
+import client.gui.auxiliar.Images;
 import client.logic.ClientObservable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

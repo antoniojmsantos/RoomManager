@@ -94,7 +94,8 @@ public class ClientController {
 
     public ArrayList<Room> getRooms(){
 
-        return communication.getRooms();
+//        return communication.getRooms();
+        return null;
     }
 
     public boolean isRoomAvailable(int id){

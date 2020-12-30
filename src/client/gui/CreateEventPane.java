@@ -1,10 +1,8 @@
 package client.gui;
 
-import client.gui.aux.Constants;
+import client.gui.auxiliar.Constants;
 import client.gui.custom_controls.DateTimePicker;
 import client.logic.ClientObservable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;

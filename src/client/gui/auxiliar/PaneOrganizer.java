@@ -1,4 +1,4 @@
-package client.gui.aux;
+package client.gui.auxiliar;
 
 import client.gui.RMRoot;
 import client.logic.ClientObservable;

@@ -1,6 +1,6 @@
 package client.gui;
 
-import client.gui.aux.Constants;
+import client.gui.auxiliar.Constants;
 import client.gui.custom_controls.Calendar;
 import client.logic.ClientObservable;
 import javafx.beans.binding.Bindings;
