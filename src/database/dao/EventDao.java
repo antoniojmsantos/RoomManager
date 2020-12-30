@@ -65,6 +65,30 @@ public class EventDao implements IEventDao {
     }
 
     @Override
+    public List<Event> getEventsInRoom(int id_room){
+        PreparedStatement st = null;
+        ResultSet rs= null;
+
+        List<Event> events = new ArrayList<>();
+        try{
+            st = conn.prepareStatement(
+                    "select * from tb_event where i_room_id = ?"
+            );
+            st.setInt(1, id_room);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                events.add(build(rs));
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+        return events;
+    }
+
+    @Override
     public int insert(String name, int roomId, String groupName, LocalDateTime startDate, int duration) {
         PreparedStatement st = null;
         ResultSet rs = null;

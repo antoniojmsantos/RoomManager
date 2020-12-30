@@ -1,6 +1,7 @@
 package database.dao;
 
 import database.DBManager;
+import shared_data.entities.Event;
 import shared_data.entities.Group;
 import shared_data.entities.User;
 
@@ -174,6 +175,41 @@ public class UserDao implements IUserDao {
         }
 
         return groups;
+    }
+
+    @Override
+    public List<Event> getEventsPending(String username) {
+        return getEvents(username, "pending");
+    }
+
+    @Override
+    public List<Event> getEventsAccepted(String username) {
+        return getEvents(username, "accepted");
+    }
+
+    public List<Event> getEvents(String username, String state) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        List<Event> events = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "select i_event_id from tb_event_subscription where vc_user_username = ? and vc_state = ?"
+            );
+            st.setString(1, username);
+            st.setString(2, state);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                events.add(DBManager.getEventDao().get(rs.getInt("i_event_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+
+        return events;
     }
 
     // own

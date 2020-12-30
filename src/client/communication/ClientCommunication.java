@@ -1,13 +1,8 @@
 package client.communication;
 
 import client.communication.threads.ThreadListenPendentEvents;
-import shared_data.communication.request.RequestAuthentication;
-import shared_data.communication.request.RequestCreateEvent;
-import shared_data.communication.request.RequestFirstContact;
-import shared_data.communication.request.RequestRegister;
-import shared_data.communication.response.ResponseAuthentication;
-import shared_data.communication.response.ResponseFirstContact;
-import shared_data.communication.response.ResponseRegister;
+import shared_data.communication.request.*;
+import shared_data.communication.response.*;
 import shared_data.entities.Event;
 import shared_data.entities.Group;
 import shared_data.entities.Room;
@@ -34,6 +29,9 @@ public class ClientCommunication {
     private Socket socketCallBack;
 
     private User loggedUser;
+
+    private ArrayList<Event> pendingEvents;
+    private ArrayList<Event> registeredEvents;
 
     public User getLoggedUser(){ return loggedUser; }
 
@@ -76,6 +74,8 @@ public class ClientCommunication {
            if(response.isAuthenticated()){
                socketCallBack = clientSocket.accept();
                this.loggedUser = response.getUser();
+               this.pendingEvents = response.getPendingEvents();
+               this.registeredEvents = response.getRegisteredEvents();
                ThreadListenPendentEvents threadListenPendentEvents = new ThreadListenPendentEvents(socketCallBack);
                threadListenPendentEvents.start();
            }
@@ -150,26 +150,16 @@ public class ClientCommunication {
         return null;
     }
 
-    public ArrayList<Event> getPendingUserEvents(){
-        //TODO: PEDE AO SERVIDOR OS EVENTOS PENDENTES DO "currentUser"
-        return null;
-    }
+    public ArrayList<Room> getRooms(){
+        try{
+            RequestGetRooms requestGetRooms = new RequestGetRooms();
+            SendAndReceiveData.sendData(requestGetRooms,socketTCP);
+            ResponseGetRooms responseGetRooms = (ResponseGetRooms)SendAndReceiveData.receiveData(socketTCP);
+            return responseGetRooms.getRooms();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-    public ArrayList<Event> getUserEvents(){
-
-        //TODO: PEDE AO SERVIDOR OS EVENTOS A QUE O "currentUser" SE ENCONTRA INSCRITO
-        return null;
-    }
-
-    public ArrayList<Room> getRoomsWithFilter(String name){
-        //TODO: FALTA VER DE QUE MANEIRA VAMOS LHE ENVIAR AS CARACTERISTICAS. ArrayList? String com espaços?
-        // Isto é importante porque de que forma vai ser gerida essa string na interface?
-        // visto que o user pode fazer check e uncheck às caracteristicas.
-
-        //TODO: NA QUERY SQL É PRECISO TER ATENÇÃO PARA SÓ DEVOLVER AS SALAS QUE NÃO ESTEJAM JA OCUPADAS NO DETERMINADO HORARIO
-
-
-        //TODO: PEDE AO SERVIDOR AS SALAS COM AS DETERMINADAS CARACTERISTICAS QUE RECEBE DO CONTROLADOR.
         return null;
     }
 
