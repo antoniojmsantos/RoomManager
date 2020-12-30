@@ -166,6 +166,18 @@ public class ClientCommunication {
         }
         return null;
     }
+    public ArrayList<Event> getEventsCreated(){
+        try{
+            RequestCreatedEvents requestCreatedEvents = new RequestCreatedEvents(this.loggedUser);
+            SendAndReceiveData.sendData(requestCreatedEvents,socketTCP);
+            
+            ResponseUserEvents responseUserEvents = (ResponseUserEvents)SendAndReceiveData.receiveData(socketTCP);
+            return responseUserEvents.getUserEvents();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public ArrayList<Group> getAllGroups(){
         try{

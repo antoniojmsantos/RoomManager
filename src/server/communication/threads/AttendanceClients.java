@@ -114,5 +114,10 @@ public class AttendanceClients extends Thread{
             ResponsePendingEvents responsePendingEvents = new ResponsePendingEvents(serverLogic.getUserPendingEvents(requestPendingEvents.getUser()));
             SendAndReceiveData.sendData(responsePendingEvents,socketClient);
         }
+        else if(request instanceof RequestCreatedEvents){
+            RequestCreatedEvents requestCreatedEvents = (RequestCreatedEvents)request;
+            ResponseCreatedEvents responseCreatedEvents  = new ResponseCreatedEvents(serverLogic.getCreatedEvents(requestCreatedEvents.getUser()));
+            SendAndReceiveData.sendData(responseCreatedEvents,socketClient);
+        }
     }
 }

@@ -89,4 +89,9 @@ public final class ServerLogic {
     public ArrayList<Group> getAllGroups() {
         return (ArrayList<Group>) DBManager.getGroupDao().getAll();
     }
+
+    public ArrayList<Event> getCreatedEvents(User user) {
+
+        return null;
+    }
 }
