@@ -9,11 +9,11 @@ import java.util.Date;
 
 public class RequestCreateEvent extends Request implements Serializable {
     private int idRoom;
-    private Duration duration;
+    private int duration;
     private String name,nameGroup;
     private LocalDateTime initialDate;
 
-    public RequestCreateEvent(int idRoom, String nameGroup, Duration duration, String name, LocalDateTime initialDate) {
+    public RequestCreateEvent(int idRoom, String nameGroup, int duration, String name, LocalDateTime initialDate) {
         this.idRoom = idRoom;
         this.nameGroup = nameGroup;
         this.duration = duration;
@@ -29,7 +29,7 @@ public class RequestCreateEvent extends Request implements Serializable {
         return nameGroup;
     }
 
-    public Duration getDuration() {
+    public int getDuration() {
         return duration;
     }
 

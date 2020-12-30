@@ -45,13 +45,13 @@ public class AttendanceClients extends Thread{
         System.out.println("Client went off");
     }
 
-    // TODO:Quando criado um evento criar uma thread que so manda para os users do grupo
     /**
      *
      * @param request
      * @throws IOException
      */
     public void verifyRequest(Request request) throws IOException {
+
         if(request instanceof RequestAuthentication) {
             RequestAuthentication authentication = (RequestAuthentication) request;
             User user = serverLogic.getAuthenticate(authentication.getUsername(), authentication.getPassword());
@@ -85,12 +85,15 @@ public class AttendanceClients extends Thread{
                 //positivo
                 responseCreateEvent = new ResponseCreateEvent(event);
                 SendAndReceiveData.sendData(responseCreateEvent,socketClient);
-                //TODO: lançar thread paara enviar aos users
+                NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic);
+                notifyPendentEvents.start();
             }else{
                 responseCreateEvent = new ResponseCreateEvent(null);
                 SendAndReceiveData.sendData(responseCreateEvent,socketClient);
                 //negativo
             }
+        }
+        else if(request instanceof ){
 
         }
     }
