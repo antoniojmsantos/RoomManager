@@ -1,8 +1,10 @@
 package server.ui;
 
 import server.logic.ServerLogic;
+import shared_data.entities.User;
 import shared_data.helper.KeepAlive;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ServerInterface extends Thread {
@@ -69,17 +71,50 @@ public class ServerInterface extends Thread {
     }
 
     private void manageRoles(){
+
         //1º-> É apresentada a lista de utilizadores registados na base de dados
-        //2º-> É possível escolher um utilizador específico, para alterar as suas permissões, inserindo o id do utilizador
-        System.out.println("ID Search: ");
-        String idModify = scan.nextLine();
+        ArrayList<User> users=serverLogic.getAllUsersInterface();
+        for(int i=0;i<users.size();i++){
+            System.out.println(users.get(i).getUsername()+"\n");
+        }
+
+        //2º-> É possível escolher um utilizador específico, para alterar as suas permissões, inserindo o username do utilizador
+        System.out.println("\nUsername:\t");
+        String userid = scan.nextLine();
 
         //3º-> É apresentada uma lista de permisões, sendo possível alterá-las
-        //  É feito atravéz da inserção do nome da permissão e do valor a registar para a permissão
+        Boolean permissions= serverLogic.getUserPermissions(userid);
 
-        //4º-> O sistema atualiza a base de dados (Tabela correspondente às permissões do utilizador)
-        //5º-> O administrador é remtido para o ecrã de administrasção de utilizadores
+                //docente if(permissions)
+
+        if(permissions)
+            System.out.println("O user é docente.\n");
+        else if(!permissions) System.out.println("O user é aluno.\n");
+        else System.out.println("Username não encontrado.\n");
+
+        //  É feito através da inserção do nome da permissão e do valor a registar para a permissão
+        System.out.println("\nPermissão:\t");
+        String perm = scan.nextLine();
+
+        if(perm.equals("aluno")) {
+            if(!permissions)
+                System.out.println("\nUser já com role de aluno.");
+            //4º-> O sistema atualiza a base de dados (Tabela correspondente às permissões do utilizador)
+            else serverLogic.setPermissions(userid, false);
+        }
+        else if(perm.equals("docente")) {
+            if(!permissions)
+                System.out.println("\nUser já com role de docente.");
+            //4º-> O sistema atualiza a base de dados (Tabela correspondente às permissões do utilizador)
+            else serverLogic.setPermissions(userid, false);
+        }
+        else System.out.println("Nome de permissao invalido.");
+
+        //5º-> O administrador é remetido para o ecrã de administrasção de utilizadores
+        run();
     }
+
+
 
     private void manageGroups(){
         System.out.println("------Group Management-------");

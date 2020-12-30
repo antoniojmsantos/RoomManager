@@ -93,4 +93,17 @@ public final class ServerLogic {
     public ArrayList<Event> getCreatedEvents(User user) {
         return (ArrayList<Event>) DBManager.getEventDao().getEventsByCreator(user.getUsername());
     }
+
+    public ArrayList<User> getAllUsersInterface() {
+        return (ArrayList<User>) DBManager.getUserDao().getAll();
+    }
+
+
+    public boolean getUserPermissions(String userid) {
+            return DBManager.getUserDao().get(userid).isPermissions();
+    }
+
+    public void setPermissions(String userid,boolean i){
+        DBManager.getUserDao().updatePermissions(userid,i);
+    }
 }
