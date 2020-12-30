@@ -29,7 +29,6 @@ public class Calendar extends VBox {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) {
                 CalendarItem ap = new CalendarItem();
-                ap.setPrefSize(200,200);
                 calendar.add(ap,j,i);
                 allCalendarDays.add(ap);
             }
@@ -87,23 +86,22 @@ public class Calendar extends VBox {
         // Populate the calendar with day numbers
         for (CalendarItem ap : allCalendarDays) {
             if (ap.getChildren().size() != 0) {
-                ap.getChildren().remove(0);
+                for(int i = 0; i < ap.getChildren().size(); i++)
+                    ap.getChildren().remove(i);
             }
-            Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
-            if(currentDate.isEqual(calendarDate)) // Changes the color of the text on the current day
-                txt.setFill(Color.web("#0093ff"));
-            ap.setDate(calendarDate);
-            ap.getChildren().add(txt);
+            ap.populateItem(calendarDate, currentDate);
             calendarDate = calendarDate.plusDays(1);
         }
         // Change the title of the calendar
         calendarTitle.setText(yearMonth.getMonth().toString() + " " + String.valueOf(yearMonth.getYear()));
     }
 
+
     private void previousMonth() {
         currentYearMonth = currentYearMonth.minusMonths(1);
         populateCalendar(currentYearMonth);
     }
+
 
     private void nextMonth() {
         currentYearMonth = currentYearMonth.plusMonths(1);
