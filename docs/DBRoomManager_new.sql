@@ -29,11 +29,14 @@ CREATE TABLE `tb_event` (
   `vc_name` varchar(45) NOT NULL,
   `i_room_id` int NOT NULL,
   `vc_group_name` varchar(50) NOT NULL,
+  `vc_creator_username` varchar(50) NOT NULL,
   `d_date_start` datetime NOT NULL,
   `t_duration` time NOT NULL,
   PRIMARY KEY (`i_id`),
   KEY `event_group_idx` (`vc_group_name`),
   KEY `event_room_idx` (`i_room_id`),
+  KEY `event_creator_idx` (`vc_creator_username`),
+  CONSTRAINT `event_creator` FOREIGN KEY (`vc_creator_username`) REFERENCES `tb_user` (`vc_username`) ON DELETE CASCADE,
   CONSTRAINT `event_group` FOREIGN KEY (`vc_group_name`) REFERENCES `tb_group` (`vc_name`) ON DELETE CASCADE,
   CONSTRAINT `event_room` FOREIGN KEY (`i_room_id`) REFERENCES `tb_room` (`i_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -50,6 +53,7 @@ CREATE TABLE `tb_event_subscription` (
   `i_id` int NOT NULL AUTO_INCREMENT,
   `i_event_id` int NOT NULL,
   `vc_user_username` varchar(50) NOT NULL,
+  `vc_state` varchar(20) NOT NULL,
   PRIMARY KEY (`i_id`),
   KEY `event_idx` (`i_event_id`),
   KEY `user_idx` (`vc_user_username`),
@@ -79,10 +83,9 @@ DROP TABLE IF EXISTS `tb_group_member`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_group_member` (
-  `i_id` int NOT NULL AUTO_INCREMENT,
   `vc_group_name` varchar(50) NOT NULL,
   `vc_user_username` varchar(50) NOT NULL,
-  PRIMARY KEY (`i_id`),
+  PRIMARY KEY (`vc_group_name`,`vc_user_username`),
   KEY `group_idx` (`vc_group_name`),
   KEY `member_idx` (`vc_user_username`),
   CONSTRAINT `group` FOREIGN KEY (`vc_group_name`) REFERENCES `tb_group` (`vc_name`) ON DELETE CASCADE,
@@ -100,9 +103,27 @@ DROP TABLE IF EXISTS `tb_room`;
 CREATE TABLE `tb_room` (
   `i_id` int NOT NULL AUTO_INCREMENT,
   `vc_name` varchar(45) NOT NULL,
-  `vc_details` varchar(500) DEFAULT NULL,
+  `vc_type` varchar(45) NOT NULL,
   `i_capacity` int NOT NULL,
   PRIMARY KEY (`i_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tb_room_feature`
+--
+
+DROP TABLE IF EXISTS `tb_room_feature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_room_feature` (
+  `i_id` int NOT NULL AUTO_INCREMENT,
+  `i_room_id` int NOT NULL,
+  `vc_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`i_id`),
+  UNIQUE KEY `RoomFeature` (`i_room_id`,`vc_name`),
+  KEY `Room_idx` (`i_room_id`),
+  CONSTRAINT `Room` FOREIGN KEY (`i_room_id`) REFERENCES `tb_room` (`i_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -131,4 +152,4 @@ CREATE TABLE `tb_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-18 20:22:43
+-- Dump completed on 2020-12-30 21:27:04
