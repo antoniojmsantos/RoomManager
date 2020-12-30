@@ -4,6 +4,7 @@ import database.DBManager;
 import shared_data.communication.request.RequestCreateEvent;
 import shared_data.communication.request.RequestRegister;
 import shared_data.entities.Event;
+import shared_data.entities.Room;
 import shared_data.entities.User;
 import shared_data.helper.ClientInfo;
 
@@ -69,5 +70,17 @@ public final class ServerLogic {
             }
         }
         return clientInEvent;
+    }
+
+    public ArrayList<Room> getAllRooms() {
+        return (ArrayList<Room>) DBManager.getRoomDao().getAll();
+    }
+
+    public ArrayList<Event> getUserEvents(User user) {
+        return (ArrayList<Event>) DBManager.getUserDao().getEventsAccepted(user.getUsername());
+    }
+
+    public ArrayList<Event> getUserPendingEvents(User user) {
+        return (ArrayList<Event>) DBManager.getUserDao().getEventsPending(user.getUsername());
     }
 }

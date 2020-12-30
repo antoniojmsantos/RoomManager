@@ -2,12 +2,8 @@ package server.communication.threads;
 
 import server.logic.ServerLogic;
 import shared_data.communication.Request;
-import shared_data.communication.request.RequestAuthentication;
-import shared_data.communication.request.RequestCreateEvent;
-import shared_data.communication.request.RequestRegister;
-import shared_data.communication.response.ResponseAuthentication;
-import shared_data.communication.response.ResponseCreateEvent;
-import shared_data.communication.response.ResponseRegister;
+import shared_data.communication.request.*;
+import shared_data.communication.response.*;
 import shared_data.entities.Event;
 import shared_data.entities.User;
 import shared_data.helper.KeepAlive;
@@ -57,12 +53,19 @@ public class AttendanceClients extends Thread{
             User user = serverLogic.getAuthenticate(authentication.getUsername(), authentication.getPassword());
             ResponseAuthentication responseAuthentication;
             if(user != null){
-                responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), true, user);
+                responseAuthentication = new ResponseAuthentication(
+                        InetAddress.getLocalHost().getHostAddress()
+                        , socketClient.getPort(),
+                        true,
+                        user,
+                        serverLogic.getUserPendingEvents(user),
+                        serverLogic.getUserEvents(user));
+
                 SendAndReceiveData.sendData(responseAuthentication,socketClient);
                 socketCallBack = new Socket(authentication.getIp(),authentication.getSocketTCPclient());
                 serverLogic.addToClientInfo(socketCallBack,user);
             }else{
-                responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), false, null);
+                responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), false, null,null,null);
                 SendAndReceiveData.sendData(responseAuthentication,socketClient);
             }
         }
@@ -92,6 +95,10 @@ public class AttendanceClients extends Thread{
                 SendAndReceiveData.sendData(responseCreateEvent,socketClient);
                 //negativo
             }
+        }
+        else if(request instanceof RequestGetRooms){
+            ResponseGetRooms responseGetRooms = new ResponseGetRooms(serverLogic.getAllRooms());
+            SendAndReceiveData.sendData(responseGetRooms,socketClient);
         }
     }
 }
