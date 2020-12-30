@@ -1,20 +1,31 @@
 package client.gui;
 
+import client.gui.aux.Constants;
+import client.gui.custom_controls.DateTimePicker;
 import client.logic.ClientObservable;
-import com.sun.javafx.scene.control.IntegerField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.IntegerStringConverter;
+import shared_data.entities.Room;
 
-import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.nio.charset.CharacterCodingException;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.function.UnaryOperator;
 
 public class CreateEventPane extends VBox implements Constants, PropertyChangeListener {
 
@@ -22,31 +33,45 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     VBox boxEventFilters;
 
-    TextField txt_nome, txt_grupo, txt_sala, txt_horainicio;
-    TextField txt_lotacao, txt_duracao;
-
-    ListView<String> listRooms;
+    TextField txtEventName, txtGroup, txtRoomName;
+    DateTimePicker dtInitialDate;
+    Spinner<Integer> spDuration, spCapacity;
 
     CheckBox cb_anfi, cb_lab, cb_salareuniao;
     CheckBox cb2_projetor, cb2_mesareuniao, cb2_windows, cb2_macos, cb2_quadroiterativo, cb2_arcondicionado;
+
+    ListView<Room> listRooms;
+    FilteredList<Room> filteredRoomsList;
+    ObservableList<Room> roomsList;
+
 
     public CreateEventPane(ClientObservable observable){
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
 
-        txt_nome= new TextField();
-        txt_grupo= new TextField();
-        txt_sala = new TextField();
-        txt_horainicio = new TextField();
-        txt_lotacao = new TextField();
-        txt_duracao = new TextField();
+        txtRoomName = new TextField();
+        txtEventName= new TextField();
+        txtGroup= new TextField();
+        dtInitialDate = new DateTimePicker();
+        spDuration = new Spinner<>();
 
 
         boxEventFilters = new VBox(10);
         boxEventFilters.setPadding(new Insets(30));
 
+
+
+        ArrayList<Room> salasTeste = new ArrayList<>();
+        salasTeste.add(new Room(1, "L1.1", 10));
+        salasTeste.add(new Room(2, "L1.2", 25));
+        salasTeste.add(new Room(3, "L2.1", 25));
+        salasTeste.add(new Room(3, "L2.3", 25));
+        salasTeste.add(new Room(3, "L3.1", 25));
+        salasTeste.add(new Room(3, "A4.1", 25));
+        roomsList = FXCollections.observableArrayList(salasTeste);
+
         setupEventFilters();
-        showRooms();
+        setupRooms();
         setupButton();
 
         this.getChildren().add(boxEventFilters);
@@ -56,28 +81,102 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     }
 
 
+//    public void applyFilterRooms(){
+//        //TODO: FUNCAO QUE VAI SER EVOCADA NO INICIO DO PANE (MOSTRA TODAS) E SEMPRE QUE FOR APLICADO UM FILTRO (MOSTRA COM FILTRO)
+//
+//    }
+
+
     public void setupEventFilters(){
 
         VBox boxAux = new VBox(10); //Auxiliar box because it will have 2 vertical lines of info
+//        boxAux.setMinWidth(DIM_X_FRAME);
 
         HBox boxFilters1 = new HBox(10);
 
-        txt_nome.setPromptText("Nome Evento");
-        txt_grupo.setPromptText("Grupo Pertencente");
-        txt_horainicio.setPromptText("Hora Início");
+        txtEventName.setPromptText("Nome Evento");
+        txtGroup.setPromptText("Grupo Pertencente");
+        Button btListGroups = new Button("?");
+//        btListGroups.setOnAction(e-> );
 
-        boxFilters1.getChildren().addAll(txt_nome, txt_grupo, txt_horainicio);
+        Label lbInitialDate = new Label("Hora Inicio:");
+        dtInitialDate.setDateTimeValue(LocalDateTime.now());
+        dtInitialDate.editorProperty().get().setAlignment(Pos.CENTER);
+
+        HBox boxAuxDate = new HBox(lbInitialDate, dtInitialDate);
+        boxAuxDate.setSpacing(10);
+        boxAuxDate.setAlignment(Pos.CENTER);
+
+        boxFilters1.getChildren().addAll(txtEventName, txtGroup, btListGroups, boxAuxDate);
+
+        lbInitialDate.setMinWidth(Region.USE_PREF_SIZE);
+        dtInitialDate.prefWidthProperty().bind(boxAuxDate.widthProperty());
+
+        txtEventName.prefWidthProperty().bind(boxFilters1.widthProperty());
+        txtGroup.prefWidthProperty().bind(boxFilters1.widthProperty());
+        btListGroups.setMinWidth(Region.USE_PREF_SIZE);
+        boxAuxDate.prefWidthProperty().bind(boxFilters1.widthProperty());
 
 
         HBox boxFilters2 = new HBox(10);
 
-        txt_sala.setPromptText("Nome da Sala");
-        txt_duracao.setPromptText("Lotação");
-        txt_lotacao.setPromptText("Duração");
 
-        boxFilters2.getChildren().addAll(txt_sala, txt_duracao, txt_lotacao);
+        txtRoomName.setPromptText("Nome da Sala");
+
+        spCapacity = new Spinner<>();
+
+        Label lbCapacity = new Label("Capacidade:");
+        spCapacity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,500, 0));
+        spCapacity.editorProperty().get().setAlignment(Pos.CENTER);
+        HBox boxAuxCapacity = new HBox(lbCapacity, spCapacity);
+        boxAuxCapacity.setSpacing(10);
+        boxAuxCapacity.setAlignment(Pos.CENTER);
+
+        lbCapacity.setMinWidth(Region.USE_PREF_SIZE);
+        spCapacity.prefWidthProperty().bind(boxAuxCapacity.widthProperty());
+
+        Label lbDuration = new Label("Duração (Min):");
+        // get a localized format for parsing
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            if (c.isContentChange()) {
+                ParsePosition parsePosition = new ParsePosition(0);
+                // NumberFormat evaluates the beginning of the text
+                format.parse(c.getControlNewText(), parsePosition);
+                if (parsePosition.getIndex() == 0 ||
+                        parsePosition.getIndex() < c.getControlNewText().length()) {
+                    // reject parsing the complete text failed
+                    return null;
+                }
+            }
+            return c;
+        };
+        TextFormatter<Integer> priceFormatter = new TextFormatter<Integer>(
+                new IntegerStringConverter(), 1, filter);
+
+        spDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                1, 1000, 1));
+        spDuration.setEditable(true);
+        spDuration.getEditor().setTextFormatter(priceFormatter);
+        spDuration.editorProperty().get().setAlignment(Pos.CENTER);
+        HBox boxAuxDuration = new HBox(lbDuration, spDuration);
+        boxAuxDuration.setSpacing(10);
+        boxAuxDuration.setAlignment(Pos.CENTER);
+
+        lbDuration.setMinWidth(Region.USE_PREF_SIZE);
+        spDuration.prefWidthProperty().bind(boxAuxDuration.widthProperty());
+
+        boxFilters2.getChildren().addAll(txtRoomName, boxAuxCapacity, boxAuxDuration);
+
+        txtRoomName.prefWidthProperty().bind(boxFilters2.widthProperty());
+        boxAuxCapacity.prefWidthProperty().bind(boxFilters2.widthProperty());
+        boxAuxDuration.prefWidthProperty().bind(boxFilters2.widthProperty());
 
         boxAux.getChildren().addAll(boxFilters1, boxFilters2);
+
+        //MAKE THIS TWO BOX's THE SAME SIZE AS THE PARENT (boxAUX)
+//        boxFilters1.prefWidthProperty().bind(boxAux.widthProperty());
+        boxFilters2.prefWidthProperty().bind(boxAux.widthProperty());
 
         boxEventFilters.getChildren().add(boxAux);
 
@@ -87,6 +186,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     public void setupRoomType(){
 
         HBox boxAux = new HBox(10);
+
 
 
         TitledPane paneFilterType = new TitledPane();
@@ -105,7 +205,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         TitledPane paneFilterDetails = new TitledPane();
         paneFilterDetails.setText("Características");
         paneFilterDetails.setCollapsible(false);
-        HBox boxAux1 = new HBox();
+        HBox boxAux1 = new HBox(150);
         VBox boxVAux = new VBox(10);
         VBox boxVAux1 = new VBox(10);
         cb2_projetor = new CheckBox("Projetor");
@@ -124,11 +224,15 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
         boxAux.getChildren().addAll(paneFilterType, paneFilterDetails);
 
+        //MAKE THIS TWO PANELS THE SAME SIZE AS THE PARENT (boxAUX)
+        paneFilterDetails.prefWidthProperty().bind(boxAux.widthProperty());
+        paneFilterType.prefWidthProperty().bind(boxAux.widthProperty());
+
         boxEventFilters.getChildren().add(boxAux);
 
     }
 
-    public void showRooms(){
+    public void setupRooms(){
 //        //AQUI É SUPOSTO SEREM MOSTRADAS AS SALAS QUE CORRESPONDAM AO QUE FOI FILTRADO PELO UTILIZADOR
 
         TitledPane paneRooms = new TitledPane();
@@ -136,11 +240,44 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         paneRooms.setCollapsible(false);
 
         listRooms = new ListView<>();
-//        listRooms.setStyle("-fx-border-color: black");
-//        listRooms.setPrefHeight(DIM_Y_FRAME);
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Sala 1", "Sala 2", "Sala 3");
-        listRooms.setItems(items);
+        filteredRoomsList = new FilteredList<>(roomsList);
+        listRooms.setItems(filteredRoomsList);
+
+//        LISTENERS PARA CADA CONTROLO QUE PODE APLICAR FILTRO NA LISTVIEW
+        txtRoomName.textProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        spCapacity.valueProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb_anfi.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb_lab.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb_salareuniao.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_projetor.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_mesareuniao.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_windows.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_macos.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_quadroiterativo.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+        cb2_arcondicionado.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+
 
         paneRooms.setContent(listRooms);
 
@@ -148,10 +285,41 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     }
 
+    private void calculatePredicate() {
+        String filterTxt = txtRoomName.getText();
+        int filterCap = spCapacity.getValue();
+        boolean cbAnfiCap = cb_anfi.isSelected();
+        boolean cbLabCap = cb_lab.isSelected();
+        boolean cbSalaReuniaoCap = cb_salareuniao.isSelected();
+        boolean cbProjetorCap = cb2_projetor.isSelected();
+        boolean cbMesaReuniaoCap = cb2_mesareuniao.isSelected();
+        boolean cbWindowsCap = cb2_windows.isSelected();
+        boolean cbMacOSCap = cb2_macos.isSelected();
+        boolean cbQuadroInterativoCap = cb2_quadroiterativo.isSelected();
+        boolean cbArCondicionadoCap = cb2_arcondicionado.isSelected();
+
+        filteredRoomsList.setPredicate(s -> {
+            boolean availableMatch = observable.isRoomAvailable(s.getId()); //CHECKS AND ONLY SHOWS IF ROOM SCHEDULE IS AVAILABLE
+            boolean txtMatch = filterTxt.isEmpty() || s.getName().contains(filterTxt);
+            boolean capMatch = filterCap == 0 || s.getCapacity() == filterCap;
+//            boolean cbAnfiMatch = cbAnfiCap;
+//            boolean cbLabMatch =;
+//            boolean cbSalaReuniaoMatch =;
+//            boolean cbProjetorMatch =;
+//            boolean cbMesaReuniaoMatch =;
+//            boolean cbWindowsMatch =;
+//            boolean cbMacOSMatch =;
+//            boolean cbQuadroInterativoMatch =;
+//            boolean cbArCondicionadoMatch =;
+            return txtMatch && capMatch;
+        });
+    }
+
     public void setupButton(){
         HBox boxCreate = new HBox(10);
         boxCreate.setAlignment(Pos.CENTER_RIGHT);
         Button btCreate = new Button("Criar Evento");
+        btCreate.setOnAction(new CreateEventListener());
         Button btCancel = new Button("Cancelar");
         btCancel.setOnAction(e-> observable.setStateMain());
 
@@ -159,6 +327,56 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
         boxEventFilters.getChildren().add(boxCreate);
     }
+
+    class CreateEventListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+
+            int idRoom = 0;
+//            DateFormat sdf = new SimpleDateFormat("hh:mm");
+//            Date date = null;
+//            try {
+//                date = sdf.parse("01:35");
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            assert date != null;
+//            Time time = new Time(date.getTime());
+//
+//            Duration duration;
+//            duration = Duration.ofMinutes(spDuration.getValue());
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+
+            if(listRooms.getSelectionModel().isEmpty()){
+                alert.setTitle("");
+                alert.setHeaderText("Ocorreu um erro!");
+                alert.setContentText("É necessário selecionar uma sala da lista!");
+                alert.showAndWait();
+            }
+            else if(observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(),
+                    dtInitialDate.getDateTimeValue(), spDuration.getValue())){
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.setTitle("");
+                alert.setHeaderText("Sucesso!");
+                alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                alert.showAndWait();
+            }
+            else{
+
+                alert.setTitle("");
+                alert.setHeaderText("Ocorreu um erro!");
+                alert.setContentText("Não foi possível criar o evento.\nVerifique os dados introduzidos e tente novamente!");
+                alert.showAndWait();
+            }
+
+
+
+
+        }
+    }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

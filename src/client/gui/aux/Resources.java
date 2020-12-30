@@ -1,4 +1,4 @@
-package client.gui;
+package client.gui.aux;
 
 import java.io.InputStream;
 

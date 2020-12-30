@@ -42,4 +42,13 @@ public class Room implements Serializable {
         this.capacity = capacity;
     }
 
+    @Override
+    public String toString(){
+        String str;
+
+        str = "Sala: " + name + " | Capacidade: " +capacity;
+
+        return str;
+    }
+
 }

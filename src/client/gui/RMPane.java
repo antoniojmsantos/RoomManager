@@ -1,10 +1,8 @@
 package client.gui;
 
+import client.gui.aux.Constants;
 import client.logic.ClientObservable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

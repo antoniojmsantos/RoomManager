@@ -2,6 +2,11 @@ package client.logic;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import shared_data.entities.*;
 
 public class ClientObservable {
 
@@ -90,5 +95,19 @@ public class ClientObservable {
         }
         else
             return false;
+    }
+
+    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
+
+        return controller.CreateEvent(idRoom, nameGroup, name, initialDate, durationMin);
+    }
+
+    public ArrayList<Room> getRooms(String name){
+
+        return controller.getRooms();
+    }
+
+    public boolean isRoomAvailable(int id){
+        return controller.isRoomAvailable(id);
     }
 }

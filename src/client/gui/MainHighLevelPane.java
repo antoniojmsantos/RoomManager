@@ -1,42 +1,26 @@
 package client.gui;
 
+import client.gui.aux.Constants;
+import client.gui.custom_controls.Calendar;
 import client.logic.ClientObservable;
-import client.logic.State;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
-import java.time.Month;
-
-
-import java.time.*;
-
-import java.util.ArrayList;
-
-import javafx.scene.layout.GridPane;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+
 
 
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
     private ClientObservable observable;
 
-    private ArrayList<GridItemEvent> allCalendarDays = new ArrayList();
-    private Text calendarTitle;
-    private YearMonth currentYearMonth;
-
-    private VBox box_events;
-    private VBox box_calendar;
 
     Label lbUser;
 
@@ -52,13 +36,12 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         setupEventList();
         setupEventCalendar();
 
-        this.getChildren().addAll(box_events,box_calendar);
 
         propertyChange(null);
     }
 
     public void setupEventList(){
-        box_events = new VBox(20);
+        VBox box_events = new VBox(20);
 
         box_events.setPrefHeight(DIM_Y_FRAME);
 
@@ -122,99 +105,14 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         box_list.getChildren().addAll(header_list, list_events);
 
         box_events.getChildren().addAll(lbUser, box_list);
+
+        this.getChildren().addAll(box_events);
     }
 
     public void setupEventCalendar(){
-        box_calendar = new VBox();
+        Calendar calendar = new Calendar();
 
-
-        currentYearMonth = YearMonth.now();
-
-        GridPane calendar = new GridPane();
-        calendar.setStyle("-fx-background-color: white;" + "-fx-border-color: black");
-        calendar.setPrefSize(950, 650);
-        calendar.setGridLinesVisible(true);
-        // Create rows and columns with anchor panes for the calendar
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 7; j++) {
-                GridItemEvent ap = new GridItemEvent();
-                ap.setPrefSize(200,200);
-                calendar.add(ap,j,i);
-                allCalendarDays.add(ap);
-            }
-        }
-        // Days of the week labels
-        Text[] dayNames = new Text[]{ new Text("Domingo"), new Text("Segunda-feira"), new Text("Terça-feira"),
-                new Text("Quarta-feira"), new Text("Quinta-feira"), new Text("Sexta-feira"),
-                new Text("Sábado") };
-        GridPane dayLabels = new GridPane();
-
-        dayLabels.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
-        dayLabels.setPrefWidth(800);
-        Integer col = 0;
-        for (Text txt : dayNames) {
-            AnchorPane ap = new AnchorPane();
-            ap.setPrefSize(200, 10);
-            ap.setBottomAnchor(txt, 5.0);
-            ap.getChildren().add(txt);
-            dayLabels.add(ap, col++, 0);
-        }
-        // Create calendarTitle and buttons to change current month
-        calendarTitle = new Text();
-        calendarTitle.setFont(Font.font("verdana", FontWeight.BOLD, 16));
-        Button previousMonth = new Button("<<");
-        previousMonth.setOnAction(e -> previousMonth());
-        Button nextMonth = new Button(">>");
-        nextMonth.setOnAction(e -> nextMonth());
-        AnchorPane titleBar = new AnchorPane(previousMonth, calendarTitle, nextMonth);
-        titleBar.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
-
-        AnchorPane.setLeftAnchor(calendarTitle, 400.0);
-        AnchorPane.setTopAnchor(calendarTitle, 5.0);
-
-        AnchorPane.setBottomAnchor(previousMonth, 0.0);
-        AnchorPane.setBottomAnchor(nextMonth, 0.0);
-        AnchorPane.setRightAnchor(nextMonth, 0.0);
-
-        // Populate calendar with the appropriate day numbers
-        populateCalendar(currentYearMonth);
-        // Create the calendar view
-
-        box_calendar.getChildren().addAll(titleBar, dayLabels, calendar);
-    }
-
-    public void populateCalendar(YearMonth yearMonth) {
-        LocalDate currentdate = LocalDate.now();
-        // Get the date we want to start with on the calendar
-        LocalDate calendarDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 1);
-        // Dial back the day until it is SUNDAY (unless the month starts on a sunday)
-        while (!calendarDate.getDayOfWeek().toString().equals("SUNDAY") ) {
-            calendarDate = calendarDate.minusDays(1);
-        }
-        // Populate the calendar with day numbers
-        for (GridItemEvent ap : allCalendarDays) {
-            if (ap.getChildren().size() != 0) {
-                ap.getChildren().remove(0);
-            }
-            Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
-            if(calendarDate.getDayOfMonth() == currentdate.getDayOfMonth())
-                txt.setFill(Color.web("#0093ff"));
-            ap.setDate(calendarDate);
-            ap.getChildren().add(txt);
-            calendarDate = calendarDate.plusDays(1);
-        }
-        // Change the title of the calendar
-        calendarTitle.setText(yearMonth.getMonth().toString() + " " + String.valueOf(yearMonth.getYear()));
-    }
-
-    private void previousMonth() {
-        currentYearMonth = currentYearMonth.minusMonths(1);
-        populateCalendar(currentYearMonth);
-    }
-
-    private void nextMonth() {
-        currentYearMonth = currentYearMonth.plusMonths(1);
-        populateCalendar(currentYearMonth);
+        this.getChildren().addAll(calendar);
     }
 
 
