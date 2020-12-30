@@ -91,7 +91,6 @@ public final class ServerLogic {
     }
 
     public ArrayList<Event> getCreatedEvents(User user) {
-
-        return null;
+        return (ArrayList<Event>) DBManager.getEventDao().getEventsByCreator(user.getUsername());
     }
 }
