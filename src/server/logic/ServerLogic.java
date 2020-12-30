@@ -3,14 +3,12 @@ package server.logic;
 import database.DBManager;
 import shared_data.communication.request.RequestCreateEvent;
 import shared_data.communication.request.RequestRegister;
-import shared_data.entities.Event;
-import shared_data.entities.Group;
-import shared_data.entities.Room;
-import shared_data.entities.User;
+import shared_data.entities.*;
 import shared_data.helper.ClientInfo;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 import static database.DBManager.getGroupDao;
 
@@ -92,5 +90,58 @@ public final class ServerLogic {
 
     public ArrayList<Event> getCreatedEvents(User user) {
         return (ArrayList<Event>) DBManager.getEventDao().getEventsByCreator(user.getUsername());
+    }
+
+    public void addRoom(String addName, String roomTypeString,String addLimit, String addFeatures) {
+        ArrayList<RoomFeature> features = new ArrayList<>();
+        String rest;String[] data;
+        data = addFeatures.split(" ");
+        rest = data[1];
+        while(!rest.isEmpty()){
+            if(data[0].equals("ar_condicionado")){
+                features.add(RoomFeature.AR_CONDICIONADO);
+            }else if(data[0].equals("computadores_mac")){
+                features.add(RoomFeature.COMPUTADORES_MAC);
+            }else if(data[0].equals("computadores_windows")){
+                features.add(RoomFeature.COMPUTADORES_WINDOWS);
+            }else if(data[0].equals("projetor")){
+                features.add(RoomFeature.PROJETOR);
+            }else if(data[0].equals("quadro_interativo")){
+                features.add(RoomFeature.QUADRO_INTERATIVO);
+            }
+            data = addFeatures.split(" ");
+            rest = data[1];
+        }
+
+        RoomType roomType = null;
+        if(roomTypeString.equals("laboratorio")){
+            roomType = RoomType.LABORATORIO;
+        }else if(roomTypeString.equals("auditorio")){
+            roomType = RoomType.AUDITORIO;
+        }
+
+        DBManager.getRoomDao().insert(addName,Integer.parseInt(addLimit), roomType,features);
+    }
+
+    public void updateName(int parseInt, String editName) {
+        DBManager.getRoomDao().updateName(parseInt, editName);
+    }
+
+    public void updateLimit(int parseInt, int editLimit) {
+        DBManager.getRoomDao().updateCapacity(parseInt, editLimit);
+    }
+
+    public void updateDescription(int parseInt, String editDescription) {
+        //FALTA FAZER NA BASE DE DADOS FUNÇÃO PARA ALTERAR DESCRIÇÃO DE SALAS
+        //DBManager.getRoomDao().updateDescription(parseInt, editDescription);
+
+    }
+
+    public void addGroup(String addName) {
+        DBManager.getGroupDao().insert(addName);
+    }
+
+    public List<Group> getGroups(){
+        return DBManager.getGroupDao().getAll();
     }
 }

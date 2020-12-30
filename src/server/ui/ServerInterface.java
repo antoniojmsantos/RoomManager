@@ -1,8 +1,10 @@
 package server.ui;
 
 import server.logic.ServerLogic;
+import shared_data.entities.Group;
 import shared_data.helper.KeepAlive;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ServerInterface extends Thread {
@@ -90,10 +92,10 @@ public class ServerInterface extends Thread {
         String choice = scan.nextLine();
         switch(Integer.parseInt(choice)){
             case 1:
-
+                createGroup();
                 break;
             case 2:
-
+                modifyGroups();
                 break;
             default:
                 System.out.println("Choose a valid option");
@@ -105,13 +107,17 @@ public class ServerInterface extends Thread {
         System.out.print("Name = ");
         String addName = scan.nextLine();
 
-        System.out.print("Limit = ");
+        System.out.printf("\nRoom Type = ");
+        String addType = scan.nextLine();
+
+        System.out.print("\nLimit = ");
         String addLimit = scan.nextLine();
 
-        System.out.print("Description = ");
-        String addDescription = scan.nextLine();
+        System.out.print("\nFeatures = ");
+        String addFeatures = scan.nextLine();
 
-        //chama função que valida e adiciona a sala à base de dados
+        serverLogic.addRoom(addName, addType, addLimit, addFeatures);
+
     }
 
     private void editRoom(){
@@ -127,14 +133,17 @@ public class ServerInterface extends Thread {
         switch(Integer.parseInt(choice)){
             case 1:
                 String editName = scan.nextLine();
+                serverLogic.updateName(Integer.parseInt(editRoom), editName);
                 break;
 
             case 2:
                 String editLimit = scan.nextLine();
+                serverLogic.updateLimit(Integer.parseInt(editRoom), Integer.parseInt(editLimit));
                 break;
 
             case 3:
                 String editDescription = scan.nextLine();
+                serverLogic.updateDescription(Integer.parseInt(editRoom), editDescription );
                 break;
 
             default:
@@ -142,5 +151,18 @@ public class ServerInterface extends Thread {
                 break;
         }
 
+    }
+
+    public void createGroup(){
+        System.out.println("Name = ");
+        String addName = scan.next();
+        serverLogic.addGroup(addName);
+    }
+
+    public void modifyGroups(){
+        List<Group> groups = serverLogic.getGroups();
+        for(int i=0; i < groups.size(); i++){
+            System.out.println(groups.get(i).getName());
+        }
     }
 }
