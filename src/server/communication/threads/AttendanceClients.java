@@ -93,8 +93,5 @@ public class AttendanceClients extends Thread{
                 //negativo
             }
         }
-        else if(request instanceof ){
-
-        }
     }
 }
