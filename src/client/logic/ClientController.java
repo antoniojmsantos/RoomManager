@@ -1,6 +1,7 @@
 package client.logic;
 
 import client.communication.ClientCommunication;
+import shared_data.entities.Event;
 import shared_data.entities.Room;
 
 import java.io.IOException;
@@ -103,4 +104,8 @@ public class ClientController {
         return true;
     }
 
+    public ArrayList<Event> getCreatedEvents() {
+
+        return communication.getUserEvents();
+    }
 }

@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
+import shared_data.helper.KeepAlive;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -51,7 +52,10 @@ public class RMRoot extends VBox implements PropertyChangeListener {
 
         MenuItem exitMenuItem = new MenuItem("Sair");
         exitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
-        exitMenuItem.setOnAction(e-> Platform.exit());
+        exitMenuItem.setOnAction(e-> {
+            KeepAlive.setKeepAlive(false);
+            Platform.exit();
+        });
 
         actionsMenu.getItems().addAll(logoutMenuItem, new SeparatorMenuItem(), exitMenuItem);
 

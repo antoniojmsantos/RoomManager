@@ -110,4 +110,9 @@ public class ClientObservable {
     public boolean isRoomAvailable(int id){
         return controller.isRoomAvailable(id);
     }
+
+    public ArrayList<Event> getCreatedEvents() {
+
+        return controller.getCreatedEvents();
+    }
 }
