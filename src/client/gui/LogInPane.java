@@ -1,10 +1,8 @@
 package client.gui;
 
+import client.gui.aux.Constants;
+import client.gui.aux.Images;
 import client.logic.ClientObservable;
-import client.logic.State;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,13 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.util.Duration;
-import org.w3c.dom.events.Event;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Calendar;
-import java.util.Optional;
 
 public class LogInPane extends VBox implements Constants, PropertyChangeListener {
 

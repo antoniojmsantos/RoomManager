@@ -1,25 +1,17 @@
 package client;
 
-import client.communication.ClientCommunication;
-import client.gui.Constants;
-import client.gui.Images;
-import client.gui.PaneOrganizer;
-import client.logic.ClientController;
+import client.gui.aux.Constants;
+import client.gui.aux.Images;
+import client.gui.aux.PaneOrganizer;
 import client.logic.ClientObservable;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import shared_data.helper.KeepAlive;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Client extends Application {
 

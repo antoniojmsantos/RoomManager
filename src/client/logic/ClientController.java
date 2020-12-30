@@ -1,8 +1,12 @@
 package client.logic;
 
 import client.communication.ClientCommunication;
+import shared_data.entities.Room;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ClientController {
 
@@ -82,6 +86,20 @@ public class ClientController {
             return false;
     }
 
+    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
 
+        return communication.CreateEvent(idRoom, nameGroup, name, initialDate, durationMin);
+    }
+
+
+    public ArrayList<Room> getRooms(){
+
+        return communication.getRooms();
+    }
+
+    public boolean isRoomAvailable(int id){
+//        return communication.isRoomAvailable(id);
+        return true;
+    }
 
 }
