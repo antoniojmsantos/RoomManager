@@ -4,8 +4,6 @@ import client.communication.ClientCommunication;
 import shared_data.entities.Event;
 import shared_data.entities.Room;
 
-import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -36,7 +34,7 @@ public class ClientController {
     public boolean isStateCreate(){return state.isCreate();}
 
     public boolean isHighPermission(){
-        return communication.getLoggedUser().isPermissions();
+        return communication.getLoggedUser().getPermissions();
     }
 
     public boolean isAuthenticated(){

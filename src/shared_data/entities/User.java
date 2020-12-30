@@ -48,7 +48,7 @@ public class User implements Comparable<User>, Serializable {
         this.password = password;
     }
 
-    public boolean isPermissions() {
+    public boolean getPermissions() {
         return permissions;
     }
 
@@ -69,5 +69,15 @@ public class User implements Comparable<User>, Serializable {
     @Override
     public int compareTo(User o) {
         return username.compareTo(o.getUsername());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", permissions=" + permissions +
+                '}';
     }
 }

@@ -10,8 +10,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import static database.DBManager.getGroupDao;
-
 public final class ServerLogic {
 
     private ArrayList<ClientInfo> clientInfo;
@@ -92,17 +90,21 @@ public final class ServerLogic {
         return (ArrayList<Event>) DBManager.getEventDao().getEventsByCreator(user.getUsername());
     }
 
-    public ArrayList<User> getAllUsersInterface() {
+    public ArrayList<User> getAllUsers() {
         return (ArrayList<User>) DBManager.getUserDao().getAll();
     }
 
-
-    public boolean getUserPermissions(String userid) {
-            return DBManager.getUserDao().get(userid).isPermissions();
+    public User getUser(String username) {
+        return DBManager.getUserDao().get(username);
     }
 
-    public void setPermissions(String userid,boolean i){
-        DBManager.getUserDao().updatePermissions(userid,i);
+    public boolean getUserPermissions(String userid) {
+            return DBManager.getUserDao().get(userid).getPermissions();
+    }
+
+    public void setPermissions(String userid,boolean i) {
+        DBManager.getUserDao().updatePermissions(userid, i);
+    }
     public void addRoom(String addName, String roomTypeString,String addLimit, String addFeatures) {
         ArrayList<RoomFeature> features = new ArrayList<>();
         String rest;String[] data;
