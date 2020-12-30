@@ -10,6 +10,8 @@ import shared_data.helper.ClientInfo;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import static database.DBManager.getGroupDao;
+
 public final class ServerLogic {
 
     private ArrayList<ClientInfo> clientInfo;
@@ -51,5 +53,21 @@ public final class ServerLogic {
                 requestCreateEvent.getDuration());
 
         return DBManager.getEventDao().get(idEvent);
+    }
+
+    public ArrayList<ClientInfo> getClientInfo(Event event) {
+        ArrayList<ClientInfo> clientInEvent = new ArrayList<>();
+        synchronized (this.clientInfo){
+            ArrayList<User> users = (ArrayList<User>) DBManager.getGroupDao().getMembers(event.getGroup().getName());
+
+            for(int i = 0; i < clientInfo.size(); i++){
+                for(int j = 0; j < users.size(); j++){
+                    if(clientInfo.get(i).getUser().getUsername().equals(users.get(j).getUsername())){
+                        clientInEvent.add(clientInfo.get(i));
+                    }
+                }
+            }
+        }
+        return clientInEvent;
     }
 }

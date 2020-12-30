@@ -65,7 +65,7 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public int insert(String name, int roomId, String groupName, LocalDateTime startDate, Duration duration) {
+    public int insert(String name, int roomId, String groupName, LocalDateTime startDate, int duration) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
