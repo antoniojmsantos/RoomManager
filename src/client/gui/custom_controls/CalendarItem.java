@@ -9,9 +9,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import shared_data.entities.Event;
-import shared_data.entities.Group;
-import shared_data.entities.Room;
+import shared_data.entities.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,6 +19,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CalendarItem extends VBox {
 
@@ -36,10 +35,17 @@ public class CalendarItem extends VBox {
         // Add action handler for mouse clicked
 //        this.setOnMouseClicked(e -> System.out.println("This pane's date is: " + date));
 
-        events.add(new Event(0, "SO_P3_L1.1", new Room(0, "L1.1", 10),
-                new Group("P1"), LocalDateTime.now(), 120));
-        events.add(new Event(1, "IRC_P1_L2.1", new Room(1, "L2.1", 15),
-                new Group("P3"), LocalDateTime.now(), 130));
+        events.add(new Event(0, "SO_P3_L1.1", new Room(0, "L1.1", 10, RoomType.AUDITORIO, List.of(
+                RoomFeature.AR_CONDICIONADO,
+                RoomFeature.COMPUTADORES_WINDOWS,
+                RoomFeature.PROJETOR
+                )),
+                new Group("P1"),new User("pedrito@gmail.com","Pedro","1234", true), LocalDateTime.now(), 120));
+        events.add(new Event(1, "IRC_P1_L2.1", new Room(1, "L2.1", 15,RoomType.LABORATORIO,List.of(
+                RoomFeature.AR_CONDICIONADO,
+                RoomFeature.QUADRO_INTERATIVO
+                )),
+                new Group("P3"),new User("rodigo@gmail.com","Rodrigo","1234", false), LocalDateTime.now(), 130));
 
     }
 

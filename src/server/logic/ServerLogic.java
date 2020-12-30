@@ -51,6 +51,7 @@ public final class ServerLogic {
                 requestCreateEvent.getName(),
                 requestCreateEvent.getIdRoom(),
                 requestCreateEvent.getNameGroup(),
+                requestCreateEvent.getUsernameCreator(),
                 requestCreateEvent.getInitialDate(),
                 requestCreateEvent.getDuration());
 

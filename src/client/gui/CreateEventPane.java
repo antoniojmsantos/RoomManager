@@ -16,6 +16,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 import shared_data.entities.Room;
+import shared_data.entities.RoomFeature;
+import shared_data.entities.RoomType;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,6 +25,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class CreateEventPane extends VBox implements Constants, PropertyChangeListener {
@@ -60,12 +63,31 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
 
         ArrayList<Room> salasTeste = new ArrayList<>();
-        salasTeste.add(new Room(1, "L1.1", 10));
-        salasTeste.add(new Room(2, "L1.2", 25));
-        salasTeste.add(new Room(3, "L2.1", 25));
-        salasTeste.add(new Room(3, "L2.3", 25));
-        salasTeste.add(new Room(3, "L3.1", 25));
-        salasTeste.add(new Room(3, "A4.1", 25));
+        salasTeste.add(new Room(1, "L1.1", 10, RoomType.LABORATORIO, List.of(
+                RoomFeature.COMPUTADORES_WINDOWS,
+                RoomFeature.COMPUTADORES_MAC
+        )));
+        salasTeste.add(new Room(2, "L1.2", 25, RoomType.LABORATORIO, List.of(
+                RoomFeature.COMPUTADORES_WINDOWS,
+                RoomFeature.AR_CONDICIONADO
+        )));
+        salasTeste.add(new Room(3, "L2.1", 25, RoomType.LABORATORIO, List.of(
+                RoomFeature.AR_CONDICIONADO,
+                RoomFeature.COMPUTADORES_MAC
+        )));
+        salasTeste.add(new Room(3, "L2.3", 25, RoomType.LABORATORIO, List.of(
+                RoomFeature.COMPUTADORES_WINDOWS,
+                RoomFeature.AR_CONDICIONADO,
+                RoomFeature.COMPUTADORES_MAC
+        )));
+        salasTeste.add(new Room(3, "L3.1", 25, RoomType.LABORATORIO, List.of(
+                RoomFeature.PROJETOR
+        )));
+        salasTeste.add(new Room(3, "A4.1", 25, RoomType.AUDITORIO, List.of(
+                RoomFeature.COMPUTADORES_WINDOWS,
+                RoomFeature.COMPUTADORES_MAC,
+                RoomFeature.AR_CONDICIONADO
+        )));
         roomsList = FXCollections.observableArrayList(salasTeste);
 
         setupEventFilters();

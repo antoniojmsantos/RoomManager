@@ -10,12 +10,13 @@ import java.util.Date;
 public class RequestCreateEvent extends Request implements Serializable {
     private int idRoom;
     private int duration;
-    private String name,nameGroup;
+    private String name,nameGroup, usernameCreator;
     private LocalDateTime initialDate;
 
-    public RequestCreateEvent(int idRoom, String nameGroup, int duration, String name, LocalDateTime initialDate) {
+    public RequestCreateEvent(int idRoom, String nameGroup, String usernameCreator, int duration, String name, LocalDateTime initialDate) {
         this.idRoom = idRoom;
         this.nameGroup = nameGroup;
+        this.usernameCreator = usernameCreator;
         this.duration = duration;
         this.name = name;
         this.initialDate = initialDate;
@@ -31,6 +32,10 @@ public class RequestCreateEvent extends Request implements Serializable {
 
     public int getDuration() {
         return duration;
+    }
+
+    public String getUsernameCreator() {
+        return usernameCreator;
     }
 
     public String getName() {

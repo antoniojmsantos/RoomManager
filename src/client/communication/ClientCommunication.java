@@ -126,9 +126,9 @@ public class ClientCommunication {
         return false;
     }
 
-    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int duration){
+    public boolean CreateEvent(int idRoom, String nameGroup, String usernameCreator, String name, LocalDateTime initialDate, int duration){
         try{
-            RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup,duration,name,initialDate);
+            RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup, usernameCreator, duration,name,initialDate);
             SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
             ResponseCreateEvent responseCreateEvent = (ResponseCreateEvent) SendAndReceiveData.receiveData(socketTCP);
             if(responseCreateEvent.getEvent() != null){

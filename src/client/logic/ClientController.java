@@ -88,7 +88,7 @@ public class ClientController {
 
     public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
 
-        return communication.CreateEvent(idRoom, nameGroup, name, initialDate, durationMin);
+        return communication.CreateEvent(idRoom, nameGroup, name, getUsername(), initialDate, durationMin);
     }
 
 
