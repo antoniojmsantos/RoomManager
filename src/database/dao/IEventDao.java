@@ -12,10 +12,11 @@ import java.util.Optional;
 public interface IEventDao {
     Event get(int id);
     List<Event> getAll();
-    int insert(String name, int roomId, String groupName, LocalDateTime startDate, int duration);
+    int insert(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration);
     void delete(int id);
 
     List<Event> getEventsInRoom(int id_room);
+    List<Event> getEventsByCreator(String username);
 
     // own
     Event build(ResultSet rs) throws SQLException;

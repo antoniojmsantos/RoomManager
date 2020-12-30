@@ -75,7 +75,7 @@ public class UserDao implements IUserDao {
         try {
             st = conn.prepareStatement(
                     "insert into tb_user(vc_username, vc_name, vc_password, b_permissions) " +
-                            "values (?,?,?,?)"
+                            "values (?,?,md5(?),?)"
             );
             st.setString(1,username);
             st.setString(2,name);
@@ -133,7 +133,7 @@ public class UserDao implements IUserDao {
 
         try {
             st = conn.prepareStatement(
-                    "select exists(select * from tb_user where  vc_username = ? and vc_password = ?) as res;"
+                    "select exists(select * from tb_user where  vc_username = ? and vc_password = md5(?)) as res;"
             );
             st.setString(1, username);
             st.setString(2, password);
