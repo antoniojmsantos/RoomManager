@@ -12,10 +12,12 @@ import javafx.scene.layout.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+import shared_data.entities.Event;
+import shared_data.entities.Room;
 
 
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
@@ -23,6 +25,9 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
 
     Label lbUser;
+
+    ArrayList<Event> listEvents;
+    ListView<Event> lvCreatedEvents;
 
     public MainHighLevelPane(ClientObservable observable){
         this.observable = observable;
@@ -65,44 +70,44 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
         header_list.getChildren().addAll(lbl, btn_new);
 
-        ListView<String> list_events = new ListView<>();
-        list_events.setStyle("-fx-border-color: black");
-        list_events.setPrefHeight(DIM_Y_FRAME);
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Evento 1", "Evento 2", "Evento 3");
-        list_events.setItems(items);
-
-        list_events.setCellFactory(lv -> {
-
-            ListCell<String> cell = new ListCell<>();
-
-            ContextMenu contextMenu = new ContextMenu();
 
 
-            MenuItem editItem = new MenuItem();
-            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
-            editItem.setOnAction(event -> {
-                String item = cell.getItem();
-                // code to edit item...
-            });
-            MenuItem deleteItem = new MenuItem();
-            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
-            deleteItem.setOnAction(event -> list_events.getItems().remove(cell.getItem()));
-            contextMenu.getItems().addAll(editItem, deleteItem);
+        lvCreatedEvents = new ListView<>();
+        lvCreatedEvents.setStyle("-fx-border-color: black");
+        lvCreatedEvents.setPrefHeight(DIM_Y_FRAME);
 
-            cell.textProperty().bind(cell.itemProperty());
 
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(contextMenu);
-                }
-            });
-            return cell ;
-        });
+//        lvCreatedEvents.setCellFactory(lv -> {
+//
+//            ListCell<Event> cell = new ListCell<>();
+//
+//            ContextMenu contextMenu = new ContextMenu();
+//
+//
+//            MenuItem editItem = new MenuItem();
+//            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
+//            editItem.setOnAction(event -> {
+//                Event item = cell.getItem();
+//                // code to edit item...
+//            });
+//            MenuItem deleteItem = new MenuItem();
+//            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+//            deleteItem.setOnAction(event -> lvCreatedEvents.getItems().remove(cell.getItem()));
+//            contextMenu.getItems().addAll(editItem, deleteItem);
+//
+//            cell.textProperty().bind(cell);
+//
+//            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+//                if (isNowEmpty) {
+//                    cell.setContextMenu(null);
+//                } else {
+//                    cell.setContextMenu(contextMenu);
+//                }
+//            });
+//            return cell ;
+//        });
 
-        box_list.getChildren().addAll(header_list, list_events);
+        box_list.getChildren().addAll(header_list, lvCreatedEvents);
 
         box_events.getChildren().addAll(lbUser, box_list);
 
@@ -120,8 +125,12 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     public void propertyChange(PropertyChangeEvent evt) {
         setVisible(observable.isStateMain());
 
-        if(observable.isAuthenticated())
+        if(observable.isAuthenticated()){
             lbUser.setText("Autenticado como: " + observable.getUsername());
+            listEvents = observable.getCreatedEvents();
+            ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
+            lvCreatedEvents.setItems(items);
+        }
 
 //        setVisible(observable.isStateMain() && observable.isHighPermission());
         //TODO: FALTA VERIFICAR TAMBÉM SE O USER TEM PERMISSAO ALTA

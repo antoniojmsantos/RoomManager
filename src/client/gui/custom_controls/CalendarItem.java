@@ -65,6 +65,8 @@ public class CalendarItem extends VBox {
     public void populateEvents(LocalDate calendarDate){
         //TODO: NAO ESQUECER DE FAZER A TOOLTIP COM A INFORMACAO DO EVENTO
 
+        //TODO PEDE OS EVENTOS AO SERVIDOR
+
         for(Event e : events){ //FOR EACH OF THE USER EVENTS POPULATE IT ON THE CALENDAR
             LocalDate eventDate = e.getStart().toLocalDate();
 
