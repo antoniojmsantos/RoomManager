@@ -77,7 +77,7 @@ public class EventDao implements IEventDao {
             st.setInt(1, id_room);
             rs = st.executeQuery();
             while (rs.next()) {
-                events.add(DBManager.getEventDao().build(rs));
+                events.add(build(rs));
             }
         }catch (SQLException e) {
             e.printStackTrace();

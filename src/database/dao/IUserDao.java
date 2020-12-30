@@ -1,5 +1,6 @@
 package database.dao;
 
+import shared_data.entities.Event;
 import shared_data.entities.Group;
 import shared_data.entities.User;
 
@@ -18,6 +19,10 @@ public interface IUserDao {
 
     // group member
     List<Group> getGroups(String username);
+
+    // events
+    List<Event> getEventsPending(String username);
+    List<Event> getEventsAccepted(String username);
 
     // own
     User build(ResultSet rs) throws SQLException;
