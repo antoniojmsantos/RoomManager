@@ -124,7 +124,7 @@ public class EventDao implements IEventDao {
                 room,
                 group,
                 ((LocalDateTime)rs.getObject("d_date_start")),
-                ((Duration)rs.getObject("t_duration"))
+                ((int)rs.getObject("t_duration"))
             );
     }
 }

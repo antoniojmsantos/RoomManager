@@ -13,9 +13,9 @@ public class Event implements Serializable {
     private Room room;
     private Group group;
     private LocalDateTime start;
-    private Duration duration;
+    private int duration;
 
-    public Event(int id, String name, Room room, Group group, LocalDateTime start, Duration duration){
+    public Event(int id, String name, Room room, Group group, LocalDateTime start, int duration){
         this.id=id;
         this.name=name;
         this.room=room;
@@ -39,8 +39,8 @@ public class Event implements Serializable {
     public LocalDateTime getStart(){return start;}
     public void setStart(LocalDateTime start){this.start=start;}
 
-    public Duration getDuration(){return duration;}
-    public void setDuration(Duration duration){this.duration=duration;}
+    public int getDuration(){return duration;}
+    public void setDuration(int duration){this.duration=duration;}
 
     public static Event make(
             int id,
@@ -48,7 +48,7 @@ public class Event implements Serializable {
             Room room ,
             Group group,
             LocalDateTime start,
-            Duration duration)
+            int duration)
     {
         return new Event(id, name, room,group, start, duration);
     }
