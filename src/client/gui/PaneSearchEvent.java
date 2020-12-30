@@ -1,5 +1,5 @@
-package client.gui.dictionaries;
+package client.gui;
 
-public class PaneSearchGroups {
+public class PaneSearchEvent {
     // TODO: CLASS USED FOR SEARCHING THROUGH ALL THE AVAILABLE GROUPS WHILE CREATING A EVENT
 }

@@ -1,6 +1,5 @@
-package client.gui.aux;
+package client.gui;
 
-import client.gui.RMRoot;
 import client.logic.ClientObservable;
 import javafx.scene.layout.Pane;
 

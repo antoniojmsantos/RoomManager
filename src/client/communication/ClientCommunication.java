@@ -126,13 +126,13 @@ public class ClientCommunication {
         return false;
     }
 
-    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
-//        try{
-//            RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup,durationMin,name,initialDate);
-//            SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, Duration duration){
+        try{
+            RequestCreateEvent requestCreateEvent = new RequestCreateEvent(idRoom,nameGroup,duration,name,initialDate);
+            SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         //TODO: CRIAR UM OBJETO EVENT COM OS DADOS Q RECEBEU DO CONTROLADOR E MANDA LO AO SERVIDOR PARA INSERIR NA DB.
@@ -141,7 +141,7 @@ public class ClientCommunication {
         // TABELA DE SUBSCRICOES UM REGISTO PARA TODOS OS UTILIZADORES E VAI TER DE TER UM CAMPO QUE DIGA SE ACEITOU OU REJEITOU.
 
         //TODO: RETORNA 0 SE NAO FOI CRIADO COM SUCESSO OU 1 SE FOI CRIADO COM SUCESSO
-        return false;
+        return true;
     }
 
     public ArrayList<Group> getAllGroups(){
@@ -161,7 +161,7 @@ public class ClientCommunication {
         return null;
     }
 
-    public ArrayList<Room> getRooms(){ //JA N EXISTE FUNCAO DE getRoomsWithFilter() PQ VAI SER A PROPRIA GUI A FILTRAR A LISTA. VAI TER DE TER UM METODO QUE VERIFICA A DESPONIBILIDADE DE CADA SALA ANTES DE A APRESENTAR NA LISTA FILTRADA
+    public ArrayList<Room> getRoomsWithFilter(String name){
         //TODO: FALTA VER DE QUE MANEIRA VAMOS LHE ENVIAR AS CARACTERISTICAS. ArrayList? String com espaços?
         // Isto é importante porque de que forma vai ser gerida essa string na interface?
         // visto que o user pode fazer check e uncheck às caracteristicas.
