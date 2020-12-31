@@ -8,7 +8,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import shared_data.entities.Event;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class Calendar extends VBox {
     private ArrayList<CalendarItem> allCalendarDays = new ArrayList();
     private Text calendarTitle;
     private YearMonth currentYearMonth;
+
+    ArrayList<Event> events;
 
     public Calendar(){
         currentYearMonth = YearMonth.now();
@@ -67,17 +71,17 @@ public class Calendar extends VBox {
         AnchorPane.setRightAnchor(nextMonth, 0.0);
 
         // Populate calendar with the appropriate day numbers
-        populateCalendar(currentYearMonth);
+        populateCalendar();
         // Create the calendar view
 
         this.getChildren().addAll(titleBar, dayLabels, calendar);
     }
 
-    public void populateCalendar(YearMonth yearMonth) {
+    public void populateCalendar() {
         LocalDate currentDate = LocalDate.now();
 
         // Get the date we want to start with on the calendar
-        LocalDate calendarDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 1);
+        LocalDate calendarDate = LocalDate.of(currentYearMonth.getYear(), currentYearMonth.getMonthValue(), 1);
 
         // Dial back the day until it is SUNDAY (unless the month starts on a sunday)
         while (!calendarDate.getDayOfWeek().toString().equals("SUNDAY") ) {
@@ -89,22 +93,26 @@ public class Calendar extends VBox {
                 for(int i = 0; i < ap.getChildren().size(); i++)
                     ap.getChildren().remove(i);
             }
+            ap.refreshEvents(events);
             ap.populateItem(calendarDate, currentDate);
             calendarDate = calendarDate.plusDays(1);
         }
         // Change the title of the calendar
-        calendarTitle.setText(yearMonth.getMonth().toString() + " " + String.valueOf(yearMonth.getYear()));
+        calendarTitle.setText(currentYearMonth.getMonth().toString() + " " + String.valueOf(currentYearMonth.getYear()));
     }
 
+    public void refresh(ArrayList<Event> events){
+        this.events = events;
+        populateCalendar();
+    }
 
     private void previousMonth() {
         currentYearMonth = currentYearMonth.minusMonths(1);
-        populateCalendar(currentYearMonth);
+        populateCalendar();
     }
-
 
     private void nextMonth() {
         currentYearMonth = currentYearMonth.plusMonths(1);
-        populateCalendar(currentYearMonth);
+        populateCalendar();
     }
 }
