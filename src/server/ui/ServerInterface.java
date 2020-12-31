@@ -96,7 +96,10 @@ public class ServerInterface extends Thread {
                     System.out.println("Syntax: > <username> <has-permissions>");
                 } else if (serverLogic.getUser(input[0]) == null) {
                     System.out.println("Warning: user \""+input[0]+"\" does not exist!");
-                } else {
+                } else if (input[0].equals("exit")) {
+                    return;
+                }
+                else {
                     stop = true;
                 }
             }

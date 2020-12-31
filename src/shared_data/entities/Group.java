@@ -25,4 +25,9 @@ public class Group implements Serializable {
     }
 
     public static Group make(String name) {return new Group(name);}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
