@@ -336,7 +336,7 @@ public class ServerInterface extends Thread {
                 System.out.println("<There are no Users in this Group>");
             else {
                 for (int j = 0; j < usersInGroup.size(); j++) {
-                    System.out.println(usersInGroup.get(j).getName() + "\n->");
+                    System.out.println("\n->\t" + usersInGroup.get(j).getName());
                 }
             }
         }
