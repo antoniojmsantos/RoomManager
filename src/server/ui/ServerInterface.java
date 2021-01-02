@@ -57,8 +57,9 @@ public class ServerInterface extends Thread {
 
     private void manageRooms(){
         System.out.println("------Room Management-------");
-        System.out.println("1 - Add Room ");
-        System.out.println("2 - Edit Room ");
+        System.out.println("1 - Add Rooms ");
+        System.out.println("2 - Edit Rooms ");
+        System.out.println("3 - View Rooms");
         String choice = scan.nextLine();
         switch(Integer.parseInt(choice)){
             case 1:
@@ -66,6 +67,9 @@ public class ServerInterface extends Thread {
                 break;
             case 2:
                 editRoom();
+                break;
+            case 3:
+                showRooms();
                 break;
             default:
                 System.out.println("Choose a valid option");
@@ -143,10 +147,10 @@ public class ServerInterface extends Thread {
             addName = scan.nextLine();
         }
 
-        System.out.printf("\nRoom Type = ");
+        System.out.print("Room Type = ");
         String addType = scan.nextLine();
 
-        System.out.print("\nLimit = ");
+        System.out.print("Limit = ");
         String addLimit = scan.nextLine();
 
         while(Integer.parseInt(addLimit) <= 0){
@@ -154,7 +158,7 @@ public class ServerInterface extends Thread {
             addLimit = scan.nextLine();
         }
 
-        System.out.print("\nFeatures = ");
+        System.out.print("Features = ");
         String addFeatures = scan.nextLine();
 
         serverLogic.addRoom(addName, addType, addLimit, addFeatures);
@@ -176,6 +180,9 @@ public class ServerInterface extends Thread {
             String newValue = eachResponse.next();
 
             if(changeField.equals("name")){
+                if(newValue.isEmpty()){
+                    System.out.println("Invalid Room Name. <EMPTY STRING>");
+                }
                 serverLogic.updateName(Integer.parseInt(roomId), newValue);
             }
             else{
@@ -326,22 +333,20 @@ public class ServerInterface extends Thread {
     }
 
     public void viewGroups(){
-        //falta alterar a função que é chamada pela getGroups, não está a devolver bem a lista de users
-        List<Group> allGroups = serverLogic.getGroups(); //É ISTO QUE ESTÁ A DAR MERDA
+        List<Group> allGroups = serverLogic.getGroups();
         for(int i = 0; i < allGroups.size(); i++) {
             List<User> usersInGroup = serverLogic.getUsersInGroup(allGroups.get(i).getName());
             System.out.println(allGroups.get(i).getName() + ":");
 
             if (usersInGroup.isEmpty())
-                System.out.println("<There are no Users in this Group>");
+                System.out.println("<There are no Users in this Group>\n");
             else {
                 for (int j = 0; j < usersInGroup.size(); j++) {
-                    System.out.println("\n->\t" + usersInGroup.get(j).getName());
+                    System.out.println("->" + usersInGroup.get(j).getName() + "\n");
                 }
             }
         }
-
-        System.out.println();
+       // System.out.println("\n");
     }
 
 }
