@@ -203,27 +203,13 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public boolean refuseEvent(int eventId, String username) {
-        return updateEventSubscriptionState(eventId, username, "refused");
+    public boolean refuseEvent(int eventId, String userUsername) {
+        return updateEventSubscriptionState(eventId, userUsername, "refused");
     }
 
     @Override
-    public boolean cancelEvent(int eventId) {
-        PreparedStatement st = null;
-
-        try {
-            st = conn.prepareStatement(
-                    "delete from tb_event_subscription where i_event_id= ?"
-            );
-            st.setInt(1,eventId);
-            st.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBManager.closeStatement(st);
-        }
-        return false;
+    public boolean cancelEvent(int eventId, String userUsername) {
+        return updateEventSubscriptionState(eventId, userUsername, "cancelled");
     }
 
     // own

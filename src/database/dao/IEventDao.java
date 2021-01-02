@@ -17,7 +17,7 @@ public interface IEventDao {
 
     boolean acceptEvent(int eventId, String userUsername);
     boolean refuseEvent(int eventId, String userUsername);
-    boolean cancelEvent(int eventId);
+    public boolean cancelEvent(int eventId, String userUsername);
 
     List<Event> getEventsInRoom(int id_room);
     List<Event> getEventsByCreator(String username);
