@@ -13,7 +13,11 @@ public interface IEventDao {
     Event get(int id);
     List<Event> getAll();
     int insert(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration);
-    void delete(int id);
+    boolean delete(int id);
+
+    boolean acceptEvent(int eventId, String userUsername);
+    boolean refuseEvent(int eventId, String userUsername);
+    boolean cancelEvent(int eventId);
 
     List<Event> getEventsInRoom(int id_room);
     List<Event> getEventsByCreator(String username);

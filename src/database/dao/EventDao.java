@@ -121,7 +121,7 @@ public class EventDao implements IEventDao {
         int id = 0;
         try {
             st = conn.prepareStatement(
-                    "insert into tb_event(vc_name, i_room_id, vc_group_name, vc_creator_username, d_date_start, t_duration) " +
+                    "insert into tb_event(vc_name, i_room_id, vc_group_name, vc_creator_username, d_date_start, i_duration) " +
                             "values (?,?,?,?,?,?)"
             );
             st.setString(1,name);
@@ -132,10 +132,22 @@ public class EventDao implements IEventDao {
             st.setObject(6,duration);
             st.executeUpdate();
 
+            // get event id
             st = conn.prepareStatement("select LAST_INSERT_ID()");
             rs = st.executeQuery();
             if (rs.next()) {
                 id = rs.getInt(1);
+            }
+
+            // insert into event subscription
+            for (User user: DBManager.getGroupDao().getMembers(groupName)) {
+                st = conn.prepareStatement(
+                        "insert into tb_event_subscription(i_event_id, vc_user_username, vc_state) values(?,?,?)"
+                );
+                st.setInt(1, id);
+                st.setString(2, user.getUsername());
+                st.setString(3, "pending");
+                st.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -147,7 +159,7 @@ public class EventDao implements IEventDao {
     }
 
     @Override
-    public void delete(int id) {
+    public boolean delete(int id) {
         PreparedStatement st = null;
 
         try {
@@ -156,13 +168,65 @@ public class EventDao implements IEventDao {
             );
             st.setInt(1,id);
             st.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBManager.closeStatement(st);
         }
+        return false;
     }
 
+    private boolean updateEventSubscriptionState(int eventId, String userUsername, String state) {
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "update tb_event_subscription set vc_state = ? where i_event_id = ? and vc_user_username = ?"
+            );
+            st.setString(1,state);
+            st.setInt(2,eventId);
+            st.setString(3,userUsername);
+            st.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean acceptEvent(int eventId, String userUsername) {
+        return updateEventSubscriptionState(eventId, userUsername, "accepted");
+    }
+
+    @Override
+    public boolean refuseEvent(int eventId, String username) {
+        return updateEventSubscriptionState(eventId, username, "refused");
+    }
+
+    @Override
+    public boolean cancelEvent(int eventId) {
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "delete from tb_event_subscription where i_event_id= ?"
+            );
+            st.setInt(1,eventId);
+            st.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+        }
+        return false;
+    }
+
+    // own
     @Override
     public final Event build(ResultSet rs) throws SQLException {
         Room room   = DBManager.getRoomDao().get(rs.getInt("i_room_id"));

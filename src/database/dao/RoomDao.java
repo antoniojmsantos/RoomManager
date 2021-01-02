@@ -4,11 +4,13 @@ import database.DBManager;
 import shared_data.entities.Room;
 import shared_data.entities.RoomFeature;
 import shared_data.entities.RoomType;
+import shared_data.helper.TimePeriod;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -166,9 +168,7 @@ public class RoomDao implements IRoomDao {
             st.setInt(1,  roomId);
             rs = st.executeQuery();
             while(rs.next()) {
-                features.add(
-                        RoomFeature.valueOf(rs.getString("vc_name"))
-                );
+                features.add(RoomFeature.value(rs.getString("vc_name")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -216,6 +216,32 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    private List<TimePeriod> getSchedule(int roomId) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        List<TimePeriod> schedule = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "select * from tb_event where i_room_id = ?"
+            );
+            st.setInt(1,  roomId);
+            rs = st.executeQuery();
+            while(rs.next()) {
+                schedule.add(TimePeriod.make(
+                        (LocalDateTime) rs.getObject("d_date_start"),
+                        rs.getInt("i_duration")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+        return schedule;
+    }
+
     // own
     @Override
     public final Room build(ResultSet rs) throws SQLException {
@@ -223,7 +249,8 @@ public class RoomDao implements IRoomDao {
                 rs.getInt("i_id"),
                 rs.getString("vc_name"),
                 rs.getInt("i_capacity"),
-                RoomType.valueOf(rs.getString("vc_type")),
-                getFeatures(rs.getInt("i_id")));
+                RoomType.value(rs.getString("vc_type")),
+                getFeatures(rs.getInt("i_id")),
+                getSchedule(rs.getInt("i_id")));
     }
 }
