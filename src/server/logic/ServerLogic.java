@@ -193,4 +193,25 @@ public final class ServerLogic {
        return DBManager.getGroupDao().getMembers(groupName);
     }
 
+    public boolean deleteEvent(int idEvent, User user) {
+        //DBManager.getEventDao().delete(idEvent);
+        return true;
+    }
+
+    public Event getEvent(int idEvent) {
+        return DBManager.getEventDao().get(idEvent);
+    }
+
+    public boolean cancelSubscription(int idEvent, User user) {
+        //
+        return true;
+    }
+
+    public boolean acceptEvent(int idEvent, User user) {
+        return true;
+    }
+
+    public boolean declineEvent(int idEvent, User user) {
+        return true;
+    }
 }
