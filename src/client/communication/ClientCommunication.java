@@ -170,9 +170,9 @@ public class ClientCommunication {
         try{
             RequestCreatedEvents requestCreatedEvents = new RequestCreatedEvents(this.loggedUser);
             SendAndReceiveData.sendData(requestCreatedEvents,socketTCP);
-            
-            ResponseUserEvents responseUserEvents = (ResponseUserEvents)SendAndReceiveData.receiveData(socketTCP);
-            return responseUserEvents.getUserEvents();
+
+            ResponseCreatedEvents responseCreatedEvents = (ResponseCreatedEvents)SendAndReceiveData.receiveData(socketTCP);
+            return responseCreatedEvents.getCreatedEvents();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
