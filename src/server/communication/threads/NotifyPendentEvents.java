@@ -1,6 +1,7 @@
 package server.communication.threads;
 
 import server.logic.ServerLogic;
+import shared_data.communication.RequestThreadNotification;
 import shared_data.entities.Event;
 import shared_data.helper.ClientInfo;
 import shared_data.helper.SendAndReceiveData;
@@ -12,10 +13,12 @@ public class NotifyPendentEvents extends Thread {
 
     private ServerLogic serverLogic;
     private Event event;
+    private String type;
 
-    public NotifyPendentEvents(Event event, ServerLogic serverLogic) {
+    public NotifyPendentEvents(Event event, ServerLogic serverLogic, String type) {
         this.serverLogic = serverLogic;
         this.event = event;
+        this.type = type;
     }
 
     @Override
@@ -23,7 +26,8 @@ public class NotifyPendentEvents extends Thread {
         ArrayList<ClientInfo> clientToSendNotification = serverLogic.getClientInfo(event);
         for(int i = 0; i < clientToSendNotification.size();i++){
             try {
-                SendAndReceiveData.sendData(event,clientToSendNotification.get(i).getCallBackSocket());
+                RequestThreadNotification requestThreadNotification = new RequestThreadNotification(event,type);
+                SendAndReceiveData.sendData(requestThreadNotification,clientToSendNotification.get(i).getCallBackSocket());
             } catch (IOException e) {
                 e.printStackTrace();
             }

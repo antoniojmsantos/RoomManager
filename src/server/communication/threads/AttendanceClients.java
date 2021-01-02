@@ -88,7 +88,7 @@ public class AttendanceClients extends Thread{
                 //positivo
                 responseCreateEvent = new ResponseCreateEvent(event);
                 SendAndReceiveData.sendData(responseCreateEvent,socketClient);
-                NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic);
+                NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic,"create");
                 notifyPendentEvents.start();
             }else{
                 responseCreateEvent = new ResponseCreateEvent(null);
@@ -118,6 +118,34 @@ public class AttendanceClients extends Thread{
             RequestCreatedEvents requestCreatedEvents = (RequestCreatedEvents)request;
             ResponseCreatedEvents responseCreatedEvents  = new ResponseCreatedEvents(serverLogic.getCreatedEvents(requestCreatedEvents.getUser()));
             SendAndReceiveData.sendData(responseCreatedEvents,socketClient);
+        }
+        else if(request instanceof RequestDeleteEvent){
+            RequestDeleteEvent requestDeleteEvent = (RequestDeleteEvent)request;
+            Event event = serverLogic.getEvent(requestDeleteEvent.getIdEvent());
+
+            ResponseDeleteEvent responseDeleteEvent = new ResponseDeleteEvent(serverLogic.deleteEvent(requestDeleteEvent.getIdEvent(),requestDeleteEvent.getUser()));
+            SendAndReceiveData.sendData(responseDeleteEvent,socketClient);
+
+            NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic,"delete");
+            notifyPendentEvents.start();
+        }
+        else if (request instanceof RequestCancelSubscription){
+            RequestCancelSubscription requestCancelSubscription = (RequestCancelSubscription)request;
+            boolean result = serverLogic.cancelSubscription(requestCancelSubscription.getIdEvent(),requestCancelSubscription.getUser());
+            ResponseCancelSubscription responseCancelSubscription = new ResponseCancelSubscription(result);
+            SendAndReceiveData.sendData(responseCancelSubscription,socketClient);
+        }
+        else if(request instanceof RequestAcceptEvent){
+            RequestAcceptEvent requestAcceptEvent = (RequestAcceptEvent)request;
+            boolean result = serverLogic.acceptEvent(requestAcceptEvent.getIdEvent(),requestAcceptEvent.getUser());
+            ResponseAcceptEvent responseAcceptEvent = new ResponseAcceptEvent(result);
+            SendAndReceiveData.sendData(responseAcceptEvent,socketClient);
+        }
+        else if (request instanceof RequestDeclineEvent){
+            RequestDeclineEvent requestDeclineEvent = (RequestDeclineEvent)request;
+            boolean result = serverLogic.declineEvent(requestDeclineEvent.getIdEvent(),requestDeclineEvent.getUser());
+            ResponseDeclineEvent responseDeclineEvent = new ResponseDeclineEvent(result);
+            SendAndReceiveData.sendData(responseDeclineEvent,socketClient);
         }
     }
 }

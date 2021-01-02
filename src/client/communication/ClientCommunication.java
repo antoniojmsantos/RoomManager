@@ -211,27 +211,51 @@ public class ClientCommunication {
     }
 
     public boolean deleteEvent(int idEvent){
-
-        //TODO: PEDE AO SERVIDOR UM OBJETO EVENTO A PARTIR DO SEU ID E RETORNA-O.
-        return true;
+        try{
+            RequestDeleteEvent requestDeleteEvent = new RequestDeleteEvent(idEvent,this.loggedUser);
+            SendAndReceiveData.sendData(requestDeleteEvent,socketTCP);
+            ResponseDeleteEvent responseDeleteEvent = (ResponseDeleteEvent)SendAndReceiveData.receiveData(socketTCP);
+            return responseDeleteEvent.isResult();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public boolean deleteEventSubscription(int idEvent){
-
-        //TODO: MANDA AO SERVIDOR O ID DO EVENTO E O ID DO USER E CANCELA A SUA SUBSCRICAO NAQUELE EVENTO
-        return true;
+    public boolean cancelEventSubscription(int idEvent){
+        try{
+            RequestCancelSubscription requestCancelSubscription = new RequestCancelSubscription(idEvent,this.loggedUser);
+            SendAndReceiveData.sendData(requestCancelSubscription,socketTCP);
+            ResponseCancelSubscription responseCancelSubscription = (ResponseCancelSubscription)SendAndReceiveData.receiveData(socketTCP);
+            return responseCancelSubscription.isResult();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public boolean acceptUserSubscription(int idEvent){
-        //TODO: PEDE AO SERVIDOR PARA ACEITAR A SUBSCRICAO DO USER currentUser NO EVENTO idEvent
-
-        return true;
+    public boolean acceptEventSubscription(int idEvent){
+        try{
+            RequestAcceptEvent requestAcceptEvent = new RequestAcceptEvent(idEvent,this.loggedUser);
+            SendAndReceiveData.sendData(requestAcceptEvent,socketTCP);
+            ResponseAcceptEvent responseAcceptEvent = (ResponseAcceptEvent)SendAndReceiveData.receiveData(socketTCP);
+            return responseAcceptEvent.isResult();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public boolean declineUserSubscription(int idEvent){
-        //TODO: PEDE AO SERVIDOR PARA REJEITAR A SUBSCRICAO DO USER currentUser NO EVENTO idEvent
-
-        return true;
+    public boolean declineEventSubscription(int idEvent){
+        try{
+            RequestDeclineEvent requestDeclineEvent = new RequestDeclineEvent(idEvent,this.loggedUser);
+            SendAndReceiveData.sendData(requestDeclineEvent,socketTCP);
+            ResponseDeclineEvent responseDeclineEvent = (ResponseDeclineEvent)SendAndReceiveData.receiveData(socketTCP);
+            return responseDeclineEvent.isResult();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
