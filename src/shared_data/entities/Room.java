@@ -38,8 +38,7 @@ public class Room implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return "Sala: " + name + " | Capacidade: " +capacity;
+    public String toString() {
+        return name;
     }
-
 }

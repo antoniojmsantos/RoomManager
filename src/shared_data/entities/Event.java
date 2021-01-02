@@ -59,4 +59,8 @@ public class Event implements Serializable {
         return new Event(id, name, room,group, creator, start, duration);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

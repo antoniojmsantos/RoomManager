@@ -2,9 +2,11 @@ package client.logic;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import shared_data.entities.*;
 
@@ -111,8 +113,31 @@ public class ClientObservable {
         return controller.isRoomAvailable(id);
     }
 
-    public ArrayList<Event> getCreatedEvents() {
+    public ArrayList<Event> getEventsCreated() {
 
-        return controller.getCreatedEvents();
+//        ArrayList<Event> events = new ArrayList<>();
+//        events.add(new Event(0, "SO_P3_L1.1", new Room(0, "L1.1", 10, RoomType.AUDITORIO, List.of(
+//                RoomFeature.AR_CONDICIONADO,
+//                RoomFeature.COMPUTADORES_WINDOWS,
+//                RoomFeature.PROJETOR
+//        )),
+//                new Group("P1"),new User("pedrito@gmail.com","Pedro","1234", true), LocalDateTime.now(), 120));
+//        events.add(new Event(1, "IRC_P1_L2.1", new Room(1, "L2.1", 15,RoomType.LABORATORIO,List.of(
+//                RoomFeature.AR_CONDICIONADO,
+//                RoomFeature.QUADRO_INTERATIVO
+//        )),
+//                new Group("P3"),new User("rodigo@gmail.com","Rodrigo","1234", false), LocalDateTime.now(), 130));
+//return events;
+        return controller.getEventsCreated();
+    }
+
+    public boolean deleteEvent(int id){
+
+        if(controller.deleteEvent(id)){
+            support.firePropertyChange(null, null, null);
+            return true;
+        }
+        else
+            return false;
     }
 }

@@ -4,6 +4,7 @@ import client.gui.auxiliar.Constants;
 import client.gui.custom_controls.Calendar;
 import client.logic.ClientObservable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -25,9 +26,12 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
 
     Label lbUser;
+    ListView<Event> lvCreatedEvents;
 
     ArrayList<Event> listEvents;
-    ListView<Event> lvCreatedEvents;
+
+    Calendar calendar;
+
 
     public MainHighLevelPane(ClientObservable observable){
         this.observable = observable;
@@ -76,36 +80,57 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         lvCreatedEvents.setStyle("-fx-border-color: black");
         lvCreatedEvents.setPrefHeight(DIM_Y_FRAME);
 
+        lvCreatedEvents.setCellFactory(lv -> {
 
-//        lvCreatedEvents.setCellFactory(lv -> {
-//
-//            ListCell<Event> cell = new ListCell<>();
-//
-//            ContextMenu contextMenu = new ContextMenu();
-//
-//
-//            MenuItem editItem = new MenuItem();
-//            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
-//            editItem.setOnAction(event -> {
-//                Event item = cell.getItem();
-//                // code to edit item...
-//            });
-//            MenuItem deleteItem = new MenuItem();
-//            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
-//            deleteItem.setOnAction(event -> lvCreatedEvents.getItems().remove(cell.getItem()));
-//            contextMenu.getItems().addAll(editItem, deleteItem);
-//
-//            cell.textProperty().bind(cell);
-//
-//            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-//                if (isNowEmpty) {
-//                    cell.setContextMenu(null);
-//                } else {
-//                    cell.setContextMenu(contextMenu);
-//                }
-//            });
-//            return cell ;
-//        });
+            ListCell<Event> cell = new ListCell<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+
+
+            MenuItem deleteItem = new MenuItem();
+            deleteItem.textProperty().bind(Bindings.format("Delete \'%s\'", cell.itemProperty()));
+            deleteItem.setOnAction(event -> {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Tem certeza que deseja apagar o evento '"
+                        + cell.itemProperty().get().toString() + "' ?\n\nEsta operação não é reversível.", ButtonType.YES, ButtonType.NO);
+                alert.setTitle("");
+                alert.setHeaderText("Atenção!");
+                alert.showAndWait();
+
+                if (alert.getResult() == ButtonType.YES) {
+                    observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId());
+                }
+
+            });
+
+            contextMenu.getItems().addAll(deleteItem);
+
+//            cell.textProperty().bind(cell.itemProperty().asString());
+            StringBinding stringBinding = new StringBinding(){
+                {
+                    super.bind(cell.itemProperty().asString());
+                }
+                @Override
+                protected String computeValue() {
+                    if(cell.itemProperty().getValue()==null){
+                        return "";
+                    }
+                    return cell.itemProperty().getValue().toString();
+                }
+            };
+
+            cell.textProperty().bind(stringBinding);
+
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(contextMenu);
+                }
+            });
+
+            return cell ;
+        });
+
 
         box_list.getChildren().addAll(header_list, lvCreatedEvents);
 
@@ -115,8 +140,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     }
 
     public void setupEventCalendar(){
-        Calendar calendar = new Calendar();
-
+        calendar = new Calendar();
         this.getChildren().addAll(calendar);
     }
 
@@ -127,7 +151,8 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
         if(observable.isAuthenticated()){
             lbUser.setText("Autenticado como: " + observable.getUsername());
-            listEvents = observable.getCreatedEvents();
+            listEvents = observable.getEventsCreated();
+            calendar.refresh(listEvents);
             ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
             lvCreatedEvents.setItems(items);
         }

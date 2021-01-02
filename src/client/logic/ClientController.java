@@ -102,8 +102,12 @@ public class ClientController {
         return true;
     }
 
-    public ArrayList<Event> getCreatedEvents() {
+    public ArrayList<Event> getEventsCreated() {
 
-        return communication.getUserEvents();
+        return communication.getEventsCreated();
+    }
+
+    public boolean deleteEvent(int id) {
+        return communication.deleteEvent(id);
     }
 }

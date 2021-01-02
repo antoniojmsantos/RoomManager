@@ -106,25 +106,6 @@ public final class ServerLogic {
         DBManager.getUserDao().updatePermissions(userid, i);
     }
     public void addRoom(String addName, String roomTypeString,String addLimit, String addFeatures) {
-        ArrayList<RoomFeature> features = new ArrayList<>();
-        String rest;String[] data;
-        data = addFeatures.split(" ");
-        rest = data[1];
-        while(!rest.isEmpty()){
-            if(data[0].equals("ar_condicionado")){
-                features.add(RoomFeature.AR_CONDICIONADO);
-            }else if(data[0].equals("computadores_mac")){
-                features.add(RoomFeature.COMPUTADORES_MAC);
-            }else if(data[0].equals("computadores_windows")){
-                features.add(RoomFeature.COMPUTADORES_WINDOWS);
-            }else if(data[0].equals("projetor")){
-                features.add(RoomFeature.PROJETOR);
-            }else if(data[0].equals("quadro_interativo")){
-                features.add(RoomFeature.QUADRO_INTERATIVO);
-            }
-            data = addFeatures.split(" ");
-            rest = data[1];
-        }
 
         RoomType roomType = null;
         if(roomTypeString.equals("laboratorio")){
@@ -132,8 +113,42 @@ public final class ServerLogic {
         }else if(roomTypeString.equals("auditorio")){
             roomType = RoomType.AUDITORIO;
         }
+        ArrayList<RoomFeature> features = new ArrayList<>();
+        if(addFeatures.equals("ar_condicionado"))
+            features.add(RoomFeature.AR_CONDICIONADO);
+        else {
+            if (addFeatures.equals("computadores_mac"))
+                features.add(RoomFeature.COMPUTADORES_MAC);
+            else{
+                if(addFeatures.equals("computadores_windows"))
+                    features.add(RoomFeature.COMPUTADORES_WINDOWS);
+                else{
+                    if(addFeatures.equals("projetor"))
+                        features.add(RoomFeature.PROJETOR);
+                    else{
+                        if(addFeatures.equals("quadro_interativo"))
+                            features.add(RoomFeature.QUADRO_INTERATIVO);
+                        else
+                            System.out.println("Invalid Feature.");
+                    }
+                }
+
+            }
+        }
 
         DBManager.getRoomDao().insert(addName,Integer.parseInt(addLimit), roomType,features);
+    }
+
+    public void removeRoom(int roomId){
+        DBManager.getRoomDao().delete(roomId);
+    }
+
+    public void updateFeatures(int roomId, RoomFeature rF){
+        DBManager.getRoomDao().insertFeature(roomId, rF);
+    }
+
+    public void removeFeatures(int roomId, RoomFeature rF){
+        DBManager.getRoomDao().deleteFeature(roomId, rF);
     }
 
     public void updateName(int parseInt, String editName) {
@@ -157,4 +172,25 @@ public final class ServerLogic {
     public List<Group> getGroups(){
         return DBManager.getGroupDao().getAll();
     }
+
+
+    public void removeGroup(String groupName) {
+        DBManager.getGroupDao().delete(groupName);
+    }
+
+
+    public void addUserGroup(String groupName, String userId) {
+        DBManager.getGroupDao().addMember(groupName, userId);
+    }
+
+
+    public void removeUserGroup(String groupName, String userId) {
+        DBManager.getGroupDao().removeMember(groupName, userId);
+    }
+
+    //FUNÇÃO GET MEMBERS NÃO ESTÁ A RECEBER BEM OS USERS DE UM DETERMINADO GRUPO
+    public List<User> getUsersInGroup(String groupName){
+       return DBManager.getGroupDao().getMembers(groupName);
+    }
+
 }

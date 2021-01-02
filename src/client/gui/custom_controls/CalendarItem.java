@@ -9,6 +9,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import shared_data.entities.*;
 
 import java.beans.PropertyChangeEvent;
@@ -24,9 +25,8 @@ import java.util.List;
 public class CalendarItem extends VBox {
 
     // Date associated with this pane
-    private LocalDate date;
-
-    ArrayList<Event> events = new ArrayList<>();
+    private LocalDate date;;
+    ArrayList<Event> events;
 
     public CalendarItem() {
         this.setSpacing(2);
@@ -35,18 +35,10 @@ public class CalendarItem extends VBox {
         // Add action handler for mouse clicked
 //        this.setOnMouseClicked(e -> System.out.println("This pane's date is: " + date));
 
-        events.add(new Event(0, "SO_P3_L1.1", new Room(0, "L1.1", 10, RoomType.AUDITORIO, List.of(
-                RoomFeature.AR_CONDICIONADO,
-                RoomFeature.COMPUTADORES_WINDOWS,
-                RoomFeature.PROJETOR
-                )),
-                new Group("P1"),new User("pedrito@gmail.com","Pedro","1234", true), LocalDateTime.now(), 120));
-        events.add(new Event(1, "IRC_P1_L2.1", new Room(1, "L2.1", 15,RoomType.LABORATORIO,List.of(
-                RoomFeature.AR_CONDICIONADO,
-                RoomFeature.QUADRO_INTERATIVO
-                )),
-                new Group("P3"),new User("rodigo@gmail.com","Rodrigo","1234", false), LocalDateTime.now(), 130));
+    }
 
+    public void refreshEvents(ArrayList<Event> events){
+        this.events = events;
     }
 
     void populateItem(LocalDate calendarDate, LocalDate currentDate){
@@ -67,25 +59,31 @@ public class CalendarItem extends VBox {
 
         //TODO PEDE OS EVENTOS AO SERVIDOR
 
-        for(Event e : events){ //FOR EACH OF THE USER EVENTS POPULATE IT ON THE CALENDAR
-            LocalDate eventDate = e.getStart().toLocalDate();
+        if(events != null){
+            for(Event e : events){ //FOR EACH OF THE USER EVENTS POPULATE IT ON THE CALENDAR
+                LocalDate eventDate = e.getStart().toLocalDate();
 
-            if(calendarDate.isEqual(eventDate)){
-                Label lb = new Label(e.getName());
-                HBox boxEvent = new HBox(lb);
-                boxEvent.setAlignment(Pos.CENTER);
-                boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                if(calendarDate.isEqual(eventDate)){
+                    Label lb = new Label(e.toString());
+                    HBox boxEvent = new HBox(lb);
+                    boxEvent.setAlignment(Pos.CENTER);
+                    boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
+                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-                Tooltip tooltip = new Tooltip("Informações do Evento:\n\nSala: " + e.getRoom().getName() +
-                        "\nGrupo: " +e.getGroup().getName() + "\nHora Inicio: " +
-                        e.getStart().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nDuração: " +
-                        e.getDuration() + " minutos");
-                Tooltip.install(boxEvent, tooltip);
+                    Tooltip tooltip = new Tooltip("Informações do Evento:\n\nSala: " + e.getRoom().getName() +
+                            "\nGrupo: " +e.getGroup().getName() + "\nHora Inicio: " +
+                            e.getStart().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nDuração: " +
+                            e.getDuration() + " minutos");
+                    tooltip.setStyle("-fx-font-size: 14");
+                    tooltip.setShowDelay(Duration.millis(200));
+                    tooltip.setShowDuration(Duration.INDEFINITE);
+                    Tooltip.install(boxEvent, tooltip);
 
-                this.getChildren().add(boxEvent);
+                    this.getChildren().add(boxEvent);
+                }
             }
         }
+
     }
 
     public LocalDate getDate() {
