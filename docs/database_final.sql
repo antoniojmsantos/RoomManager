@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `db_room_manager` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `db_room_manager`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_room_manager
@@ -39,18 +37,8 @@ CREATE TABLE `tb_event` (
   CONSTRAINT `event_creator` FOREIGN KEY (`vc_creator_username`) REFERENCES `tb_user` (`vc_username`) ON DELETE CASCADE,
   CONSTRAINT `event_group` FOREIGN KEY (`vc_group_name`) REFERENCES `tb_group` (`vc_name`) ON DELETE CASCADE,
   CONSTRAINT `event_room` FOREIGN KEY (`i_room_id`) REFERENCES `tb_room` (`i_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_event`
---
-
-LOCK TABLES `tb_event` WRITE;
-/*!40000 ALTER TABLE `tb_event` DISABLE KEYS */;
-INSERT INTO `tb_event` VALUES (1,'Webinar',2,'Grupo 1','pedrito@hotmail.com','2021-01-05 17:40:50',120),(2,'Conferência',2,'Grupo 2','pedrito@hotmail.com','2021-01-05 20:00:00',60);
-/*!40000 ALTER TABLE `tb_event` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tb_event_subscription`
@@ -67,20 +55,10 @@ CREATE TABLE `tb_event_subscription` (
   PRIMARY KEY (`i_id`),
   KEY `event_idx` (`i_event_id`),
   KEY `user_idx` (`vc_user_username`),
-  CONSTRAINT `event` FOREIGN KEY (`i_event_id`) REFERENCES `tb_event` (`i_id`) ON UPDATE CASCADE,
-  CONSTRAINT `user` FOREIGN KEY (`vc_user_username`) REFERENCES `tb_user` (`vc_username`) ON UPDATE CASCADE
+  CONSTRAINT `event` FOREIGN KEY (`i_event_id`) REFERENCES `tb_event` (`i_id`) ON DELETE CASCADE,
+  CONSTRAINT `user` FOREIGN KEY (`vc_user_username`) REFERENCES `tb_user` (`vc_username`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_event_subscription`
---
-
-LOCK TABLES `tb_event_subscription` WRITE;
-/*!40000 ALTER TABLE `tb_event_subscription` DISABLE KEYS */;
-INSERT INTO `tb_event_subscription` VALUES (1,1,'ajms@hotmail.com','pending'),(2,1,'pedrito','pending'),(3,2,'asdas','pending'),(4,2,'pedrito','pending');
-/*!40000 ALTER TABLE `tb_event_subscription` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tb_group`
@@ -94,16 +72,6 @@ CREATE TABLE `tb_group` (
   PRIMARY KEY (`vc_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_group`
---
-
-LOCK TABLES `tb_group` WRITE;
-/*!40000 ALTER TABLE `tb_group` DISABLE KEYS */;
-INSERT INTO `tb_group` VALUES ('Grupo 1'),('Grupo 2'),('Grupo 3');
-/*!40000 ALTER TABLE `tb_group` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tb_group_member`
@@ -124,16 +92,6 @@ CREATE TABLE `tb_group_member` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_group_member`
---
-
-LOCK TABLES `tb_group_member` WRITE;
-/*!40000 ALTER TABLE `tb_group_member` DISABLE KEYS */;
-INSERT INTO `tb_group_member` VALUES ('Grupo 1','ajms@hotmail.com'),('Grupo 1','pedrito'),('Grupo 2','asdas'),('Grupo 2','pedrito');
-/*!40000 ALTER TABLE `tb_group_member` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tb_room`
 --
 
@@ -148,16 +106,6 @@ CREATE TABLE `tb_room` (
   PRIMARY KEY (`i_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_room`
---
-
-LOCK TABLES `tb_room` WRITE;
-/*!40000 ALTER TABLE `tb_room` DISABLE KEYS */;
-INSERT INTO `tb_room` VALUES (1,'Guerra Pratas','Auditório',100),(2,'Rui Borges','Anfiteatro',150),(3,'L3.1','Laboratório',20);
-/*!40000 ALTER TABLE `tb_room` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tb_room_feature`
@@ -178,16 +126,6 @@ CREATE TABLE `tb_room_feature` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_room_feature`
---
-
-LOCK TABLES `tb_room_feature` WRITE;
-/*!40000 ALTER TABLE `tb_room_feature` DISABLE KEYS */;
-INSERT INTO `tb_room_feature` VALUES (1,1,'Ar Condicionado'),(2,1,'Projetor'),(3,2,'Projetor'),(6,3,'Computadores MacOS'),(5,3,'Computadores Windows'),(4,3,'Quadro Interativo');
-/*!40000 ALTER TABLE `tb_room_feature` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tb_user`
 --
 
@@ -202,16 +140,6 @@ CREATE TABLE `tb_user` (
   PRIMARY KEY (`vc_username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_user`
---
-
-LOCK TABLES `tb_user` WRITE;
-/*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
-INSERT INTO `tb_user` VALUES ('aaaa@hotmail.com','João','81dc9bdb52d04dc20036dbd8313ed055',_binary ''),('ajms@hotmail.com','António','10f6872a03e0d9ef6281545c2402af86',_binary ''),('asd','aadsa','88a8d500a8761091f721a7ef8348eba1',_binary ''),('asdas','asdas','81dc9bdb52d04dc20036dbd8313ed055',_binary ''),('pedrito','Pedro','81dc9bdb52d04dc20036dbd8313ed055',_binary '\0'),('pedrito@hotmail.com','Pedro','81dc9bdb52d04dc20036dbd8313ed055',_binary '');
-/*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -222,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-03 14:50:20
+-- Dump completed on 2021-01-03 18:37:07
