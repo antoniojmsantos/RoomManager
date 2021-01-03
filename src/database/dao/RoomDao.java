@@ -77,7 +77,7 @@ public class RoomDao implements IRoomDao {
             );
             st.setString(1,name);
             st.setInt(2,capacity);
-            st.setString(3, type.toString());
+            st.setString(3, type.getValue());
             st.executeUpdate();
 
             st = conn.prepareStatement(
@@ -186,7 +186,7 @@ public class RoomDao implements IRoomDao {
                     "insert into tb_room_feature(i_room_id, vc_name) values (?,?)"
             );
             st.setInt(1, roomId);
-            st.setString(2,feature.toString());
+            st.setString(2,feature.getValue());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

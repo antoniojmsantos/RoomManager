@@ -149,11 +149,16 @@ public class ServerInterface extends Thread {
             addName = scan.nextLine();
         }
 
+        System.out.println("------Room Type-------");
+        for(RoomType rT : RoomType.values())
+            System.out.println(rT.getValue());
+        System.out.println("----------------------");
+
         System.out.print("Room Type = ");
         String addType = scan.nextLine();
 
-        while (checkRoomType(addType) == false) {
-            System.out.print("<Invalid Room Type.Try Again>\nName = ");
+        while (!checkRoomType(addType)) {
+            System.out.print("<Invalid Room Type.Try Again>\nRoom Type = ");
             addType = scan.nextLine();
         }
 
@@ -165,8 +170,18 @@ public class ServerInterface extends Thread {
             addLimit = scan.nextLine();
         }
 
+        System.out.println("-----Feature Options-----");
+        for(RoomFeature rF : RoomFeature.values()){
+            System.out.println(rF.getValue());
+        }
+        System.out.println("-------------------------");
+
         System.out.print("Features = ");
-        String addFeatures = scan.nextLine();
+      //  String addFeature = scan.nextLine();
+        String[] addFeatures = scan.nextLine().split(" | ");
+        for(String s : addFeatures){
+            System.out.println(s);
+        }
 
         serverLogic.addRoom(addName, addType, addLimit, addFeatures);
 
@@ -182,9 +197,12 @@ public class ServerInterface extends Thread {
     }
 
     public boolean checkRoomType(String roomType) {
-        if (roomType.equals("auditorio") || roomType.equals("laboratorio"))
+        try{
+            RoomType.value(roomType);
             return true;
-        return false;
+        }catch(IllegalArgumentException e){
+            return false;
+        }
     }
 
 

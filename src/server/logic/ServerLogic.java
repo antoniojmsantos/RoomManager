@@ -105,7 +105,7 @@ public final class ServerLogic {
     public void setPermissions(String userid,boolean i) {
         DBManager.getUserDao().updatePermissions(userid, i);
     }
-    public void addRoom(String addName, String roomTypeString,String addLimit, String addFeatures) {
+    public void addRoom(String addName, String roomTypeString,String addLimit, String[] addFeatures) {
 
         RoomType roomType = RoomType.value(roomTypeString);
 
@@ -116,7 +116,11 @@ public final class ServerLogic {
             roomType = RoomType.AUDITÓRIO;
         }*/
         ArrayList<RoomFeature> features = new ArrayList<>();
-        if(addFeatures.equals("ar_condicionado"))
+        for (String addFeature : addFeatures) {
+            features.add(RoomFeature.value(addFeature));
+        }
+
+        /*if(addFeatures.equals("ar_condicionado"))
             features.add(RoomFeature.AR_CONDICIONADO);
         else {
             if (addFeatures.equals("computadores_mac"))
@@ -136,7 +140,7 @@ public final class ServerLogic {
                 }
 
             }
-        }
+        }*/
 
         DBManager.getRoomDao().insert(addName,Integer.parseInt(addLimit), roomType,features);
     }
