@@ -107,12 +107,14 @@ public final class ServerLogic {
     }
     public void addRoom(String addName, String roomTypeString,String addLimit, String addFeatures) {
 
-        RoomType roomType = null;
+        RoomType roomType = RoomType.value(roomTypeString);
+
+        /*RoomType roomType = null;
         if(roomTypeString.equals("laboratorio")){
-            roomType = RoomType.LABORATORIO;
+            roomType = RoomType.LABORATÓRIO;
         }else if(roomTypeString.equals("auditorio")){
-            roomType = RoomType.AUDITORIO;
-        }
+            roomType = RoomType.AUDITÓRIO;
+        }*/
         ArrayList<RoomFeature> features = new ArrayList<>();
         if(addFeatures.equals("ar_condicionado"))
             features.add(RoomFeature.AR_CONDICIONADO);

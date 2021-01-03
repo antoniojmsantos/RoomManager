@@ -2,9 +2,7 @@ package client.gui.custom_controls;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -12,15 +10,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import shared_data.entities.*;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class CalendarItem extends VBox {
 
@@ -61,7 +53,7 @@ public class CalendarItem extends VBox {
 
         if(events != null){
             for(Event e : events){ //FOR EACH OF THE USER EVENTS POPULATE IT ON THE CALENDAR
-                LocalDate eventDate = e.getStart().toLocalDate();
+                LocalDate eventDate = e.getStartDate().toLocalDate();
 
                 if(calendarDate.isEqual(eventDate)){
                     Label lb = new Label(e.toString());
@@ -72,7 +64,7 @@ public class CalendarItem extends VBox {
 
                     Tooltip tooltip = new Tooltip("Informações do Evento:\n\nSala: " + e.getRoom().getName() +
                             "\nGrupo: " +e.getGroup().getName() + "\nHora Inicio: " +
-                            e.getStart().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nDuração: " +
+                            e.getStartDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nDuração: " +
                             e.getDuration() + " minutos");
                     tooltip.setStyle("-fx-font-size: 14");
                     tooltip.setShowDelay(Duration.millis(200));

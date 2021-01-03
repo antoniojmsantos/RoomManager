@@ -257,6 +257,4 @@ public class ClientCommunication {
         }
         return false;
     }
-
-
 }

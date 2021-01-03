@@ -6,10 +6,7 @@ import shared_data.entities.RoomFeature;
 import shared_data.entities.RoomType;
 import shared_data.helper.TimePeriod;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -229,7 +226,7 @@ public class RoomDao implements IRoomDao {
             rs = st.executeQuery();
             while(rs.next()) {
                 schedule.add(TimePeriod.make(
-                        (LocalDateTime) rs.getObject("d_date_start"),
+                        ((Timestamp) rs.getObject("d_date_start")).toLocalDateTime(),
                         rs.getInt("i_duration")
                 ));
             }

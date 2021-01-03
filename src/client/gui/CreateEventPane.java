@@ -25,7 +25,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 public class CreateEventPane extends VBox implements Constants, PropertyChangeListener {
@@ -38,8 +39,19 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     DateTimePicker dtInitialDate;
     Spinner<Integer> spDuration, spCapacity;
 
-    CheckBox cb_anfi, cb_lab, cb_salareuniao;
-    CheckBox cb2_projetor, cb2_mesareuniao, cb2_windows, cb2_macos, cb2_quadroiterativo, cb2_arcondicionado;
+    // Room Types
+    CheckBox cbRoomType_Anfiteatro,
+            cbRoomType_Lab,
+            cbRoomType_SalaReunioes,
+            cbRoomType_Auditorio;
+
+    // Room Features
+    CheckBox cbRoomFeature_Projetor,
+            cbRoomFeature_MesaReuniao,
+            cbRoomFeature_ComputadoresWindows,
+            cbRoomFeature_ComputadoresMacOS,
+            cbRoomFeature_QuadroInterativo,
+            cbRoomFeature_ArCondicionado;
 
     ListView<Room> listRooms;
     FilteredList<Room> filteredRoomsList;
@@ -61,33 +73,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         boxEventFilters.setPadding(new Insets(30));
 
 
-
-        ArrayList<Room> salasTeste = new ArrayList<>();
-        salasTeste.add(new Room(1, "L1.1", 10, RoomType.LABORATORIO, List.of(
-                RoomFeature.COMPUTADORES_WINDOWS,
-                RoomFeature.COMPUTADORES_MAC
-        )));
-        salasTeste.add(new Room(2, "L1.2", 25, RoomType.LABORATORIO, List.of(
-                RoomFeature.COMPUTADORES_WINDOWS,
-                RoomFeature.AR_CONDICIONADO
-        )));
-        salasTeste.add(new Room(3, "L2.1", 25, RoomType.LABORATORIO, List.of(
-                RoomFeature.AR_CONDICIONADO,
-                RoomFeature.COMPUTADORES_MAC
-        )));
-        salasTeste.add(new Room(3, "L2.3", 25, RoomType.LABORATORIO, List.of(
-                RoomFeature.COMPUTADORES_WINDOWS,
-                RoomFeature.AR_CONDICIONADO,
-                RoomFeature.COMPUTADORES_MAC
-        )));
-        salasTeste.add(new Room(3, "L3.1", 25, RoomType.LABORATORIO, List.of(
-                RoomFeature.PROJETOR
-        )));
-        salasTeste.add(new Room(3, "A4.1", 25, RoomType.AUDITORIO, List.of(
-                RoomFeature.COMPUTADORES_WINDOWS,
-                RoomFeature.COMPUTADORES_MAC,
-                RoomFeature.AR_CONDICIONADO
-        )));
+        ArrayList<Room> salasTeste = observable.getRooms();
         roomsList = FXCollections.observableArrayList(salasTeste);
 
         setupEventFilters();
@@ -97,14 +83,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         this.getChildren().add(boxEventFilters);
 
        propertyChange(null);
-
     }
-
-
-//    public void applyFilterRooms(){
-//        //TODO: FUNCAO QUE VAI SER EVOCADA NO INICIO DO PANE (MOSTRA TODAS) E SEMPRE QUE FOR APLICADO UM FILTRO (MOSTRA COM FILTRO)
-//
-//    }
 
 
     public void setupEventFilters(){
@@ -207,19 +186,24 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
         HBox boxAux = new HBox(10);
 
-
-
         TitledPane paneFilterType = new TitledPane();
         paneFilterType.setText("Tipo de Sala");
         paneFilterType.setCollapsible(false);
         VBox boxFilterType = new VBox(10);
-        cb_anfi = new CheckBox("Anfiteatro");
-        cb_lab = new CheckBox("Laboratório");
-        cb_salareuniao = new CheckBox("Sala Reunião");
 
-        boxFilterType.getChildren().addAll(cb_anfi, cb_lab, cb_salareuniao);
+        // check boxes room types
+        cbRoomType_Anfiteatro = new CheckBox(RoomType.ANFITEATRO.getValue());
+        cbRoomType_Auditorio = new CheckBox(RoomType.AUDITORIO.getValue());
+        cbRoomType_Lab = new CheckBox(RoomType.LABORATORIO.getValue());
+        cbRoomType_SalaReunioes = new CheckBox(RoomType.SALA_REUNIOES.getValue());
+
+        boxFilterType.getChildren().addAll(
+                cbRoomType_Anfiteatro,
+                cbRoomType_Auditorio,
+                cbRoomType_Lab,
+                cbRoomType_SalaReunioes
+        );
         paneFilterType.setContent(boxFilterType);
-
 
 //        VBox boxFilterDetails = new VBox(10);
         TitledPane paneFilterDetails = new TitledPane();
@@ -228,19 +212,22 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         HBox boxAux1 = new HBox(150);
         VBox boxVAux = new VBox(10);
         VBox boxVAux1 = new VBox(10);
-        cb2_projetor = new CheckBox("Projetor");
-        cb2_mesareuniao = new CheckBox("Mesa Reunião");
-        cb2_windows = new CheckBox("Computadores Windows");
-        boxVAux.getChildren().addAll(cb2_projetor, cb2_mesareuniao, cb2_windows);
-        cb2_macos = new CheckBox("Computadores MacOS");
-        cb2_quadroiterativo = new CheckBox("Quadro Iterativo");
-        cb2_arcondicionado = new CheckBox("Ar Condicionado");
-        boxVAux1.getChildren().addAll(cb2_macos, cb2_quadroiterativo, cb2_arcondicionado);
+
+        // checkboxes room features v1
+        cbRoomFeature_Projetor = new CheckBox(RoomFeature.PROJETOR.getValue());
+        cbRoomFeature_MesaReuniao = new CheckBox(RoomFeature.MESA_REUNIAO.getValue());
+        cbRoomFeature_ComputadoresWindows = new CheckBox(RoomFeature.COMPUTADORES_WINDOWS.getValue());
+        boxVAux.getChildren().addAll(cbRoomFeature_Projetor, cbRoomFeature_MesaReuniao, cbRoomFeature_ComputadoresWindows);
+
+        // checkboxes room features v2
+        cbRoomFeature_ComputadoresMacOS = new CheckBox(RoomFeature.COMPUTADORES_MAC.getValue());
+        cbRoomFeature_QuadroInterativo = new CheckBox(RoomFeature.QUADRO_INTERATIVO.getValue());
+        cbRoomFeature_ArCondicionado = new CheckBox(RoomFeature.AR_CONDICIONADO.getValue());
+        boxVAux1.getChildren().addAll(cbRoomFeature_ComputadoresMacOS, cbRoomFeature_QuadroInterativo, cbRoomFeature_ArCondicionado);
 
         boxAux1.getChildren().addAll(boxVAux, boxVAux1);
 
         paneFilterDetails.setContent(boxAux1);
-
 
         boxAux.getChildren().addAll(paneFilterType, paneFilterDetails);
 
@@ -249,12 +236,9 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         paneFilterType.prefWidthProperty().bind(boxAux.widthProperty());
 
         boxEventFilters.getChildren().add(boxAux);
-
     }
 
     public void setupRooms(){
-//        //AQUI É SUPOSTO SEREM MOSTRADAS AS SALAS QUE CORRESPONDAM AO QUE FOI FILTRADO PELO UTILIZADOR
-
         TitledPane paneRooms = new TitledPane();
         paneRooms.setText("Salas com estes filtros");
         paneRooms.setCollapsible(false);
@@ -263,86 +247,110 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         filteredRoomsList = new FilteredList<>(roomsList);
         listRooms.setItems(filteredRoomsList);
 
-//        LISTENERS PARA CADA CONTROLO QUE PODE APLICAR FILTRO NA LISTVIEW
+        // setup listeners
+        registerListeners();
+
+        paneRooms.setContent(listRooms);
+        boxEventFilters.getChildren().add(paneRooms);
+    }
+
+    private void registerListeners() {
         txtRoomName.textProperty().addListener(obs->{
             calculatePredicate();
         });
         spCapacity.valueProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb_anfi.selectedProperty().addListener(obs->{
+
+        // room type
+        cbRoomType_Auditorio.selectedProperty().addListener(obs -> {
             calculatePredicate();
         });
-        cb_lab.selectedProperty().addListener(obs->{
+        cbRoomType_Anfiteatro.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb_salareuniao.selectedProperty().addListener(obs->{
+        cbRoomType_Lab.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_projetor.selectedProperty().addListener(obs->{
+        cbRoomType_SalaReunioes.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_mesareuniao.selectedProperty().addListener(obs->{
+
+        // room features
+        cbRoomFeature_Projetor.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_windows.selectedProperty().addListener(obs->{
+        cbRoomFeature_MesaReuniao.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_macos.selectedProperty().addListener(obs->{
+        cbRoomFeature_ComputadoresWindows.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_quadroiterativo.selectedProperty().addListener(obs->{
+        cbRoomFeature_ComputadoresMacOS.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
-        cb2_arcondicionado.selectedProperty().addListener(obs->{
+        cbRoomFeature_QuadroInterativo.selectedProperty().addListener(obs->{
             calculatePredicate();
         });
+        cbRoomFeature_ArCondicionado.selectedProperty().addListener(obs->{
+            calculatePredicate();
+        });
+
+        // date
         dtInitialDate.valueProperty().addListener(obs->{
             calculatePredicate();
         });
-
-        paneRooms.setContent(listRooms);
-
-        boxEventFilters.getChildren().add(paneRooms);
-
+        spDuration.valueProperty().addListener( obs -> {
+            calculatePredicate();
+        });
     }
 
-
     private void calculatePredicate() {
-        String filterTxt = txtRoomName.getText();
-        int filterCap = spCapacity.getValue();
-        boolean cbAnfiCap = cb_anfi.isSelected();
-        boolean cbLabCap = cb_lab.isSelected();
-        boolean cbSalaReuniaoCap = cb_salareuniao.isSelected();
-        boolean cbProjetorCap = cb2_projetor.isSelected();
-        boolean cbMesaReuniaoCap = cb2_mesareuniao.isSelected();
-        boolean cbWindowsCap = cb2_windows.isSelected();
-        boolean cbMacOSCap = cb2_macos.isSelected();
-        boolean cbQuadroInterativoCap = cb2_quadroiterativo.isSelected();
-        boolean cbArCondicionadoCap = cb2_arcondicionado.isSelected();
-        LocalDateTime dtInitialDateCap = dtInitialDate.getDateTimeValue();
+        String filterRoomName = txtRoomName.getText();
+        int filterRoomCapacity = spCapacity.getValue();
 
-        filteredRoomsList.setPredicate(s -> {
-            boolean availableMatch = observable.isRoomAvailable(s.getId()); //CHECKS AND ONLY SHOWS IF ROOM SCHEDULE IS AVAILABLE
-            boolean txtMatch = filterTxt.isEmpty() || s.getName().contains(filterTxt);
-            boolean capMatch = filterCap == 0 || s.getCapacity() == filterCap;
-           /* boolean datadisponivel = false;
-            for(int i = 0; i< s.getTIme().size(); i++){
-                if(dtInitialDate.getDateTimeValue() == s.getTime().get(i)){
-                    datadisponivel = true;
+        Map<RoomType, Boolean> filterRoomType = new HashMap<>(Map.of(
+                RoomType.ANFITEATRO, cbRoomType_Anfiteatro.isSelected(),
+                RoomType.AUDITORIO, cbRoomType_Auditorio.isSelected(),
+                RoomType.LABORATORIO, cbRoomType_Lab.isSelected(),
+                RoomType.SALA_REUNIOES, cbRoomType_SalaReunioes.isSelected()
+        ));
+
+        Map<RoomFeature, Boolean> filterRoomFeatures = new HashMap<>(Map.of(
+                RoomFeature.AR_CONDICIONADO, cbRoomFeature_ArCondicionado.isSelected(),
+                RoomFeature.COMPUTADORES_MAC, cbRoomFeature_ComputadoresMacOS.isSelected(),
+                RoomFeature.COMPUTADORES_WINDOWS, cbRoomFeature_ComputadoresWindows.isSelected(),
+                RoomFeature.PROJETOR, cbRoomFeature_Projetor.isSelected(),
+                RoomFeature.QUADRO_INTERATIVO, cbRoomFeature_QuadroInterativo.isSelected(),
+                RoomFeature.MESA_REUNIAO, cbRoomFeature_MesaReuniao.isSelected()
+        ));
+
+        LocalDateTime startDate = dtInitialDate.getDateTimeValue();
+        int duration = spDuration.getValue();
+
+        filteredRoomsList.setPredicate(room -> {
+            boolean matchesRoomName = filterRoomName.isEmpty() || room.getName().contains(filterRoomName);
+            boolean matchesRoomCapacity = room.getCapacity() >= filterRoomCapacity;
+
+            boolean matchesRoomType = !filterRoomType.containsValue(true);
+            for (RoomType rt : filterRoomType.keySet()) {
+                if (filterRoomType.get(rt)) {
+                    matchesRoomType = matchesRoomType || room.getType().equals(rt);
                 }
-            }*/
+            }
 
-//            boolean cbAnfiMatch = cbAnfiCap;
-//            boolean cbLabMatch =;
-//            boolean cbSalaReuniaoMatch =;
-//            boolean cbProjetorMatch =;
-//            boolean cbMesaReuniaoMatch =;
-//            boolean cbWindowsMatch =;
-//            boolean cbMacOSMatch =;
-//            boolean cbQuadroInterativoMatch =;
-//            boolean cbArCondicionadoMatch =;
-            return txtMatch && capMatch;
+            boolean matchesRoomFeatures = !filterRoomFeatures.containsValue(true);
+            for (RoomFeature rf : filterRoomFeatures.keySet()) {
+                if (filterRoomFeatures.get(rf)) {
+                    matchesRoomFeatures = matchesRoomFeatures || room.getFeatures().contains(rf);
+                }
+            }
+
+            return  room.isAvailable(startDate, duration) &&
+                    matchesRoomName &&
+                    matchesRoomCapacity &&
+                    matchesRoomType &&
+                    matchesRoomFeatures;
         });
     }
 
@@ -415,8 +423,6 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
 
     }
-
-
 }
 
 
