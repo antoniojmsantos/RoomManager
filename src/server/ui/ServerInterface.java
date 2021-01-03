@@ -40,8 +40,8 @@ public class ServerInterface extends Thread {
     }
 
     private void processChoice() {
-        String choice = scan.nextLine();
-        switch (Integer.parseInt(choice)) {
+        int choice = scan.nextInt();
+        switch (choice) {
             case 1:
                 manageRooms();
                 break;
@@ -63,8 +63,8 @@ public class ServerInterface extends Thread {
         System.out.println("2 - Edit Rooms ");
         System.out.println("3 - View Rooms");
         System.out.println("4 - Back");
-        String choice = scan.nextLine();
-        switch (Integer.parseInt(choice)) {
+        int choice = scan.nextInt();
+        switch (choice) {
             case 1:
                 addRoom();
                 break;
@@ -146,6 +146,7 @@ public class ServerInterface extends Thread {
                 break;
             default:
                 System.out.println("Choose a valid option");
+                manageGroups();
                 break;
         }
     }
@@ -154,7 +155,7 @@ public class ServerInterface extends Thread {
         System.out.print("Name = ");
         String addName = scan.nextLine();
 
-        while (addName.isEmpty() || checkRoomName(addName) == false) {
+        while (addName.isEmpty() || !checkRoomName(addName)) {
             System.out.print("<Invalid Name.Try Again>\nName = ");
             addName = scan.nextLine();
         }
@@ -190,7 +191,7 @@ public class ServerInterface extends Thread {
         String[] addFeatures = scan.nextLine().split(" , ");
 
         serverLogic.addRoom(addName, addType, addLimit, addFeatures);
-        manageGroups();
+        manageRooms();
     }
 
     public boolean checkRoomName(String addName) {
@@ -245,7 +246,7 @@ public class ServerInterface extends Thread {
                         System.out.println("-----Choose one of the Feature Options-----");
                         int k=0;
                         for(RoomFeature rF : RoomFeature.values()){
-                            System.out.println(k + "->" + rF.getValue());
+                            System.out.println(k +1 + "->" + rF.getValue());
                             k++;
                         }
                         System.out.println("-------------------------");
