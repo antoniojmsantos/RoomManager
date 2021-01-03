@@ -99,6 +99,8 @@ public class ClientObservable {
         return controller.CreateEvent(idRoom, nameGroup, name, initialDate, durationMin);
     }
 
+    public boolean isPasswordAccepted(String password) {return controller.isPasswordAccepted(password);}
+
     public ArrayList<Room> getRooms(){
         return controller.getRooms();
     }

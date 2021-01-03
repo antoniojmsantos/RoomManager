@@ -89,6 +89,9 @@ public class ClientController {
         return communication.CreateEvent(idRoom, nameGroup, name, getUsername(), initialDate, durationMin);
     }
 
+    public boolean isPasswordAccepted(String password){
+        return password.length() >= 8 && !password.equals(password.toLowerCase()) && password.matches(".*\\d.*");
+    }
 
     public ArrayList<Room> getRooms(){
         return communication.getRooms();
