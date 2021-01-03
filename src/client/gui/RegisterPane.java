@@ -216,17 +216,37 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
                 alert.setContentText( "É obrigatório aceitar as condições de registo." );
                 alert.showAndWait();
             } else if (!observable.isEmailAccepted(txt_email.getText())) {
-                // todo: alert
-                System.out.println("ERRO");
+                alert.setHeaderText( "Erro ao criar novo registo!" );
+                alert.setContentText( "Email tem de ser do tipo: A@B.C" );
+                alert.showAndWait();
             }
             else if(!observable.isPasswordAccepted(txt_password.getText())){
                 alert.setHeaderText("Password Fraca!");
-                alert.setContentText("A password tem de conter pelo menos 8 caracteres, 1 letra maiúscula e 1 número.");
+                alert.setContentText("A palavra-passe tem de conter pelo menos 8 caracteres, 1 letra maiúscula e 1 número.");
                 alert.showAndWait();
             } else {
-                observable.Register(txt_name.getText(), txt_email.getText(), txt_password.getText());
+                int resultCode = observable.Register(txt_name.getText(), txt_email.getText(), txt_password.getText());
 
+                switch (resultCode) {
+                    case -1:
+                        alert.setHeaderText( "Erro ao criar novo registo!" );
+                        alert.setContentText( "O dominio não existe." );
+                        alert.showAndWait();
+                        break;
+                    case 0:
+                        alert.setHeaderText( "Erro ao criar novo registo!" );
+                        alert.setContentText( "Username já existente." );
+                        alert.showAndWait();
+                        break;
+                    default:
+                        alert.setAlertType(Alert.AlertType.INFORMATION);
+                        alert.setTitle("");
+                        alert.setHeaderText( "Registado com sucesso!" );
+                        alert.setContentText( "A sua conta '" + email + "' foi criada com sucesso.\n" +
+                                "Pode agora efetuar Autenticação." );
+                        alert.showAndWait();
 
+                }
 /*
 
                 // todo: dominio nao exise

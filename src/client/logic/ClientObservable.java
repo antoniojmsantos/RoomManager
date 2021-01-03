@@ -92,13 +92,17 @@ public class ClientObservable {
             return false;
     }
 
-    public boolean Register(String name, String username, String password){
-        if(controller.Register(name, username, password)){
-            support.firePropertyChange(null, null, null);
-            return true;
+    public int Register(String name, String username, String password){
+        int resultCode = controller.Register(name, username, password);
+        switch(resultCode){
+            case -1:
+                return -1;
+            case 0:
+                return 0;
+            default:
+                support.firePropertyChange(null,null,null);
+                return 1;
         }
-        else
-            return false;
     }
 
     public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){

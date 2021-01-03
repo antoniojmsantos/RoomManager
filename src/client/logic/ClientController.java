@@ -84,18 +84,16 @@ public class ClientController {
             return false;
     }
 
-    public boolean Register(String name, String username, String password) {
+    public int Register(String name, String username, String password) {
         int resultCode = communication.Register(name, username, password);
         switch (resultCode) {
             case -1:
-                // do here
-                return false;
+                return -1;
             case 0:
-                // do here
-                return false;
+                return 0;
             default:
                 setStateAuthentication();
-                return true;
+                return 1;
         }
     }
 
