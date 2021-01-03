@@ -1,6 +1,7 @@
 package client.gui;
 
 import client.gui.auxiliar.Constants;
+import client.gui.auxiliar.Images;
 import client.gui.custom_controls.Calendar;
 import client.logic.ClientObservable;
 import javafx.beans.binding.Bindings;
@@ -8,8 +9,12 @@ import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.TableColumn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,6 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import shared_data.entities.Event;
 import shared_data.entities.Room;
+
 
 
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
@@ -61,18 +67,23 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
         AnchorPane header_list = new AnchorPane();
         header_list.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
-//        header_list.setPadding(new Insets(5));
+        header_list.setPadding(new Insets(0,0,5,5));
         Label lbl = new Label("Eventos criados");
         lbl.setFont(Font.font("verdana", FontWeight.BOLD, 11));
 
-        Button btn_new = new Button("+");
-        btn_new.setOnAction(e-> observable.setStateCreate());
+        ImageView imgButtonCreate = new ImageView(Images.getImage(Constants.ACCEPT));
+        imgButtonCreate.setFitWidth(18);
+        imgButtonCreate.setFitHeight(18);
+        imgButtonCreate.setOnMouseEntered(e->setCursor(Cursor.HAND));
+        imgButtonCreate.setOnMouseExited(e->setCursor(Cursor.DEFAULT));
+        imgButtonCreate.setOnMouseClicked(e->observable.setStateCreate());
+
         AnchorPane.setTopAnchor(lbl, 5.0);
         AnchorPane.setLeftAnchor(lbl, 2.0);
-        AnchorPane.setTopAnchor(btn_new, 0.0);
-        AnchorPane.setRightAnchor(btn_new, 0.0);
+        AnchorPane.setTopAnchor(imgButtonCreate, 5.0);
+        AnchorPane.setRightAnchor(imgButtonCreate, 5.0);
 
-        header_list.getChildren().addAll(lbl, btn_new);
+        header_list.getChildren().addAll(lbl, imgButtonCreate);
 
 
 
@@ -81,14 +92,24 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         lvCreatedEvents.setPrefHeight(DIM_Y_FRAME);
 
         lvCreatedEvents.setCellFactory(lv -> {
+            ListCell<Event> cell = new ListCell<Event>() {
+                @Override
+                protected void updateItem(Event item, boolean empty) {
+                    super.updateItem(item, empty);
 
-            ListCell<Event> cell = new ListCell<>();
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+
+                        setText(item.getName());
+                    }
+
+                }
+            };
 
             ContextMenu contextMenu = new ContextMenu();
-
-
             MenuItem deleteItem = new MenuItem();
-            deleteItem.textProperty().bind(Bindings.format("Delete \'%s\'", cell.itemProperty()));
+            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
             deleteItem.setOnAction(event -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Tem certeza que deseja apagar o evento '"
                         + cell.itemProperty().get().toString() + "' ?\n\nEsta operação não é reversível.", ButtonType.YES, ButtonType.NO);
@@ -97,45 +118,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 alert.showAndWait();
 
                 if (alert.getResult() == ButtonType.YES) {
-                    Alert al = new Alert(Alert.AlertType.INFORMATION);
-                    if(observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId())){
-                        al.setTitle("");
-                        al.setHeaderText("Sucesso!");
-                        al.setContentText("Evento '" + lvCreatedEvents.getSelectionModel().getSelectedItem().getName()
-                                + "' removido com sucesso!");
-                        al.showAndWait();
-                    }
-                    else
-                    {
-                        al.setAlertType(Alert.AlertType.ERROR);
-                        al.setTitle("");
-                        al.setHeaderText("Erro!");
-                        al.setContentText("Não foi possível remover o evento '" +
-                                lvCreatedEvents.getSelectionModel().getSelectedItem().getName() + "'.");
-                        al.showAndWait();
-                    }
-
+                    observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId());
                 }
 
             });
-
             contextMenu.getItems().addAll(deleteItem);
-
-//            cell.textProperty().bind(cell.itemProperty().asString());
-            StringBinding stringBinding = new StringBinding(){
-                {
-                    super.bind(cell.itemProperty().asString());
-                }
-                @Override
-                protected String computeValue() {
-                    if(cell.itemProperty().getValue()==null){
-                        return "";
-                    }
-                    return cell.itemProperty().getValue().toString();
-                }
-            };
-
-            cell.textProperty().bind(stringBinding);
 
             cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
                 if (isNowEmpty) {
@@ -144,6 +131,10 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                     cell.setContextMenu(contextMenu);
                 }
             });
+
+
+            cell.setOnMouseEntered(e-> lvCreatedEvents.getSelectionModel().select(cell.getIndex()));
+            cell.setOnMouseExited(e-> lvCreatedEvents.getSelectionModel().clearSelection());
 
             return cell ;
         });
@@ -174,8 +165,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 //                    System.out.println(e);
                 calendar.refresh(listEvents);
                 ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
+//                lvCreatedEvents.getItems().clear();
                 lvCreatedEvents.setItems(items);
             }
+            else
+                lvCreatedEvents.setItems(null);
         }
 
 

@@ -42,8 +42,11 @@ public class CalendarItem extends VBox {
             this.getChildren().remove(0);
         }
         Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
-        if(currentDate.isEqual(calendarDate)) // Changes the color of the text on the current day
+        if(currentDate.isEqual(calendarDate)) {// Changes the color of the text on the current day
             txt.setFill(Color.web("#0093ff"));
+            txt.set(new Background(new BackgroundFill(Color.web("#0093ff"), new CornerRadii(5), Insets.EMPTY)));
+
+        }
         this.setDate(calendarDate);
         this.getChildren().addAll(txt);
 
@@ -61,14 +64,18 @@ public class CalendarItem extends VBox {
 
                 if(calendarDate.isEqual(eventDate)){
                     Label lb = new Label(e.toString());
+                    lb.setTextFill(Color.WHITE);
                     HBox boxEvent = new HBox(lb);
                     boxEvent.setAlignment(Pos.CENTER);
-                    boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
-                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    boxEvent.setBackground(new Background(new BackgroundFill(Color.web("#0093ff"), new CornerRadii(5), Insets.EMPTY)));
+//                    boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
+//                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
                     if(eventDate.isBefore(currentDate)) // SE A DATA DO EVENTO JÁ PASSOU O DIA DE HOJE A BORDA FICA A CINZA
-                        boxEvent.setBorder(new Border(new BorderStroke(Color.GRAY,
-                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                        boxEvent.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(5), Insets.EMPTY)));
+
+//                        boxEvent.setBorder(new Border(new BorderStroke(Color.GRAY,
+//                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
                     Tooltip tooltip = new Tooltip("Informações do Evento:\n\n" +
                             "Criado por: " + e.getCreator().getUsername() +

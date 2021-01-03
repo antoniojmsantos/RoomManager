@@ -98,7 +98,12 @@ public class ClientController {
     }
 
     public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
-        return communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
+        if(communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin)){
+            setStateMain();
+            return true;
+        }
+        else
+            return false;
     }
 
     public boolean isEmailAccepted(String email) {
@@ -132,5 +137,14 @@ public class ClientController {
     public ArrayList<Event> getPendingEvents() {
         return communication.getPendingEvents();
     }
+
+    public void acceptEvent(int id) {
+        communication.acceptEventSubscription(id);
+    }
+
+    public void declineEvent(int id) {
+        communication.declineEventSubscription(id);
+    }
+
 
 }

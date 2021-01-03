@@ -1,7 +1,11 @@
 package client.gui.custom_controls;
 
 
+import client.gui.auxiliar.Constants;
+import client.gui.auxiliar.Images;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -56,19 +60,32 @@ public class Calendar extends VBox {
         // Create calendarTitle and buttons to change current month
         calendarTitle = new Text();
         calendarTitle.setFont(Font.font("verdana", FontWeight.BOLD, 16));
-        Button previousMonth = new Button("<<");
-        previousMonth.setOnAction(e -> previousMonth());
-        Button nextMonth = new Button(">>");
-        nextMonth.setOnAction(e -> nextMonth());
-        AnchorPane titleBar = new AnchorPane(previousMonth, calendarTitle, nextMonth);
+
+        ImageView imgButtonPrevious = new ImageView(Images.getImage(Constants.PREVIOUS));
+        imgButtonPrevious.setFitWidth(18);
+        imgButtonPrevious.setFitHeight(18);
+        imgButtonPrevious.setOnMouseEntered(e->setCursor(Cursor.HAND));
+        imgButtonPrevious.setOnMouseExited(e->setCursor(Cursor.DEFAULT));
+        imgButtonPrevious.setOnMouseClicked(e->previousMonth());
+
+        ImageView imgButtonNext = new ImageView(Images.getImage(Constants.NEXT));
+        imgButtonNext.setFitWidth(18);
+        imgButtonNext.setFitHeight(18);
+        imgButtonNext.setOnMouseEntered(e->setCursor(Cursor.HAND));
+        imgButtonNext.setOnMouseExited(e->setCursor(Cursor.DEFAULT));
+        imgButtonNext.setOnMouseClicked(e->nextMonth());
+
+
+        AnchorPane titleBar = new AnchorPane(imgButtonPrevious, calendarTitle, imgButtonNext);
         titleBar.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
 
         AnchorPane.setLeftAnchor(calendarTitle, 400.0);
         AnchorPane.setTopAnchor(calendarTitle, 5.0);
 
-        AnchorPane.setBottomAnchor(previousMonth, 0.0);
-        AnchorPane.setBottomAnchor(nextMonth, 0.0);
-        AnchorPane.setRightAnchor(nextMonth, 0.0);
+        AnchorPane.setLeftAnchor(imgButtonPrevious, 5.0);
+        AnchorPane.setBottomAnchor(imgButtonPrevious, 4.0);
+        AnchorPane.setBottomAnchor(imgButtonNext, 4.0);
+        AnchorPane.setRightAnchor(imgButtonNext, 5.0);
 
         // Populate calendar with the appropriate day numbers
         populateCalendar();

@@ -31,4 +31,10 @@ public interface Constants {
 
     String DECLINE = "decline";
     String PATH_IMG_DECLINE = "images/decline.png";
+
+    String PREVIOUS = "previous";
+    String PATH_IMG_PREVIOUS = "images/previous.png";
+
+    String NEXT = "next";
+    String PATH_IMG_NEXT = "images/next.png";
 }

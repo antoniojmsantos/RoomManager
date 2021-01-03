@@ -106,7 +106,12 @@ public class ClientObservable {
     }
 
     public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
-        return controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin);
+        if(controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin)){
+            support.firePropertyChange(null, null, null);
+            return true;
+        }
+        else
+            return false;
     }
 
     public boolean isEmailAccepted(String email) {
@@ -144,7 +149,15 @@ public class ClientObservable {
             return false;
     }
 
+    public void acceptEvent(int id){
+        controller.acceptEvent(id);
+        support.firePropertyChange(null, null, null);
+    }
 
+    public void declineEvent(int id){
+        controller.declineEvent(id);
+        support.firePropertyChange(null, null, null);
+    }
 
     public void refreshEvents() {
         //chamaar a função que vai ao server buscar os pending events

@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 
 import java.beans.PropertyChangeEvent;
@@ -64,10 +65,20 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         img_avatar.setPreserveRatio(true);
 
         HBox boxAvatar = new HBox();
+
+
+        //TODO: APAGAR ISTOOOO!!!!!!!!!
         boxAvatar.setOnMouseClicked(e->{
-            txt_username.setText("pedrito@hotmail.com");
-            txt_password.setText("1234");
+            txt_username.setText("antonio@isec.pt");
+            txt_password.setText("Pilanocu123");
+            if(e.getButton() == MouseButton.SECONDARY){
+                txt_username.setText("a21270359@isec.pt");
+                txt_password.setText("Pilanocu123");
+            }
         } );
+        /////////////////////////////
+
+
         boxAvatar.setAlignment(Pos.CENTER);
         boxAvatar.setPadding(new Insets(20));
         boxAvatar.getChildren().add(img_avatar);

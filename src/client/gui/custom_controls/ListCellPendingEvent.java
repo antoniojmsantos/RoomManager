@@ -1,29 +1,24 @@
 package client.gui.custom_controls;
 
+import client.logic.ClientObservable;
 import javafx.scene.control.ListCell;
 import shared_data.entities.Event;
 
-import java.util.ArrayList;
+public class ListCellPendingEvent extends ListCell<Event> {
 
-public class ListViewPendingEvents extends ListCell<Event> {
+    ClientObservable observable;
 
-    ArrayList<Event> pendingEvents;
-
-    public ListViewPendingEvents(){
+    public ListCellPendingEvent(ClientObservable observable){
         super();
-        this.setMinHeight(100);
+        this.observable=observable;
     }
 
-
-//    public void refreshList(ArrayList<Event> pendingEvents){
-//        this.pendingEvents = pendingEvents;
-//    }
 
     @Override
     protected void updateItem(Event event, boolean empty) {
         super.updateItem(event, empty);
         if (event != null && !empty) { // <== test for null item and empty parameter
-            PendingEvent boxPE = new PendingEvent(event);
+            PendingEvent boxPE = new PendingEvent(observable, event);
             setGraphic(boxPE);
         } else {
             setGraphic(null);
