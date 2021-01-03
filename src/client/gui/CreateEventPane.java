@@ -381,23 +381,24 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         public void handle(ActionEvent actionEvent) {
 
 
-            int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
-            System.out.println(idRoom);
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
-            if(lvRooms.getSelectionModel().isEmpty()){
-                alert.setTitle("");
-                alert.setHeaderText("Ocorreu um erro!");
-                alert.setContentText("É necessário selecionar uma sala da lista!");
-                alert.showAndWait();
-            }
-            else if(observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(),
-                    dtInitialDate.getDateTimeValue(), spDuration.getValue())){
+            if(!lvRooms.getSelectionModel().isEmpty()){
+                int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
+                observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(),
+                        dtInitialDate.getDateTimeValue(), spDuration.getValue());
                 alert.setAlertType(Alert.AlertType.INFORMATION);
                 alert.setTitle("");
                 alert.setHeaderText("Sucesso!");
                 alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                alert.showAndWait();
+
+            }
+            else if(lvRooms.getSelectionModel().isEmpty()){
+                alert.setTitle("");
+                alert.setHeaderText("Ocorreu um erro!");
+                alert.setContentText("É necessário selecionar uma sala da lista!");
                 alert.showAndWait();
             }
             else{
