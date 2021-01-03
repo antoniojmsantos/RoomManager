@@ -3,6 +3,17 @@ package shared_data.entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/*
+ *  A classe Event contém toda a informação
+ *  que permite ao programa criar objetos do
+ *  tipo Event.
+ *  Cada variável corresponde a uma tabela pertencente
+ *  à entidade tb_event. Estão também presentes funções
+ *  do tipo get/set para cada variável assim como um
+ *  construtor.
+ *  A função make recebe os argumentos necessários para
+ *  e criar e retornar um objeto Event.
+ * */
 public class Event implements Serializable {
     private final int id;
     private String name;

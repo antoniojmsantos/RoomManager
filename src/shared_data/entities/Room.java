@@ -6,6 +6,22 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+ *  A classe Room contém toda a informação
+ *  que permite ao programa criar objetos do
+ *  tipo Room.
+ *  Cada variável corresponde a uma tabela pertencente
+ *  à entidade tb_room.
+ *  Para além das variáveis que também estão mencionadas
+ *  nas tabelas da BD, um objeto do tipo Room contém também
+ *  uma variável do tipo RoomType assim como uma lista
+ *  de RoomFeature.
+ *  Estão também presentes funções
+ *  do tipo get/set para cada variável assim como um
+ *  construtor.
+ *  A função make recebe os argumentos necessários para
+ *  e criar e retornar um objeto Room.
+ * */
 public class Room implements Serializable {
 
     private final int id;

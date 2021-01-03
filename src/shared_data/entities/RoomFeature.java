@@ -1,5 +1,10 @@
 package shared_data.entities;
 
+/*
+ * A enum RoomFeature contém várias constantes,
+ * cada uma corresponde a uma característica
+ * que poderá ser atribuída às salas.
+ * */
 public enum RoomFeature {
     AR_CONDICIONADO("Ar Condicionado"),
     COMPUTADORES_MAC("Computadores MacOS"),

@@ -18,6 +18,11 @@ public class EventDao implements IEventDao {
 
     public EventDao(Connection conn) {this.conn = conn;}
 
+    /*
+     * Esta func retorna uma lista de eventos
+     * que contém todos os eventos armazenados
+     * na BD.
+     * */
     @Override
     public Event get(int id) {
         PreparedStatement st = null;
@@ -41,6 +46,10 @@ public class EventDao implements IEventDao {
         return null;
     }
 
+    /*
+     * Esta func recebe toda a informação necessária
+     * para depois inserir um evento da BD.
+     * */
     @Override
     public List<Event> getAll() {
         PreparedStatement st = null;
@@ -65,6 +74,10 @@ public class EventDao implements IEventDao {
         return events;
     }
 
+    /*
+     * Esta função retorna todos os eventos que estão associados
+     * à sala cujo id é dado por argumento.
+     * */
     @Override
     public List<Event> getEventsInRoom(int id_room){
         PreparedStatement st = null;
@@ -89,6 +102,10 @@ public class EventDao implements IEventDao {
         return events;
     }
 
+    /*
+     * Esta função retorna todos os eventos que foram criados
+     * pelo user cujo id foi passado como argumento.
+     * */
     @Override
     public List<Event> getEventsByCreator(String username) {
         PreparedStatement st = null;
@@ -117,6 +134,9 @@ public class EventDao implements IEventDao {
         return events;
     }
 
+    /*
+    * Esta função verifica se é possível ser criado um evento.
+    * */
     private boolean canCreateEvent(int eventRoomId, LocalDateTime eventStartDate, LocalDateTime eventEndDate) {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -147,6 +167,10 @@ public class EventDao implements IEventDao {
         return canCreate;
     }
 
+    /*
+     * Esta func recebe toda a informação necessária
+     * para depois inserir um evento na BD.
+     * */
     @Override
     public int insert(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration) {
         PreparedStatement st = null;
@@ -195,6 +219,11 @@ public class EventDao implements IEventDao {
         return id;
     }
 
+    /*
+     * Recebendo o id do evento, esta função
+     * encarrega-se de eliminar o evento que
+     * corresponda a esse id.
+     * */
     @Override
     public boolean delete(int id) {
         PreparedStatement st = null;
@@ -214,6 +243,13 @@ public class EventDao implements IEventDao {
         return false;
     }
 
+    /*
+     * Esta func altera o estado de um utilizador perante um evento específico,
+     * por exemplo, quando um aluno se pretende inscrever num evento, o estado desse
+     * aluno muda para "accepted".
+     * Recebe o id do evento, o username do utilizador e o estado para qual é suposto
+     * o utilizador mudar.
+     * */
     private boolean updateEventSubscriptionState(int eventId, String userUsername, String state) {
         PreparedStatement st = null;
 
@@ -234,22 +270,44 @@ public class EventDao implements IEventDao {
         return false;
     }
 
+    /*
+     * Esta função permite ao utilizador aceitar um evento
+     * a que escolheu pertencer.
+     * Recebe o id do evento assim como o id do user (username)
+     * e chama uma função específica para atualizar o estado
+     * do utilizador em relação ao evento ("accepted")
+     * */
     @Override
     public boolean acceptEvent(int eventId, String userUsername) {
         return updateEventSubscriptionState(eventId, userUsername, "accepted");
     }
 
+    /*
+     * Esta função permite ao utilizador recusar um evento.
+     * Recebe o id do evento assim como o id do user (username)
+     * e chama uma função específica para atualizar o estado
+     * do utilizador em relação ao evento ("refused")
+     * */
     @Override
     public boolean refuseEvent(int eventId, String userUsername) {
         return updateEventSubscriptionState(eventId, userUsername, "refused");
     }
 
+    /*
+     * Esta função permite ao docente cancelar um evento.
+     * Recebe o id do evento assim como o id do user (username)
+     * e chama uma função específica para atualizar o estado
+     * do utilizador em relação ao evento ("cancelled")
+     * */
     @Override
     public boolean cancelEvent(int eventId, String userUsername) {
         return updateEventSubscriptionState(eventId, userUsername, "cancelled");
     }
 
-    // own
+    /*
+     * Esta função serve para criar objetos do tipo
+     * evento a partir da informação recebida da BD.
+     * */
     @Override
     public final Event build(ResultSet rs) throws SQLException {
         Room room   = DBManager.getRoomDao().get(rs.getInt("i_room_id"));

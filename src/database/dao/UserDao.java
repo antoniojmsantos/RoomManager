@@ -16,11 +16,16 @@ public class UserDao implements IUserDao {
 
     private final Connection conn;
 
-    // constructor
     public UserDao(Connection conn) {
         this.conn = conn;
     }
 
+    /*
+     * Esta func retorna um objeto User criado
+     * com a informação retirada da base de dados
+     * cujo username corresponde à variável id passada
+     * por parametro
+     * */
     @Override
     public User get(String username) {
         PreparedStatement st = null;
@@ -44,6 +49,11 @@ public class UserDao implements IUserDao {
         return null;
     }
 
+    /*
+     * Esta func retorna uma lista de users
+     * que contém todas as salas armazenados
+     * na BD.
+     * */
     @Override
     public List<User> getAll() {
         PreparedStatement st = null;
@@ -67,6 +77,10 @@ public class UserDao implements IUserDao {
         return users;
     }
 
+    /*
+     * Esta func recebe toda a informação necessária
+     * para depois inserir uma user na BD.
+     * */
     @Override
     public boolean insert(String username, String name, String password, Boolean permissions) {
         PreparedStatement st = null;
@@ -91,6 +105,10 @@ public class UserDao implements IUserDao {
         return rows > 0;
     }
 
+    /*
+     * Esta função permite alterar o nível de permissões
+     * de um user específico.
+     * */
     @Override
     public void updatePermissions(String username, boolean permissions) {
         PreparedStatement st = null;
@@ -109,6 +127,11 @@ public class UserDao implements IUserDao {
         }
     }
 
+    /*
+     * Recebendo o id da sala, esta função
+     * encarrega-se de eliminar a sala que
+     * corresponda a esse id.
+     * */
     @Override
     public void delete(String username) {
         PreparedStatement st = null;
@@ -126,6 +149,9 @@ public class UserDao implements IUserDao {
         }
     }
 
+    /*
+     * Esta função permite autenticar um utilizador
+     * */
     @Override
     public boolean authenticate(String username, String password) {
         PreparedStatement st = null;
@@ -152,6 +178,10 @@ public class UserDao implements IUserDao {
         return false;
     }
 
+    /*
+     * Esta função retorna todos os grupos associados
+     * a um user específico.
+     * */
     @Override
     public List<Group> getGroups(String username) {
         PreparedStatement st = null;
@@ -177,16 +207,35 @@ public class UserDao implements IUserDao {
         return groups;
     }
 
+    /*
+     * Esta função permite retornar todos os eventos
+     * pendentes associados a um user específico.
+     * Para tal, é chamada uma função que retorna
+     * eventos consoante o tipo de estado que lhe for
+     * passado por parametro.
+     * */
     @Override
     public List<Event> getEventsPending(String username) {
         return getEvents(username, "pending");
     }
 
+    /*
+     * Esta função permite retornar todos os eventos
+     * aceites associados a um user específico.
+     * Para tal, é chamada uma função que retorna
+     * eventos consoante o tipo de estado que lhe for
+     * passado por parametro.
+     * */
     @Override
     public List<Event> getEventsAccepted(String username) {
         return getEvents(username, "accepted");
     }
 
+    /*
+     * Esta função retorna os eventos de um user
+     * consoante o estado que lhe tenha sido
+     * passado como parametro.
+     * */
     public List<Event> getEvents(String username, String state) {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -212,7 +261,10 @@ public class UserDao implements IUserDao {
         return events;
     }
 
-    // own
+    /*
+     * Esta função serve para criar objetos do tipo
+     * User a partir das informações recebida da BD.
+     * */
     @Override
     public final User build(ResultSet rs) throws SQLException {
         return User.make(

@@ -19,6 +19,12 @@ public class GroupDao implements IGroupDao {
         this.conn = conn;
     }
 
+    /*
+     * Esta func retorna um objeto grupo criado
+     * com a informação retirada da base de dados
+     * cujo id corresponde à variável id passada
+     * por parametro
+     * */
     @Override
     public Group get(String name) {
         PreparedStatement st = null;
@@ -42,6 +48,11 @@ public class GroupDao implements IGroupDao {
         return null;
     }
 
+    /*
+     * Esta func retorna uma lista de grupos
+     * que contém todos os eventos armazenados
+     * na BD.
+     * */
     @Override
     public List<Group> getAll() {
         PreparedStatement st = null;
@@ -66,6 +77,10 @@ public class GroupDao implements IGroupDao {
         return groups;
     }
 
+    /*
+     * Esta func recebe toda a informação necessária
+     * para depois inserir um grupo da BD.
+     * */
     @Override
     public void insert(String name) {
         PreparedStatement st = null;
@@ -84,6 +99,11 @@ public class GroupDao implements IGroupDao {
         }
     }
 
+    /*
+     * Recebendo o nome do grupo, esta função
+     * encarrega-se de eliminar o grupo que
+     * corresponda a esse nome.
+     * */
     @Override
     public void delete(String name) {
         PreparedStatement st = null;
@@ -101,6 +121,11 @@ public class GroupDao implements IGroupDao {
         }
     }
 
+    /*
+     * Esta função retorna os todos os users que
+     * pertencerem ao grupo cujo nome é passado por
+     * argumento.
+     * */
     @Override
     public List<User> getMembers(String name) {
         PreparedStatement st = null;
@@ -126,6 +151,10 @@ public class GroupDao implements IGroupDao {
         return users;
     }
 
+    /*
+    * Esta função permite retornar todos os users que
+    * não pertencem a um determinado grupo
+    * */
     @Override
     public List<User> getNonMembers(String name) {
         PreparedStatement st = null;
@@ -151,6 +180,11 @@ public class GroupDao implements IGroupDao {
         return users;
     }
 
+    /*
+     * Esta função permite adicionar um user a um
+     * grupo. O nome do grupo e o username do user
+     * são passados como parâmetro.
+     * */
     @Override
     public void addMember(String name, String username) {
         PreparedStatement st = null;
@@ -169,6 +203,11 @@ public class GroupDao implements IGroupDao {
         }
     }
 
+    /*
+     * Esta função permite remover um user de um
+     * grupo. O nome do grupo e o username do user
+     * são passados como parâmetro.
+     * */
     @Override
     public void removeMember(String name, String username) {
         PreparedStatement st = null;
@@ -187,7 +226,10 @@ public class GroupDao implements IGroupDao {
         }
     }
 
-    // own
+    /*
+     * Esta função serve para criar objetos do tipo
+     * grupo a partir da informação recebida da BD.
+     * */
     @Override
     public final Group build(ResultSet rs) throws SQLException {
         return Group.make(rs.getString("vc_name"));

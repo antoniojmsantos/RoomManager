@@ -2,6 +2,17 @@ package shared_data.entities;
 
 import java.io.Serializable;
 
+/*
+ *  A classe User contém toda a informação
+ *  que permite ao programa criar objetos do
+ *  tipo User.
+ *  Cada variável corresponde a uma tabela pertencente
+ *  à entidade tb_user. Estão também presentes funções
+ *  do tipo get/set para cada variável assim como um
+ *  construtor.
+ *  A função make recebe os argumentos necessários para
+ *  e criar e retornar um objeto User.
+ * */
 public class User implements Comparable<User>, Serializable {
 
     private String username;

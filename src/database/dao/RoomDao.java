@@ -18,6 +18,12 @@ public class RoomDao implements IRoomDao {
 
     public RoomDao(Connection conn) {this.conn = conn;}
 
+    /*
+     * Esta func retorna um objeto Room criado
+     * com a informação retirada da base de dados
+     * cujo id corresponde à variável id passada
+     * por parametro
+     * */
     @Override
     public Room get(int roomId) {
         PreparedStatement st = null;
@@ -41,6 +47,11 @@ public class RoomDao implements IRoomDao {
         return null;
     }
 
+    /*
+     * Esta func retorna uma lista de salas
+     * que contém todas as salas armazenados
+     * na BD.
+     * */
     @Override
     public List<Room> getAll() {
         PreparedStatement st = null;
@@ -65,6 +76,10 @@ public class RoomDao implements IRoomDao {
         return rooms;
     }
 
+    /*
+     * Esta func recebe toda a informação necessária
+     * para depois inserir uma sala na BD.
+     * */
     @Override
     public void insert(String name, int capacity, RoomType type, List<RoomFeature> features) {
         PreparedStatement st = null;
@@ -99,6 +114,11 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Recebendo o id da sala, esta função
+     * encarrega-se de eliminar a sala que
+     * corresponda a esse id.
+     * */
     @Override
     public void delete(int roomId) {
         PreparedStatement st = null;
@@ -116,6 +136,10 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Esta função permite alterar o nome de
+     * uma sala específica.
+     * */
     @Override
     public void updateName(int roomId, String name) {
         PreparedStatement st = null;
@@ -134,6 +158,10 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Esta função permite alterar a capacidade de
+     * uma sala específica.
+     * */
     @Override
     public void updateCapacity(int roomId, int capacity) {
         PreparedStatement st = null;
@@ -152,6 +180,10 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Esta função devolve todas as características
+     * associadas a uma sala específica.
+     * */
     @Override
     public List<RoomFeature> getFeatures(int roomId) {
         PreparedStatement st = null;
@@ -177,6 +209,10 @@ public class RoomDao implements IRoomDao {
         return features;
     }
 
+    /*
+     * Esta função permite adicionar uma característica
+     * a uma sala específica.
+     * */
     @Override
     public void insertFeature(int roomId, RoomFeature feature) {
         PreparedStatement st = null;
@@ -195,6 +231,10 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Esta função permite retirar uma característica
+     * a uma sala específica.
+     * */
     @Override
     public void deleteFeature(int roomId, RoomFeature feature) {
         PreparedStatement st = null;
@@ -213,6 +253,10 @@ public class RoomDao implements IRoomDao {
         }
     }
 
+    /*
+     * Esta função retorna uma lista de horários
+     * específicos de uma sala.
+     * */
     private List<TimePeriod> getSchedule(int roomId) {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -239,7 +283,10 @@ public class RoomDao implements IRoomDao {
         return schedule;
     }
 
-    // own
+    /*
+     * Esta função serve para criar objetos do tipo
+     * Room a partir das informações recebida da BD.
+     * */
     @Override
     public final Room build(ResultSet rs) throws SQLException {
         return new Room(

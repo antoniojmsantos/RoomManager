@@ -1,5 +1,10 @@
 package shared_data.entities;
 
+/*
+ * A enum RoomType contém várias constantes,
+ * cada uma corresponde a um tipo
+ * que poderá será atribuído a um quarto.
+ * */
 public enum RoomType {
     ANFITEATRO("Anfiteatro"),
     AUDITORIO("Auditório"),
