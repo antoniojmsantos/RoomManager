@@ -70,10 +70,13 @@ public class CalendarItem extends VBox {
                         boxEvent.setBorder(new Border(new BorderStroke(Color.GRAY,
                                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-                    Tooltip tooltip = new Tooltip("Informações do Evento:\n\nSala: " + e.getRoom().getName() +
-                            "\nGrupo: " +e.getGroup().getName() + "\nHora Inicio: " +
-                            e.getStartDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nDuração: " +
-                            e.getDuration() + " minutos");
+                    Tooltip tooltip = new Tooltip("Informações do Evento:\n\n" +
+                            "Criado por: " + e.getCreator().getUsername() +
+                            "\nSala: " + e.getRoom().getName() +
+                            "\nGrupo: " +e.getGroup().getName() + "\nData Início: " +
+                            e.getStartDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nData Fim: " +
+                            e.getStartDate().plusMinutes(e.getDuration()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
+                            + "\nDuração: " +e.getDuration()  +" minutos");
                     tooltip.setStyle("-fx-font-size: 14");
                     tooltip.setShowDelay(Duration.millis(200));
                     tooltip.setShowDuration(Duration.INDEFINITE);

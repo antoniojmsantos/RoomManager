@@ -55,7 +55,7 @@ public class TimePeriod implements Serializable {
 
     public static TimePeriod make(LocalDateTime startDate, int durationInMinutes) {
         LocalDateTime endDate = startDate.plusMinutes(durationInMinutes);
-        if (startDate.isBefore(endDate) && endDate.isAfter(startDate) && startDate.isAfter(LocalDateTime.now())) {
+        if (startDate.isBefore(endDate) && endDate.isAfter(startDate)) {
             return new TimePeriod(startDate, endDate);
         }
         throw new IllegalArgumentException();

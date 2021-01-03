@@ -97,7 +97,24 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 alert.showAndWait();
 
                 if (alert.getResult() == ButtonType.YES) {
-                    observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId());
+                    Alert al = new Alert(Alert.AlertType.INFORMATION);
+                    if(observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId())){
+                        al.setTitle("");
+                        al.setHeaderText("Sucesso!");
+                        al.setContentText("Evento '" + lvCreatedEvents.getSelectionModel().getSelectedItem().getName()
+                                + "' removido com sucesso!");
+                        al.showAndWait();
+                    }
+                    else
+                    {
+                        al.setAlertType(Alert.AlertType.ERROR);
+                        al.setTitle("");
+                        al.setHeaderText("Erro!");
+                        al.setContentText("Não foi possível remover o evento '" +
+                                lvCreatedEvents.getSelectionModel().getSelectedItem().getName() + "'.");
+                        al.showAndWait();
+                    }
+
                 }
 
             });
