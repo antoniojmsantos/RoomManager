@@ -20,6 +20,7 @@ public class ServerInterface extends Thread {
     public ServerInterface(ServerLogic serverLogic) {
         this.serverLogic = serverLogic;
         this.scan = new Scanner(System.in);
+        scan.useDelimiter("\\n");
     }
 
     @Override
@@ -61,6 +62,7 @@ public class ServerInterface extends Thread {
         System.out.println("1 - Add Rooms ");
         System.out.println("2 - Edit Rooms ");
         System.out.println("3 - View Rooms");
+        System.out.println("4 - Back");
         String choice = scan.nextLine();
         switch (Integer.parseInt(choice)) {
             case 1:
@@ -71,6 +73,10 @@ public class ServerInterface extends Thread {
                 break;
             case 3:
                 showRooms();
+                manageRooms();
+                break;
+            case 4:
+                run();
                 break;
             default:
                 System.out.println("Choose a valid option");
@@ -119,12 +125,12 @@ public class ServerInterface extends Thread {
 
     private void manageGroups() {
         System.out.println("------Group Management-------");
-        System.out.println("1- Create Groups");
-        System.out.println("2- Edit Groups");
-        System.out.println("3- View Groups");
-
-        String choice = scan.nextLine();
-        switch (Integer.parseInt(choice)) {
+        System.out.println("1 - Create Groups");
+        System.out.println("2 - Edit Groups");
+        System.out.println("3 - View Groups");
+        System.out.println("4 - Back");
+        int choice = scan.nextInt();
+        switch (choice) {
             case 1:
                 createGroup();
                 break;
@@ -133,6 +139,10 @@ public class ServerInterface extends Thread {
                 break;
             case 3:
                 viewGroups();
+                manageGroups();
+                break;
+            case 4:
+                run();
                 break;
             default:
                 System.out.println("Choose a valid option");
@@ -177,14 +187,10 @@ public class ServerInterface extends Thread {
         System.out.println("-------------------------");
 
         System.out.print("Features = ");
-      //  String addFeature = scan.nextLine();
-        String[] addFeatures = scan.nextLine().split(" | ");
-        for(String s : addFeatures){
-            System.out.println(s);
-        }
+        String[] addFeatures = scan.nextLine().split(" , ");
 
         serverLogic.addRoom(addName, addType, addLimit, addFeatures);
-
+        manageGroups();
     }
 
     public boolean checkRoomName(String addName) {
@@ -207,77 +213,108 @@ public class ServerInterface extends Thread {
 
 
     private void editRoom() {
+
+        System.out.println("--Choose the room you wish to edit--");
         showRooms();
+        int room = scan.nextInt();
+        int room_id = serverLogic.getAllRooms().get(room).getId();
+        System.out.println("--Choose the field you wish to edit--");
+        System.out.println("1->Room Name\n2->Room Max Capacity\n3->Room Features\n4->Delete Room");
+        int choice = scan.nextInt();
+        switch(choice){
+            case 1: System.out.print("Nem Name= ");
+                    String newName = scan.next();
+                    if(!checkRoom(newName)){
+                        System.out.print("Error: Invalid Name\nRepeat Name = ");
+                        newName = scan.next();
+                    }
+                    serverLogic.updateName(room_id, newName);
+                    manageRooms();
+                    break;
+            case 2: System.out.print("New Capacity= ");
+                    int cap = scan.nextInt();
+                    if(cap <= 0){
+                        System.out.print("Error: Invalid Capacity\nRepeat Capacity = ");
+                        cap = scan.nextInt();
+                    }
+                    serverLogic.updateLimit(room_id, cap);
+                    manageRooms();
+            case 3: System.out.println("1->Add Feature\n2->Remove Feature");
+                    int choice2 = scan.nextInt();
+                    if(choice2 == 1){
+                        System.out.println("-----Choose one of the Feature Options-----");
+                        int k=0;
+                        for(RoomFeature rF : RoomFeature.values()){
+                            System.out.println(k + "->" + rF.getValue());
+                            k++;
+                        }
+                        System.out.println("-------------------------");
+                        int feature = scan.nextInt();
+                        switch(feature){
+                            case 1:serverLogic.updateFeatures(room_id, RoomFeature.AR_CONDICIONADO);
+                            case 2:serverLogic.updateFeatures(room_id, RoomFeature.COMPUTADORES_MAC);
+                            case 3:serverLogic.updateFeatures(room_id, RoomFeature.COMPUTADORES_WINDOWS);
+                            case 4:serverLogic.updateFeatures(room_id, RoomFeature.PROJETOR);
+                            case 5:serverLogic.updateFeatures(room_id, RoomFeature.MESA_REUNIAO);
+                            case 6:serverLogic.updateFeatures(room_id, RoomFeature.QUADRO_INTERATIVO);
+                        }
 
-        String adminResponse = scan.nextLine();
-        Scanner eachResponse = new Scanner(adminResponse);
-        String param1 = eachResponse.next();
-
-
-        if (param1.equals("edit")) {
-            String roomId = eachResponse.next();
-            String changeField = eachResponse.next();
-            String newValue = eachResponse.next();
-
-            if (changeField.equals("name")) {
-                if (newValue.isEmpty()) {
-                    System.out.println("Invalid Room Name. <EMPTY STRING>");
-                }
-                serverLogic.updateName(Integer.parseInt(roomId), newValue);
-            } else {
-                if (changeField.equals("capacity") || changeField.equals("limit"))
-                    serverLogic.updateLimit(Integer.parseInt(roomId), Integer.parseInt(newValue));
-                else {
-                    if (changeField.equals("description") || changeField.equals("text"))
-                        serverLogic.updateDescription(Integer.parseInt(roomId), newValue);
-                    else {
-                        if (changeField.equals("roomfeature") || changeField.equals("feature") || changeField.equals("features")) {
-                            System.out.println("add (or) delete (feature?)");
-                            if (newValue.equals("add")) {
-                                System.out.println("Feature name: ");
-                                String newFeature = scan.next();
-                                addFeature(newFeature, Integer.parseInt(roomId));
-                            } else {
-                                if (newValue.equals("delete")) {
-                                    System.out.println("Feature name: ");
-                                    String featureRemove = scan.next();
-                                    removeFeature(featureRemove, Integer.parseInt(roomId));
-                                }
-                            }
-
+                    }
+                    else if(choice2 == 2){
+                        System.out.println("-----Choose one of the Feature Options-----");
+                        int k=0;
+                        for(RoomFeature rF : RoomFeature.values()){
+                            System.out.println(k + "->" + rF.getValue());
+                            k++;
+                        }
+                        System.out.println("-------------------------");
+                        int feature = scan.nextInt();
+                        switch(feature){
+                            case 1:serverLogic.removeFeatures(room_id, RoomFeature.AR_CONDICIONADO);
+                            case 2:serverLogic.removeFeatures(room_id, RoomFeature.COMPUTADORES_MAC);
+                            case 3:serverLogic.removeFeatures(room_id, RoomFeature.COMPUTADORES_WINDOWS);
+                            case 4:serverLogic.removeFeatures(room_id, RoomFeature.PROJETOR);
+                            case 5:serverLogic.removeFeatures(room_id, RoomFeature.MESA_REUNIAO);
+                            case 6:serverLogic.removeFeatures(room_id, RoomFeature.QUADRO_INTERATIVO);
                         }
                     }
-
-                }
-            }
-        } else {
-            if (param1.equals("delete")) {
-                String roomId = eachResponse.next();
-                serverLogic.removeRoom(Integer.parseInt(roomId));
-            } else
-                System.out.println("Invalid Comand");
+            case 4: serverLogic.removeRoom(room_id);
+                    manageGroups();    
         }
+    }
 
+    public boolean checkRoom(String name){
+        List<Room> allRooms = serverLogic.getAllRooms();
+        for (int i = 0; i < allRooms.size(); i++) {
+            if (name.equals(allRooms.get(i).getName()))
+                return false;
+        }
+        return true;
     }
 
     public void addFeature(String addFeatures, int roomId) {
 
-        if (addFeatures.equals("ar_condicionado"))
+        if (addFeatures.equals("Ar Condicionado"))
             serverLogic.updateFeatures(roomId, RoomFeature.AR_CONDICIONADO);
         else {
-            if (addFeatures.equals("computadores_mac"))
+            if (addFeatures.equals("Computadores MacOS"))
                 serverLogic.updateFeatures(roomId, RoomFeature.COMPUTADORES_MAC);
             else {
-                if (addFeatures.equals("computadores_windows"))
+                if (addFeatures.equals("Computadores Windows"))
                     serverLogic.updateFeatures(roomId, RoomFeature.COMPUTADORES_WINDOWS);
                 else {
-                    if (addFeatures.equals("projetor"))
+                    if (addFeatures.equals("Projetor"))
                         serverLogic.updateFeatures(roomId, RoomFeature.PROJETOR);
                     else {
-                        if (addFeatures.equals("quadro_interativo"))
+                        if (addFeatures.equals("Quadro Interativo"))
                             serverLogic.updateFeatures(roomId, RoomFeature.QUADRO_INTERATIVO);
-                        else
-                            System.out.println("Invalid Feature.");
+                        else{
+                            if(addFeatures.equals("Mesa de Reunião"))
+                                serverLogic.updateFeatures(roomId, RoomFeature.MESA_REUNIAO);
+                            else
+                                System.out.println("Invalid Feature.");
+                        }
+
                     }
                 }
 
@@ -286,22 +323,28 @@ public class ServerInterface extends Thread {
     }
 
     public void removeFeature(String addFeatures, int roomId) {
-        if (addFeatures.equals("ar_condicionado"))
+
+        if (addFeatures.equals("Ar Condicionado"))
             serverLogic.removeFeatures(roomId, RoomFeature.AR_CONDICIONADO);
         else {
-            if (addFeatures.equals("computadores_mac"))
+            if (addFeatures.equals("Computadores MacOS"))
                 serverLogic.removeFeatures(roomId, RoomFeature.COMPUTADORES_MAC);
             else {
-                if (addFeatures.equals("computadores_windows"))
+                if (addFeatures.equals("Computadores Windows"))
                     serverLogic.removeFeatures(roomId, RoomFeature.COMPUTADORES_WINDOWS);
                 else {
-                    if (addFeatures.equals("projetor"))
+                    if (addFeatures.equals("Projetor"))
                         serverLogic.removeFeatures(roomId, RoomFeature.PROJETOR);
                     else {
-                        if (addFeatures.equals("quadro_interativo"))
+                        if (addFeatures.equals("Quadro Interativo"))
                             serverLogic.removeFeatures(roomId, RoomFeature.QUADRO_INTERATIVO);
-                        else
-                            System.out.println("Invalid Feature.");
+                        else{
+                            if(addFeatures.equals("Mesa de Reunião"))
+                                serverLogic.removeFeatures(roomId, RoomFeature.MESA_REUNIAO);
+                            else
+                                System.out.println("Invalid Feature.");
+                        }
+
                     }
                 }
 
@@ -309,24 +352,27 @@ public class ServerInterface extends Thread {
         }
     }
 
+
+
     public void showRooms() {
         ArrayList<Room> allRooms = serverLogic.getAllRooms();
         if (allRooms.isEmpty())
             System.out.println("<There are no Rooms Available>");
         else {
             for (int i = 0; i < allRooms.size(); i++)
-                System.out.println("Id: " + allRooms.get(i).getId() + "\nName: " + allRooms.get(i).getName());
+                System.out.println(i + "-> Id: " + allRooms.get(i).getId() + "\tName: " + allRooms.get(i).getName());
         }
     }
 
     public void createGroup() {
         System.out.print("Name = ");
-        String addName = scan.nextLine();
+        String addName = scan.next();
         while (!checkGroupName(addName)) {
             System.out.println("Error: <Group Name Already in Use>\nName = ");
             addName = scan.nextLine();
         }
         serverLogic.addGroup(addName);
+        manageGroups();
     }
 
     //Vê se já existe um grupo igual a name (Retorna falso se existir)
@@ -340,57 +386,48 @@ public class ServerInterface extends Thread {
     }
 
     public void modifyGroups() {
+
+        System.out.println("--Choose the Group you want to Modify--");
         viewGroups();
+        int i = scan.nextInt();
+        String groupName = serverLogic.getGroups().get(i).getName();
+        System.out.println(groupName);
 
-        String adminResponse = scan.nextLine();
-        Scanner eachResponse = new Scanner(adminResponse);
-        String param1 = eachResponse.next();
-        String groupName = eachResponse.next();
+        System.out.println("--Choose the Operation you want to preform--");
 
-        if (param1.equals("edit")) {
-            String operation = eachResponse.next();
-            String userId = eachResponse.next();
+        System.out.println("1->Add User\n2->Remove User\n3->Delete Group");
+        int operationI = scan.nextInt();
 
-            while (!checkUserDb(userId)) {
-                System.out.print("Error: <Inexisting User>\nUser Name = ");
-                userId = scan.nextLine();
-            }
+        if(operationI == 1){
 
-            if (operation.equals("add")) {
-                while(checkGroupName(groupName)){
-                    System.out.print("Error: <Inexisting Group>\nGroup Name= ");
-                    groupName = scan.nextLine();
-                }
-                while(checkUserGroup(userId, groupName)){
-                    System.out.print("Error: <User Already Exists in this Group>\nUser Name= ");
-                    userId = scan.nextLine();
-                    while (!checkUserDb(userId)) {
-                        System.out.print("Error: <Inexisting User>\nUser Name = ");
-                        userId = scan.nextLine();
-                    }
-                }
-                serverLogic.addUserGroup(groupName, userId);
-            } else {
-                if (operation.equals("remove")) {
-                    while (checkGroupName(groupName)) {
-                        System.out.print("Error: <Inexisting Group>\nGroup Name = ");
-                        groupName = scan.nextLine();
-                    }
-                    serverLogic.removeUserGroup(groupName, userId);
-                } else
-                    System.out.println("Invalid Operation. Valid Operations are: add ; remove \n");
-            }
-        } else {
-            if (param1.equals("delete")) {
-                while (checkGroupName(groupName)) {
-                    System.out.print("Error: <Inexisting Group>\nGroup Name = ");
-                    groupName = scan.nextLine();
-                }
-                serverLogic.removeGroup(groupName);
-            } else
-                System.out.println("Invalid Comand.");
+            System.out.println("--Choose the User you want to Add--");
+            showUserNotInGroup(groupName);
+            int user = scan.nextInt();
+            String userId = serverLogic.getNonMembers(groupName).get(user).getUsername();
+            System.out.println(userId);
+            serverLogic.addUserGroup(groupName, userId);
+            manageGroups();
         }
+        else if(operationI == 2){
+            System.out.println("--Choose the User you wish to Remove--");
+            viewGroup(groupName);
+            int user = scan.nextInt();
+            String userId = serverLogic.getUsersInGroup(groupName).get(user).getUsername();
+            System.out.println(userId);
+            serverLogic.removeUserGroup(groupName, userId);
+            manageGroups();
+        }
+        else if(operationI == 3){
+            serverLogic.removeGroup(groupName);
+            manageGroups();
+        }
+    }
 
+    public void showUsersDb(){
+        List<User> allUsersDb = serverLogic.getAllUsers();
+        for(int i = 0; i< allUsersDb.size(); i++)
+            System.out.println(i + "-> " + allUsersDb.get(i).getName());
+        return;
     }
 
     public boolean checkUserDb(String id) {
@@ -416,18 +453,44 @@ public class ServerInterface extends Thread {
 
     public void viewGroups(){
         List<Group> allGroups = serverLogic.getGroups();
+        if(allGroups.isEmpty())
+        {
+            System.out.println("<There are no Groups>");
+            return;
+        }
         for(int i = 0; i < allGroups.size(); i++) {
             List<User> usersInGroup = serverLogic.getUsersInGroup(allGroups.get(i).getName());
-            System.out.println(allGroups.get(i).getName() + ":");
+            System.out.println( i + "->" + allGroups.get(i).getName() + ":");
 
             if (usersInGroup.isEmpty())
-                System.out.println("<There are no Users in this Group>\n");
+                System.out.print("\t<There are no Users in this Group>\n");
             else {
                 for (int j = 0; j < usersInGroup.size(); j++) {
-                    System.out.println("->" + usersInGroup.get(j).getName() + "\n");
+                    System.out.print("\t-> " + usersInGroup.get(j).getName() + "\n");
                 }
             }
         }
     }
 
+    //MOSTRA USERS NUM GRUPO ESPECÍFICO
+    public void viewGroup(String groupName){
+        List<Group> allGroups = serverLogic.getGroups();
+        for(int i = 0; i < allGroups.size(); i++) {
+            if(groupName.equals(allGroups.get(i).getName())){
+                List<User> usersInGroup = serverLogic.getUsersInGroup(allGroups.get(i).getName());
+                for (int j = 0; j < usersInGroup.size(); j++)
+                    System.out.print(j+"-> " + usersInGroup.get(j).getName() + "\n");
+
+            }
+
+        }
+    }
+
+    //MOSTRA TODOS OS USERS QUE NÃO ESTEJA NO DETERMINADO GRUPO
+    public void showUserNotInGroup(String groupName) {
+        List<User> usersNotInGroup = serverLogic.getNonMembers(groupName);
+        for(int i = 0; i < usersNotInGroup.size(); i++){
+            System.out.println(i + "-> " + usersNotInGroup.get(i).getName());
+        }
+    }
 }

@@ -94,6 +94,10 @@ public final class ServerLogic {
         return (ArrayList<User>) DBManager.getUserDao().getAll();
     }
 
+    public List<User> getNonMembers(String groupName){
+        return DBManager.getGroupDao().getNonMembers(groupName);
+    }
+
     public User getUser(String username) {
         return DBManager.getUserDao().get(username);
     }
@@ -107,40 +111,12 @@ public final class ServerLogic {
     }
     public void addRoom(String addName, String roomTypeString,String addLimit, String[] addFeatures) {
 
-        RoomType roomType = RoomType.value(roomTypeString);
+        RoomType roomType = RoomType.value(roomTypeString.trim());
 
-        /*RoomType roomType = null;
-        if(roomTypeString.equals("laboratorio")){
-            roomType = RoomType.LABORATÓRIO;
-        }else if(roomTypeString.equals("auditorio")){
-            roomType = RoomType.AUDITÓRIO;
-        }*/
         ArrayList<RoomFeature> features = new ArrayList<>();
         for (String addFeature : addFeatures) {
-            features.add(RoomFeature.value(addFeature));
+            features.add(RoomFeature.value(addFeature.trim()));
         }
-
-        /*if(addFeatures.equals("ar_condicionado"))
-            features.add(RoomFeature.AR_CONDICIONADO);
-        else {
-            if (addFeatures.equals("computadores_mac"))
-                features.add(RoomFeature.COMPUTADORES_MAC);
-            else{
-                if(addFeatures.equals("computadores_windows"))
-                    features.add(RoomFeature.COMPUTADORES_WINDOWS);
-                else{
-                    if(addFeatures.equals("projetor"))
-                        features.add(RoomFeature.PROJETOR);
-                    else{
-                        if(addFeatures.equals("quadro_interativo"))
-                            features.add(RoomFeature.QUADRO_INTERATIVO);
-                        else
-                            System.out.println("Invalid Feature.");
-                    }
-                }
-
-            }
-        }*/
 
         DBManager.getRoomDao().insert(addName,Integer.parseInt(addLimit), roomType,features);
     }
@@ -165,11 +141,6 @@ public final class ServerLogic {
         DBManager.getRoomDao().updateCapacity(parseInt, editLimit);
     }
 
-    public void updateDescription(int parseInt, String editDescription) {
-        //FALTA FAZER NA BASE DE DADOS FUNÇÃO PARA ALTERAR DESCRIÇÃO DE SALAS
-        //DBManager.getRoomDao().updateDescription(parseInt, editDescription);
-
-    }
 
     public void addGroup(String addName) {
         DBManager.getGroupDao().insert(addName);
@@ -194,7 +165,6 @@ public final class ServerLogic {
         DBManager.getGroupDao().removeMember(groupName, userId);
     }
 
-    //FUNÇÃO GET MEMBERS NÃO ESTÁ A RECEBER BEM OS USERS DE UM DETERMINADO GRUPO
     public List<User> getUsersInGroup(String groupName){
        return DBManager.getGroupDao().getMembers(groupName);
     }
