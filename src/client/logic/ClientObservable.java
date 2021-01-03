@@ -8,15 +8,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.communication.threads.ThreadUpdateEventsView;
 import shared_data.entities.*;
+import shared_data.helper.MyMutex;
 
 public class ClientObservable {
 
     private ClientController controller;
     private PropertyChangeSupport support;
 
-    public ClientObservable() {
-        controller = new ClientController();
+    public ClientObservable(MyMutex mutex) {
+        controller = new ClientController(mutex);
         support = new PropertyChangeSupport(this);
     }
 
@@ -24,6 +26,9 @@ public class ClientObservable {
         controller.init();
     }
 
+    public ClientController getController(){
+        return controller;
+    }
 
     /* property change support */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -139,5 +144,10 @@ public class ClientObservable {
         }
         else
             return false;
+    }
+
+    public void refreshEvents() {
+        //chamaar a função que vai ao server buscar os pending events
+        //fazer o fire property change
     }
 }

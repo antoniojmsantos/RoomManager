@@ -8,6 +8,7 @@ import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.entities.User;
 import shared_data.helper.KeepAlive;
+import shared_data.helper.MyMutex;
 import shared_data.helper.SendAndReceiveData;
 
 import java.io.IOException;
@@ -32,6 +33,11 @@ public class ClientCommunication {
 
     private ArrayList<Event> pendingEvents;
     private ArrayList<Event> registeredEvents;
+    private MyMutex mutex;
+
+    public ClientCommunication(MyMutex mutex) {
+        this.mutex = mutex;
+    }
 
     public User getLoggedUser(){ return loggedUser; }
 
@@ -73,10 +79,10 @@ public class ClientCommunication {
            ResponseAuthentication response = (ResponseAuthentication) SendAndReceiveData.receiveData(socketTCP);
            if(response.isAuthenticated()){
                socketCallBack = clientSocket.accept();
-               this.loggedUser = response.getUser();
+               this.loggedUser = response.getUser();/*
                this.pendingEvents = response.getPendingEvents();
-               this.registeredEvents = response.getRegisteredEvents();
-               ThreadListenPendentEvents threadListenPendentEvents = new ThreadListenPendentEvents(socketCallBack);
+               this.registeredEvents = response.getRegisteredEvents();*/
+               ThreadListenPendentEvents threadListenPendentEvents = new ThreadListenPendentEvents(socketCallBack,this.mutex);
                threadListenPendentEvents.start();
            }
            return response.isAuthenticated();

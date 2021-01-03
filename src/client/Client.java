@@ -1,5 +1,6 @@
 package client;
 
+import client.communication.threads.ThreadUpdateEventsView;
 import client.gui.auxiliar.Constants;
 import client.gui.auxiliar.Images;
 import client.gui.auxiliar.PaneOrganizer;
@@ -9,6 +10,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import shared_data.helper.MyMutex;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,8 +19,14 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        ClientObservable observable = new ClientObservable();
+
+        MyMutex mutex = new MyMutex();
+
+        ClientObservable observable = new ClientObservable(mutex);
         observable.init();
+
+        ThreadUpdateEventsView threadUpdateEventsView = new ThreadUpdateEventsView(mutex,observable);
+        threadUpdateEventsView.start();
 
         PaneOrganizer organizer = new PaneOrganizer(observable);
         Scene scene = new Scene(organizer.getRoot());

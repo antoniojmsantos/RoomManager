@@ -1,29 +1,41 @@
 package client.communication.threads;
 
+import shared_data.communication.RequestThreadNotification;
 import shared_data.helper.KeepAlive;
+import shared_data.helper.MyMutex;
 import shared_data.helper.SendAndReceiveData;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public class ThreadListenPendentEvents extends Thread {
 
+    private MyMutex mutex;
     private Socket socketCallBack;
+    private RequestThreadNotification lastNotification = null;
 
-    public ThreadListenPendentEvents(Socket socketCallBack) {
+    public ThreadListenPendentEvents(Socket socketCallBack,MyMutex mutex) throws SocketException {
         this.socketCallBack = socketCallBack;
+        this.mutex = mutex;
+        this.socketCallBack.setSoTimeout(2000);
     }
 
     @Override
     public void run() {
 
-        System.out.println("À escuta");
         while(KeepAlive.getKeepAlive()){
-            try {
-                SendAndReceiveData.receiveData(socketCallBack);
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            synchronized (mutex){
+                try {
+                    RequestThreadNotification requestThreadNotification = (RequestThreadNotification)SendAndReceiveData.receiveData(socketCallBack);
+                    lastNotification = requestThreadNotification;
+                    mutex.notify();
+                }catch (SocketTimeoutException e){
+                    continue;
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

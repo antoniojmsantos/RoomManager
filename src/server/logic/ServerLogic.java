@@ -194,8 +194,7 @@ public final class ServerLogic {
     }
 
     public boolean deleteEvent(int idEvent, User user) {
-        //DBManager.getEventDao().delete(idEvent);
-        return true;
+        return DBManager.getEventDao().delete(idEvent);
     }
 
     public Event getEvent(int idEvent) {
@@ -203,15 +202,14 @@ public final class ServerLogic {
     }
 
     public boolean cancelSubscription(int idEvent, User user) {
-        //
-        return true;
+        return DBManager.getEventDao().cancelEvent(idEvent, user.getUsername());
     }
 
     public boolean acceptEvent(int idEvent, User user) {
-        return true;
+        return DBManager.getEventDao().acceptEvent(idEvent,user.getUsername());
     }
 
     public boolean declineEvent(int idEvent, User user) {
-        return true;
+        return DBManager.getEventDao().refuseEvent(idEvent,user.getUsername());
     }
 }

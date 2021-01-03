@@ -3,14 +3,22 @@ package client.logic;
 import client.communication.ClientCommunication;
 import shared_data.entities.Event;
 import shared_data.entities.Room;
+import shared_data.helper.MyMutex;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ClientController {
 
-    private final ClientCommunication communication = new ClientCommunication();
+    private final ClientCommunication communication;
     private final State state =  new State(State.TYPE.AUTHENTICATE);
+
+    public ClientController(MyMutex mutex) {
+        communication = new ClientCommunication(mutex);
+    }
+    public ClientCommunication getCommunication(){
+        return communication;
+    }
 
     public void init() {
         communication.run();
