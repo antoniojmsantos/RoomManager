@@ -96,22 +96,20 @@ public class ClientObservable {
         int resultCode = controller.Register(name, username, password);
         switch(resultCode){
             case -1:
-                return -1;
             case 0:
-                return 0;
+                return resultCode;
             default:
                 support.firePropertyChange(null,null,null);
                 return 1;
         }
     }
 
-    public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
-        if(controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin)){
+    public int CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
+        int errorCode = controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin);
+        if(errorCode > 0) {
             support.firePropertyChange(null, null, null);
-            return true;
         }
-        else
-            return false;
+        return errorCode;
     }
 
     public boolean isEmailAccepted(String email) {

@@ -8,12 +8,18 @@ import java.io.Serializable;
 public class ResponseCreateEvent extends Response implements Serializable {
 
     private Event event;
+    private int errorCode;
 
     public Event getEvent() {
         return event;
     }
 
-    public ResponseCreateEvent(Event event) {
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public ResponseCreateEvent(Event event, int errorCode) {
         this.event = event;
+        this.errorCode = errorCode;
     }
 }

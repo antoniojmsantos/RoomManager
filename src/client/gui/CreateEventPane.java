@@ -384,15 +384,25 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
-                boolean res = observable.CreateEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
-                if (res) {
-                    alert.setAlertType(Alert.AlertType.INFORMATION);
-                    alert.setTitle("");
-                    alert.setHeaderText("Sucesso!");
-                    alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
-                    alert.showAndWait();
-                } else {
 
+                int resultCode = observable.CreateEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                switch (resultCode) {
+                    case -1:
+                        alert.setHeaderText( "Erro ao criar evento!");
+                        alert.setContentText( "A data do evento sobrepõe um evento já existente!");
+                        alert.showAndWait();
+                        break;
+                    case 0:
+                        alert.setHeaderText( "Erro ao criar novo registo!");
+                        alert.setContentText( "Ocorreu um erro na base de dados, tente outra vez...");
+                        alert.showAndWait();
+                        break;
+                    default:
+                        alert.setAlertType(Alert.AlertType.INFORMATION);
+                        alert.setTitle("");
+                        alert.setHeaderText("Sucesso!");
+                        alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                        alert.showAndWait();
                 }
             } else if(lvRooms.getSelectionModel().isEmpty()) {
                 alert.setTitle("");

@@ -66,18 +66,13 @@ public class CalendarItem extends VBox {
                     HBox boxEvent = new HBox(lb);
                     boxEvent.setAlignment(Pos.CENTER);
                     boxEvent.setBackground(new Background(new BackgroundFill(Color.web("#0093ff"), new CornerRadii(5), Insets.EMPTY)));
-//                    boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
-//                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
                     if(eventDate.isBefore(currentDate)) // SE A DATA DO EVENTO JÁ PASSOU O DIA DE HOJE A BORDA FICA A CINZA
                         boxEvent.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(5), Insets.EMPTY)));
 
-//                        boxEvent.setBorder(new Border(new BorderStroke(Color.GRAY,
-//                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
                     Tooltip tooltip = new Tooltip("Informações do Evento:\n\n" +
                             "Criado por: " + e.getCreator().getUsername() +
-                            "\nSala: " + e.getRoom().getName() +
+                            "\nSala: " + e.getRoom().getType().getValue() + " " + e.getRoom().getName() +
                             "\nGrupo: " +e.getGroup().getName() + "\nData Início: " +
                             e.getStartDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "\nData Fim: " +
                             e.getStartDate().plusMinutes(e.getDuration()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))

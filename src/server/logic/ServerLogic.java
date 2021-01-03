@@ -42,16 +42,14 @@ public final class ServerLogic {
         }
     }
 
-    public Event createEvent(RequestCreateEvent requestCreateEvent) {
-        int idEvent = DBManager.getEventDao().insert(
+    public int createEvent(RequestCreateEvent requestCreateEvent) {
+        return DBManager.getEventDao().insert(
                 requestCreateEvent.getName(),
                 requestCreateEvent.getRoomId(),
                 requestCreateEvent.getGroupName(),
                 requestCreateEvent.getCreatorUsername(),
                 requestCreateEvent.getStartDate(),
                 requestCreateEvent.getDuration());
-
-        return DBManager.getEventDao().get(idEvent);
     }
 
     public ArrayList<ClientInfo> getClientInfo(Event event) {

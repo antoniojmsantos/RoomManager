@@ -107,21 +107,18 @@ public class ClientCommunication {
         return 0;
     }
 
-    public boolean CreateEvent(String name, int idRoom, String nameGroup, String usernameCreator, LocalDateTime initialDate, int duration){
+    public int CreateEvent(String name, int idRoom, String nameGroup, String usernameCreator, LocalDateTime initialDate, int duration){
+        int errorCode = 0;
         try{
             RequestCreateEvent requestCreateEvent = new RequestCreateEvent(name, idRoom, nameGroup, usernameCreator, initialDate, duration);
             SendAndReceiveData.sendData(requestCreateEvent,socketTCP);
+
             ResponseCreateEvent responseCreateEvent = (ResponseCreateEvent) SendAndReceiveData.receiveData(socketTCP);
-            if(responseCreateEvent.getEvent() != null){
-                return true;
-            }
-            else{
-                return false;
-            }
+            errorCode =  responseCreateEvent.getErrorCode();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return false;
+        return errorCode;
     }
 
     public ArrayList<Event> getPendingEvents(){

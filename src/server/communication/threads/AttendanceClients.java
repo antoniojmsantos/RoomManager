@@ -78,18 +78,22 @@ public class AttendanceClients extends Thread{
         }
         else if(request instanceof RequestCreateEvent) {
             RequestCreateEvent requestCreateEvent = (RequestCreateEvent) request;
-            Event event = serverLogic.createEvent(requestCreateEvent);
             ResponseCreateEvent responseCreateEvent;
-            if(event != null){
-                //positivo
-                responseCreateEvent = new ResponseCreateEvent(event);
-                SendAndReceiveData.sendData(responseCreateEvent,socketClient);
-                NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic,"create");
-                notifyPendentEvents.start();
-            }else{
-                responseCreateEvent = new ResponseCreateEvent(null);
-                SendAndReceiveData.sendData(responseCreateEvent,socketClient);
-                //negativo
+
+            int eventId = serverLogic.createEvent(requestCreateEvent);
+            switch (eventId) {
+                case -1:    // dates incompatible
+                case 0: // database error
+                    responseCreateEvent = new ResponseCreateEvent(null, eventId);
+                    SendAndReceiveData.sendData(responseCreateEvent,socketClient);
+                    break;
+                default:
+                    Event event = serverLogic.getEvent(eventId);
+                    responseCreateEvent = new ResponseCreateEvent(event,eventId);
+                    SendAndReceiveData.sendData(responseCreateEvent,socketClient);
+
+                    NotifyPendentEvents notifyPendentEvents = new NotifyPendentEvents(event,serverLogic,"create");
+                    notifyPendentEvents.start();
             }
         }
         else if(request instanceof RequestGetRooms){

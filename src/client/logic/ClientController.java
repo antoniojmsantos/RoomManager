@@ -97,13 +97,12 @@ public class ClientController {
         }
     }
 
-    public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
-        if(communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin)){
+    public int CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
+        int errorCode = communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
+        if (errorCode > 0) {
             setStateMain();
-            return true;
         }
-        else
-            return false;
+        return errorCode;
     }
 
     public boolean isEmailAccepted(String email) {

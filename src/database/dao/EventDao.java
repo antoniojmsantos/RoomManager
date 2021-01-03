@@ -170,6 +170,10 @@ public class EventDao implements IEventDao {
     /*
      * Esta func recebe toda a informação necessária
      * para depois inserir um evento na BD.
+     * ---
+     * -1 -> dates are incompatible
+     * 0 -> database error
+     * > 1 -> all good
      * */
     @Override
     public int insert(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration) {
@@ -179,7 +183,7 @@ public class EventDao implements IEventDao {
         int id = 0;
         try {
             // check if event can be created
-            if (!canCreateEvent(roomId, startDate, startDate.plusMinutes(duration))) throw new SQLException();
+            if (!canCreateEvent(roomId, startDate, startDate.plusMinutes(duration))) return -1;
 
             System.out.println("Event name: "+name);
             System.out.println("Event room: "+roomId);
