@@ -20,10 +20,13 @@ public class CalendarItem extends VBox {
     private LocalDate date;;
     ArrayList<Event> events;
 
+    LocalDate currentDate;
+
     public CalendarItem() {
         this.setSpacing(2);
         this.setPrefSize(200,200);
         this.setPadding(new Insets(5));
+        currentDate = LocalDate.now();
         // Add action handler for mouse clicked
 //        this.setOnMouseClicked(e -> System.out.println("This pane's date is: " + date));
 
@@ -33,7 +36,8 @@ public class CalendarItem extends VBox {
         this.events = events;
     }
 
-    void populateItem(LocalDate calendarDate, LocalDate currentDate){
+    void populateItem(LocalDate calendarDate){
+
         if (this.getChildren().size() != 0) { // PARA NAO REPETIR CONTROLOS
             this.getChildren().remove(0);
         }
@@ -61,6 +65,10 @@ public class CalendarItem extends VBox {
                     boxEvent.setAlignment(Pos.CENTER);
                     boxEvent.setBorder(new Border(new BorderStroke(Color.web("#0093ff"),
                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+                    if(eventDate.isBefore(currentDate)) // SE A DATA DO EVENTO JÁ PASSOU O DIA DE HOJE A BORDA FICA A CINZA
+                        boxEvent.setBorder(new Border(new BorderStroke(Color.GRAY,
+                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
                     Tooltip tooltip = new Tooltip("Informações do Evento:\n\nSala: " + e.getRoom().getName() +
                             "\nGrupo: " +e.getGroup().getName() + "\nHora Inicio: " +

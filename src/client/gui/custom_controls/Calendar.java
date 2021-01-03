@@ -94,7 +94,7 @@ public class Calendar extends VBox {
                     ap.getChildren().remove(i);
             }
             ap.refreshEvents(events);
-            ap.populateItem(calendarDate, currentDate);
+            ap.populateItem(calendarDate);
             calendarDate = calendarDate.plusDays(1);
         }
         // Change the title of the calendar

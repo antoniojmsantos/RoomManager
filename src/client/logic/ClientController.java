@@ -116,4 +116,12 @@ public class ClientController {
     public boolean deleteEvent(int id) {
         return communication.deleteEvent(id);
     }
+
+    public ArrayList<Event> getUserEvents() {
+        return communication.getUserEvents();
+    }
+
+    public ArrayList<Event> getPendingEvents() {
+        return communication.getPendingEvents();
+    }
 }

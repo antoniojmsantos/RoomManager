@@ -15,6 +15,8 @@ public class Images implements Constants {
         images.put(QUESTION, new Image(Resources.getResourceFile(PATH_IMG_QUESTION)));
         images.put(UPLOAD, new Image(Resources.getResourceFile(PATH_IMG_UPLOAD)));
         images.put(DELETE, new Image(Resources.getResourceFile(PATH_IMG_DELETE)));
+        images.put(ACCEPT, new Image(Resources.getResourceFile(PATH_IMG_ACCEPT)));
+        images.put(DECLINE, new Image(Resources.getResourceFile(PATH_IMG_DECLINE)));
     }
     public static Image getImage(String name) {
         return images.get(name);

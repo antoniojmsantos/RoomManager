@@ -14,6 +14,7 @@ public class RMPane extends StackPane implements Constants, PropertyChangeListen
     private RegisterPane registerPane;
     private CreateEventPane createEventPane;
     private MainHighLevelPane mainHighLevelPane;
+    private MainLowLevelPane mainLowLevelPane;
 
 
     public RMPane(ClientObservable observable) {
@@ -34,13 +35,14 @@ public class RMPane extends StackPane implements Constants, PropertyChangeListen
         registerPane = new RegisterPane(observable);
         createEventPane = new CreateEventPane(observable);
         mainHighLevelPane = new MainHighLevelPane(observable);
+        mainLowLevelPane = new MainLowLevelPane(observable);
 
         //CRIA SE O PAINEL E ADICIONA SE SEMPRE AOS FILHOS DO PAINEL "PAI(RMPane)"
-        getChildren().addAll(mainHighLevelPane, loginPane, registerPane, createEventPane);
+        getChildren().addAll(loginPane, registerPane, mainHighLevelPane, mainLowLevelPane, createEventPane);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //AQUI VAI TER DE SAR VISIBLE TRUE AO PAINEL QUE CORRESPONDER AO ESTADO DO PROG QUE ESTIVER ATUALMENTE
+
     }
 }

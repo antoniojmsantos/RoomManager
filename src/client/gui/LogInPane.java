@@ -64,6 +64,10 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         img_avatar.setPreserveRatio(true);
 
         HBox boxAvatar = new HBox();
+        boxAvatar.setOnMouseClicked(e->{
+            txt_username.setText("a21270359@isec.pt");
+            txt_password.setText("Pilanocu123");
+        } );
         boxAvatar.setAlignment(Pos.CENTER);
         boxAvatar.setPadding(new Insets(20));
         boxAvatar.getChildren().add(img_avatar);

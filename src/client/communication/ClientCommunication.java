@@ -161,7 +161,7 @@ public class ClientCommunication {
         return null;
     }
 
-    public ArrayList<Event> getUserEvents(){
+    public ArrayList<Event> getUserEvents(){ // GET USER ACCEPTED EVENTS
         try{
             RequestUserEvents requestUserEvents = new RequestUserEvents(this.loggedUser);
             SendAndReceiveData.sendData(requestUserEvents,socketTCP);

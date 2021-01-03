@@ -25,4 +25,10 @@ public interface Constants {
 
     String DELETE = "delete";
     String PATH_IMG_DELETE = "images/delete.png";
+
+    String ACCEPT = "accept";
+    String PATH_IMG_ACCEPT = "images/accept.png";
+
+    String DECLINE = "decline";
+    String PATH_IMG_DECLINE = "images/decline.png";
 }

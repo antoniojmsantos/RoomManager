@@ -53,7 +53,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
             cbRoomFeature_QuadroInterativo,
             cbRoomFeature_ArCondicionado;
 
-    ListView<Room> listRooms;
+    ListView<Room> lvRooms;
     FilteredList<Room> filteredRoomsList;
     ObservableList<Room> roomsList;
 
@@ -189,7 +189,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         TitledPane paneFilterType = new TitledPane();
         paneFilterType.setText("Tipo de Sala");
         paneFilterType.setCollapsible(false);
-        VBox boxFilterType = new VBox(10);
+        HBox boxFilterType = new HBox(150);
 
         // check boxes room types
         cbRoomType_Anfiteatro = new CheckBox(RoomType.ANFITEATRO.getValue());
@@ -197,11 +197,19 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         cbRoomType_Lab = new CheckBox(RoomType.LABORATORIO.getValue());
         cbRoomType_SalaReunioes = new CheckBox(RoomType.SALA_REUNIOES.getValue());
 
-        boxFilterType.getChildren().addAll(
+        VBox boxFilterTypeAux = new VBox(
                 cbRoomType_Anfiteatro,
                 cbRoomType_Auditorio,
-                cbRoomType_Lab,
-                cbRoomType_SalaReunioes
+                cbRoomType_Lab);
+        boxFilterTypeAux.setSpacing(10);
+
+        VBox boxFilterTypeAux1 = new VBox(
+                cbRoomType_SalaReunioes);
+        boxFilterTypeAux1.setSpacing(10);
+
+        boxFilterType.getChildren().addAll(
+                boxFilterTypeAux,
+                boxFilterTypeAux1
         );
         paneFilterType.setContent(boxFilterType);
 
@@ -243,14 +251,14 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         paneRooms.setText("Salas com estes filtros");
         paneRooms.setCollapsible(false);
 
-        listRooms = new ListView<>();
+        lvRooms = new ListView<>();
         filteredRoomsList = new FilteredList<>(roomsList);
-        listRooms.setItems(filteredRoomsList);
+        lvRooms.setItems(filteredRoomsList);
 
         // setup listeners
         registerListeners();
 
-        paneRooms.setContent(listRooms);
+        paneRooms.setContent(lvRooms);
         boxEventFilters.getChildren().add(paneRooms);
     }
 
@@ -372,23 +380,13 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            int idRoom = 0;
-//            DateFormat sdf = new SimpleDateFormat("hh:mm");
-//            Date date = null;
-//            try {
-//                date = sdf.parse("01:35");
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            assert date != null;
-//            Time time = new Time(date.getTime());
-//
-//            Duration duration;
-//            duration = Duration.ofMinutes(spDuration.getValue());
+
+            int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
+            System.out.println(idRoom);
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
-            if(listRooms.getSelectionModel().isEmpty()){
+            if(lvRooms.getSelectionModel().isEmpty()){
                 alert.setTitle("");
                 alert.setHeaderText("Ocorreu um erro!");
                 alert.setContentText("É necessário selecionar uma sala da lista!");

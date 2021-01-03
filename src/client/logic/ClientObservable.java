@@ -119,6 +119,14 @@ public class ClientObservable {
         return controller.getEventsCreated();
     }
 
+    public ArrayList<Event> getUserEvents() {
+        return controller.getUserEvents();
+    }
+
+    public ArrayList<Event> getPendingEvents() {
+        return controller.getPendingEvents();
+    }
+
     public boolean deleteEvent(int id){
 
         if(controller.deleteEvent(id)){
@@ -128,6 +136,8 @@ public class ClientObservable {
         else
             return false;
     }
+
+
 
     public void refreshEvents() {
         //chamaar a função que vai ao server buscar os pending events
