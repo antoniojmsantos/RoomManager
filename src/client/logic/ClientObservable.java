@@ -105,6 +105,9 @@ public class ClientObservable {
         return controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin);
     }
 
+    public boolean isEmailAccepted(String email) {
+        return controller.isEmailAccepted(email);
+    }
     public boolean isPasswordAccepted(String password) {return controller.isPasswordAccepted(password);}
 
     public ArrayList<Room> getRooms(){

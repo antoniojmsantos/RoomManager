@@ -34,8 +34,12 @@ public interface IUserDao {
     /*
      * Esta func recebe toda a informação necessária
      * para depois inserir uma user na BD.
+     * ---
+     * -1 -> dominio nao existe na bd
+     * 0 ->  problemas na bd
+     * > 0 -> true correu bem
      * */
-    boolean insert(String username, String name, String password, Boolean permissions);
+    int insert(String username, String name, String password);
 
     /*
      * Esta função permite alterar o nível de permissões

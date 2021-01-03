@@ -71,14 +71,10 @@ public class AttendanceClients extends Thread{
         }
         else if(request instanceof RequestRegister) {
             RequestRegister register = (RequestRegister) request;
-            System.out.println(register.getUsername() + " "+ register.getPermissionLevel());
-            if (serverLogic.registerUsers(register)){
-                ResponseRegister responseRegister = new ResponseRegister(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),true);
-                SendAndReceiveData.sendData(responseRegister,socketClient);
-            }else {
-                ResponseRegister responseRegister = new ResponseRegister(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),false);
-                SendAndReceiveData.sendData(responseRegister,socketClient);
-            }
+            int resultCode = serverLogic.registerUsers(register);
+
+            ResponseRegister responseRegister = new ResponseRegister(InetAddress.getLocalHost().getHostAddress(),socketClient.getPort(),resultCode);
+            SendAndReceiveData.sendData(responseRegister,socketClient);
         }
         else if(request instanceof RequestCreateEvent) {
             RequestCreateEvent requestCreateEvent = (RequestCreateEvent) request;

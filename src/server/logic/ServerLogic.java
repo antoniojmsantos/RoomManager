@@ -32,8 +32,8 @@ public final class ServerLogic {
             // failure
         }
     }
-    public boolean registerUsers(RequestRegister register){
-        return DBManager.getUserDao().insert(register.getUsername(), register.getUser(), register.getPassword(), register.getPermissionLevel());
+    public int registerUsers(RequestRegister register){
+        return DBManager.getUserDao().insert(register.getUsername(), register.getUser(), register.getPassword());
     }
 
     public void addToClientInfo(Socket socketCallBack, User user) {

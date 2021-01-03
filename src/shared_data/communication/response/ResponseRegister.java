@@ -6,14 +6,14 @@ import java.io.Serializable;
 
 public class ResponseRegister extends Response implements Serializable {
 
-    private boolean result;
+    private int result;
 
-    public ResponseRegister(String ip, int port,boolean result) {
+    public ResponseRegister(String ip, int port,int result) {
         super(ip, port);
         this.result = result;
     }
 
-    public Boolean getResult() {
+    public int getResult() {
         return result;
     }
 }

@@ -93,43 +93,19 @@ public class ClientCommunication {
         return false;
     }
 
-    public boolean Register(String name, String username, String password){
-        String[] data = username.split("@");
-        String typeOfUser = data[0];
-        Boolean permission = true;
-
-        try{
-            if(typeOfUser.length() == 9){
-                if(typeOfUser.charAt(0) == 'a'){
-                    for(int i = 1; i < 9;i++){
-                        try{
-                            Integer.parseInt(String.valueOf(typeOfUser.charAt(i)));
-                            permission = false;
-                        } catch (NumberFormatException e) {
-                            permission = true;
-                            break;
-                        }
-                    }
-                    System.out.println(username + " " + name +" " + password+" " + permission);
-                    RequestRegister requestRegister = new RequestRegister(InetAddress.getLocalHost().getHostAddress(), socketTCP.getPort(),username,name,password,permission);
-                    SendAndReceiveData.sendData(requestRegister,socketTCP);
-                }
-            }else {
-                RequestRegister requestRegister = new RequestRegister(InetAddress.getLocalHost().getHostAddress(), socketTCP.getPort(),username,name,password,true);
-                SendAndReceiveData.sendData(requestRegister,socketTCP);
-            }
+    public int Register(String name, String username, String password) {
+        try {
+            RequestRegister requestRegister = new RequestRegister(InetAddress.getLocalHost().getHostAddress(), socketTCP.getPort(),username,name,password);
+            SendAndReceiveData.sendData(requestRegister,socketTCP);
 
             ResponseRegister responseRegister = (ResponseRegister) SendAndReceiveData.receiveData(socketTCP);
 
             return responseRegister.getResult();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return false;
+
+        return 0;
     }
 
     public boolean CreateEvent(String name, int idRoom, String nameGroup, String usernameCreator, LocalDateTime initialDate, int duration){

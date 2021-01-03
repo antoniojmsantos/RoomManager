@@ -1,9 +1,6 @@
 package shared_data.entities;
 
-import shared_data.helper.Pair;
-
 import java.io.Serializable;
-import java.util.*;
 
 /*
  *  A classe Group contém toda a informação

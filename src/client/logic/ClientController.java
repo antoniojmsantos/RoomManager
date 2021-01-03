@@ -85,16 +85,26 @@ public class ClientController {
     }
 
     public boolean Register(String name, String username, String password) {
-        if(communication.Register(name, username, password)){
-            setStateAuthentication();
-            return true;
+        int resultCode = communication.Register(name, username, password);
+        switch (resultCode) {
+            case -1:
+                // do here
+                return false;
+            case 0:
+                // do here
+                return false;
+            default:
+                setStateAuthentication();
+                return true;
         }
-        else
-            return false;
     }
 
     public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
         return communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
+    }
+
+    public boolean isEmailAccepted(String email) {
+        return email.contains("@") && email.indexOf("@") > 0 && email.indexOf("@") < email.length()-1;
     }
 
     public boolean isPasswordAccepted(String password){
@@ -124,4 +134,5 @@ public class ClientController {
     public ArrayList<Event> getPendingEvents() {
         return communication.getPendingEvents();
     }
+
 }

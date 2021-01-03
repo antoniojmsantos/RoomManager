@@ -46,7 +46,6 @@ public class FirstContact extends Thread{
 
                 ResponseFirstContact responseFirstContact = new ResponseFirstContact(InetAddress.getLocalHost().getHostAddress(), PORT_MULTICAST, InetAddress.getLocalHost().getHostAddress(), portTCP);
                 SendAndReceiveData.sendDataUDP(responseFirstContact, sendResponseSocket, InetAddress.getByName(requestFirstContact.getIp()), requestFirstContact.getPort());
-                System.out.println(responseFirstContact.getIpServerTCP() + " " + responseFirstContact.getPortTCP());
             } catch (SocketTimeoutException e){
                 //e.printStackTrace();
             } catch (IOException | ClassNotFoundException e) {

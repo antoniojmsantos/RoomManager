@@ -80,13 +80,31 @@ public class UserDao implements IUserDao {
     /*
      * Esta func recebe toda a informação necessária
      * para depois inserir uma user na BD.
+     * ---
+     * -1 -> dominio nao existe na bd
+     * 0 ->  problemas na bd
+     * > 0 -> true correu bem
      * */
     @Override
-    public boolean insert(String username, String name, String password, Boolean permissions) {
+    public int insert(String username, String name, String password) {
         PreparedStatement st = null;
+        ResultSet rs = null;
+
         int rows = 0;
 
         try {
+
+            // get permissions from database
+            st = conn.prepareStatement(
+                    "select b_has_permissions from tb_account where vc_domain like ?"
+            );
+            st.setString(1, "@".concat(username.split("@")[1]));
+            rs = st.executeQuery();
+            if (!rs.next()) {
+                return -1;
+            }
+
+            // insert into
             st = conn.prepareStatement(
                     "insert into tb_user(vc_username, vc_name, vc_password, b_permissions) " +
                             "values (?,?,md5(?),?)"
@@ -94,15 +112,15 @@ public class UserDao implements IUserDao {
             st.setString(1,username);
             st.setString(2,name);
             st.setString(3,password);
-            st.setBoolean(4,permissions);
+            st.setBoolean(4,rs.getBoolean("b_has_permissions"));
             rows = st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
         }
-
-        return rows > 0;
+        return rows;
     }
 
     /*
