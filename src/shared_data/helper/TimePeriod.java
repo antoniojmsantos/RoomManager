@@ -47,7 +47,7 @@ public class TimePeriod implements Serializable {
     }
 
     public static TimePeriod make(LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate.isBefore(endDate) && endDate.isAfter(startDate) && startDate.isAfter(LocalDateTime.now())) {
+        if (startDate.isBefore(endDate) && endDate.isAfter(startDate)) {
             return new TimePeriod(startDate, endDate);
         }
         throw new IllegalArgumentException();
