@@ -101,8 +101,8 @@ public class ClientObservable {
             return false;
     }
 
-    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
-        return controller.CreateEvent(idRoom, nameGroup, name, initialDate, durationMin);
+    public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
+        return controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin);
     }
 
     public boolean isPasswordAccepted(String password) {return controller.isPasswordAccepted(password);}

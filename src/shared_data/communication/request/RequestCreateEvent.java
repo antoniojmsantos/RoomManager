@@ -3,46 +3,44 @@ package shared_data.communication.request;
 import shared_data.communication.Request;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class RequestCreateEvent extends Request implements Serializable {
-    private int idRoom;
+    private int roomId;
     private int duration;
-    private String name,nameGroup, usernameCreator;
-    private LocalDateTime initialDate;
+    private String name, groupName, creatorUsername;
+    private LocalDateTime startDate;
 
-    public RequestCreateEvent(int idRoom, String nameGroup, String usernameCreator, int duration, String name, LocalDateTime initialDate) {
-        this.idRoom = idRoom;
-        this.nameGroup = nameGroup;
-        this.usernameCreator = usernameCreator;
+    public RequestCreateEvent(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration) {
+        this.roomId = roomId;
+        this.groupName = groupName;
+        this.creatorUsername = creatorUsername;
         this.duration = duration;
         this.name = name;
-        this.initialDate = initialDate;
+        this.startDate = startDate;
     }
 
-    public int getIdRoom() {
-        return idRoom;
+    public int getRoomId() {
+        return roomId;
     }
 
-    public String getNameGroup() {
-        return nameGroup;
+    public String getGroupName() {
+        return groupName;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public String getUsernameCreator() {
-        return usernameCreator;
+    public String getCreatorUsername() {
+        return creatorUsername;
     }
 
     public String getName() {
         return name;
     }
 
-    public LocalDateTime getInitialDate() {
-        return initialDate;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 }

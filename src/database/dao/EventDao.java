@@ -181,6 +181,11 @@ public class EventDao implements IEventDao {
             // check if event can be created
             if (!canCreateEvent(roomId, startDate, startDate.plusMinutes(duration))) throw new SQLException();
 
+            System.out.println("Event name: "+name);
+            System.out.println("Event room: "+roomId);
+            System.out.println("Event group: "+groupName);
+            System.out.println("Event creator: "+creatorUsername);
+
             st = conn.prepareStatement(
                     "insert into tb_event(vc_name, i_room_id, vc_group_name, vc_creator_username, d_date_start, i_duration) " +
                             "values (?,?,?,?,?,?)"

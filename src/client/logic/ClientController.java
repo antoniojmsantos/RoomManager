@@ -93,8 +93,8 @@ public class ClientController {
             return false;
     }
 
-    public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
-        return communication.CreateEvent(idRoom, nameGroup, name, getUsername(), initialDate, durationMin);
+    public boolean CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
+        return communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
     }
 
     public boolean isPasswordAccepted(String password){

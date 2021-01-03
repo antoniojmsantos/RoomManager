@@ -45,10 +45,10 @@ public final class ServerLogic {
     public Event createEvent(RequestCreateEvent requestCreateEvent) {
         int idEvent = DBManager.getEventDao().insert(
                 requestCreateEvent.getName(),
-                requestCreateEvent.getIdRoom(),
-                requestCreateEvent.getNameGroup(),
-                requestCreateEvent.getUsernameCreator(),
-                requestCreateEvent.getInitialDate(),
+                requestCreateEvent.getRoomId(),
+                requestCreateEvent.getGroupName(),
+                requestCreateEvent.getCreatorUsername(),
+                requestCreateEvent.getStartDate(),
                 requestCreateEvent.getDuration());
 
         return DBManager.getEventDao().get(idEvent);

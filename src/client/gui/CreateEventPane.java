@@ -384,13 +384,15 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
-                boolean res = observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
-                if (!res) {
+                boolean res = observable.CreateEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                if (res) {
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setTitle("");
                     alert.setHeaderText("Sucesso!");
                     alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
                     alert.showAndWait();
+                } else {
+
                 }
             } else if(lvRooms.getSelectionModel().isEmpty()) {
                 alert.setTitle("");
