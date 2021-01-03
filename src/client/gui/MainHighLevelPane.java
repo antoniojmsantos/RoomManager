@@ -147,18 +147,19 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        setVisible(observable.isStateMain());
+        setVisible(observable.isStateMain() && observable.isHighPermission());
 
         if(observable.isAuthenticated()){
             lbUser.setText("Autenticado como: " + observable.getUsername());
             listEvents = observable.getEventsCreated();
-            calendar.refresh(listEvents);
-            ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
-            lvCreatedEvents.setItems(items);
+            if(!listEvents.isEmpty()){
+                calendar.refresh(listEvents);
+                ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
+                lvCreatedEvents.setItems(items);
+            }
         }
 
-//        setVisible(observable.isStateMain() && observable.isHighPermission());
-        //TODO: FALTA VERIFICAR TAMBÉM SE O USER TEM PERMISSAO ALTA
+
     }
 
 }
