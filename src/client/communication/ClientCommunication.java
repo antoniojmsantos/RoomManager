@@ -67,7 +67,6 @@ public class ClientCommunication {
 
         // get response
         ResponseFirstContact responseFirstContact = (ResponseFirstContact)SendAndReceiveData.receiveDataUDP(socketFirstContact);
-        System.out.println(responseFirstContact);
 
         // create server socket
         socketTCP = new Socket(responseFirstContact.getIpServerTCP(),responseFirstContact.getPortTCP());
