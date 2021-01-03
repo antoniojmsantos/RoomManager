@@ -380,38 +380,29 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         @Override
         public void handle(ActionEvent actionEvent) {
 
-
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
-                observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(),
-                        dtInitialDate.getDateTimeValue(), spDuration.getValue());
-                alert.setAlertType(Alert.AlertType.INFORMATION);
-                alert.setTitle("");
-                alert.setHeaderText("Sucesso!");
-                alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
-                alert.showAndWait();
-
-            }
-            else if(lvRooms.getSelectionModel().isEmpty()){
+                boolean res = observable.CreateEvent(idRoom, txtGroup.getText(), txtEventName.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                if (!res) {
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
+                    alert.setTitle("");
+                    alert.setHeaderText("Sucesso!");
+                    alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                    alert.showAndWait();
+                }
+            } else if(lvRooms.getSelectionModel().isEmpty()) {
                 alert.setTitle("");
                 alert.setHeaderText("Ocorreu um erro!");
                 alert.setContentText("É necessário selecionar uma sala da lista!");
                 alert.showAndWait();
-            }
-            else{
-
+            } else {
                 alert.setTitle("");
                 alert.setHeaderText("Ocorreu um erro!");
                 alert.setContentText("Não foi possível criar o evento.\nVerifique os dados introduzidos e tente novamente!");
                 alert.showAndWait();
             }
-
-
-
-
         }
     }
 

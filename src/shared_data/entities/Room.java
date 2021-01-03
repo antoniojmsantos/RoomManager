@@ -58,9 +58,7 @@ public class Room implements Serializable {
         return isAvailable(from, from.plusMinutes(durationInMinutes));
     }
     public boolean isAvailable(LocalDateTime from, LocalDateTime to) {
-        System.out.println("DESIRED: "+from+" - "+to);
         for (TimePeriod period : schedule) {
-            System.out.println(period);
             if (period.intersects(from) || period.intersects(to)) {
                 return false;
             }

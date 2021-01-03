@@ -21,6 +21,27 @@ public class TimePeriod implements Serializable {
         return endDate;
     }
 
+    public static LocalDateTime periodToDate(LocalDateTime date, int durationInMinutes) {
+        return date.plusMinutes(durationInMinutes);
+    }
+
+    public static boolean overlaps(
+            LocalDateTime fromA,
+            LocalDateTime toA,
+            LocalDateTime fromB,
+            LocalDateTime toB
+    ) {
+        return isBetween(fromA, toA, fromB) || isBetween(fromA, toA, toB);
+    }
+
+    public static boolean isBetween(LocalDateTime from, LocalDateTime to, LocalDateTime candidate) {
+        return candidate.isAfter(from) && candidate.isBefore(to);
+    }
+
+    public static boolean isBetween(LocalDateTime from, int durationInMinutes, LocalDateTime candidate) {
+        return isBetween(from, from.plusMinutes(durationInMinutes), candidate);
+    }
+
     public boolean intersects(LocalDateTime date) {
         return date.isAfter(startDate) && date.isBefore(endDate);
     }

@@ -5,9 +5,9 @@ import shared_data.entities.Event;
 import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.entities.User;
+import shared_data.helper.TimePeriod;
 
 import java.sql.*;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +117,36 @@ public class EventDao implements IEventDao {
         return events;
     }
 
+    private boolean canCreateEvent(int eventRoomId, LocalDateTime eventStartDate, LocalDateTime eventEndDate) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        boolean canCreate = true;
+        try {
+            st = conn.prepareStatement(
+                    "select d_date_start, i_duration from tb_event where i_room_id = ?"
+            );
+            st.setInt(1, eventRoomId);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                if (TimePeriod.overlaps(
+                        ((Timestamp)rs.getObject("d_date_start")).toLocalDateTime(),
+                        ((Timestamp)rs.getObject("d_date_start")).toLocalDateTime().plusMinutes(rs.getInt("i_duration")),
+                        eventStartDate,
+                        eventEndDate
+                )){
+                    canCreate = false;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return canCreate;
+    }
+
     @Override
     public int insert(String name, int roomId, String groupName, String creatorUsername, LocalDateTime startDate, int duration) {
         PreparedStatement st = null;
@@ -124,6 +154,9 @@ public class EventDao implements IEventDao {
 
         int id = 0;
         try {
+            // check if event can be created
+            if (!canCreateEvent(roomId, startDate, startDate.plusMinutes(duration))) throw new SQLException();
+
             st = conn.prepareStatement(
                     "insert into tb_event(vc_name, i_room_id, vc_group_name, vc_creator_username, d_date_start, i_duration) " +
                             "values (?,?,?,?,?,?)"

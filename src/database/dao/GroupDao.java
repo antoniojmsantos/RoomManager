@@ -127,6 +127,31 @@ public class GroupDao implements IGroupDao {
     }
 
     @Override
+    public List<User> getNonMembers(String name) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        List<User> users = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    "select * from tb_user where vc_username not in (select vc_user_username from tb_group_member where vc_group_name = ?)"
+            );
+            st.setString(1, name);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                users.add(DBManager.getUserDao().get(rs.getString("vc_user_username")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.closeStatement(st);
+            DBManager.closeResultSet(rs);
+        }
+
+        return users;
+    }
+
+    @Override
     public void addMember(String name, String username) {
         PreparedStatement st = null;
 

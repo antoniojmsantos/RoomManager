@@ -15,6 +15,7 @@ public interface IGroupDao {
 
     // group member
     List<User> getMembers(String name);
+    List<User> getNonMembers(String name);
     void addMember(String name, String username);
     void removeMember(String name, String username);
 
