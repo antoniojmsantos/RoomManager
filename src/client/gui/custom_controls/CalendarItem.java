@@ -42,11 +42,9 @@ public class CalendarItem extends VBox {
             this.getChildren().remove(0);
         }
         Text txt = new Text(String.valueOf(calendarDate.getDayOfMonth()));
-        if(currentDate.isEqual(calendarDate)) {// Changes the color of the text on the current day
+        if(currentDate.isEqual(calendarDate)) // Changes the color of the text on the current day
             txt.setFill(Color.web("#0093ff"));
-            txt.set(new Background(new BackgroundFill(Color.web("#0093ff"), new CornerRadii(5), Insets.EMPTY)));
 
-        }
         this.setDate(calendarDate);
         this.getChildren().addAll(txt);
 
