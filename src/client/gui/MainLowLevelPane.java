@@ -103,12 +103,14 @@ public class MainLowLevelPane extends HBox implements Constants, PropertyChangeL
         if(observable.isAuthenticated()){
             lbUser.setText("Autenticado como: " + observable.getUsername());
             listEvents = observable.getUserEvents();
-            if(!listEvents.isEmpty())
+            if(!listEvents.isEmpty()){
                 calendar.refresh(listEvents);
+            }
+
 
             listPendingEvents = observable.getPendingEvents();
             if(!listPendingEvents.isEmpty()){
-                populateListView();
+//                populateListView();
             }
 
         }

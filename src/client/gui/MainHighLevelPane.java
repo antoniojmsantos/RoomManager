@@ -153,6 +153,8 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
             lbUser.setText("Autenticado como: " + observable.getUsername());
             listEvents = observable.getEventsCreated();
             if(!listEvents.isEmpty()){
+//                for(Event e : listEvents)
+//                    System.out.println(e);
                 calendar.refresh(listEvents);
                 ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
                 lvCreatedEvents.setItems(items);

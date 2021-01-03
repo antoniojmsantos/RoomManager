@@ -94,6 +94,8 @@ public class EventDao implements IEventDao {
         PreparedStatement st = null;
         ResultSet rs= null;
 
+        System.out.println(username);
+
         List<Event> events = new ArrayList<>();
         try{
             st = conn.prepareStatement(
@@ -110,6 +112,8 @@ public class EventDao implements IEventDao {
             DBManager.closeStatement(st);
             DBManager.closeResultSet(rs);
         }
+        for(Event e : events)
+            System.out.println(e);
         return events;
     }
 
@@ -217,16 +221,16 @@ public class EventDao implements IEventDao {
     public final Event build(ResultSet rs) throws SQLException {
         Room room   = DBManager.getRoomDao().get(rs.getInt("i_room_id"));
         Group group = DBManager.getGroupDao().get(rs.getString("vc_group_name"));
-        User user   = DBManager.getUserDao().get(rs.getString("vc_name"));
+        User user   = DBManager.getUserDao().get(rs.getString("vc_creator_username"));
 
         return (room == null || group == null || user == null) ? null : Event.make(
-                rs.getInt("id_int"),
+                rs.getInt("i_id"),
                 rs.getString("vc_name"),
                 room,
                 group,
                 user,
-                ((LocalDateTime)rs.getObject("d_date_start")),
-                ((int)rs.getObject("t_duration"))
+                ((Timestamp)rs.getObject("d_date_start")).toLocalDateTime(),
+                rs.getInt("i_duration")
             );
     }
 }

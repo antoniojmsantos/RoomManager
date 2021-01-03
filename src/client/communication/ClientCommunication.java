@@ -154,6 +154,7 @@ public class ClientCommunication {
             RequestPendingEvents requestPendingEvents = new RequestPendingEvents(this.loggedUser);
             SendAndReceiveData.sendData(requestPendingEvents,socketTCP);
             ResponsePendingEvents responsePendingEvents = (ResponsePendingEvents)SendAndReceiveData.receiveData(socketTCP);
+
             return responsePendingEvents.getUserEvents();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

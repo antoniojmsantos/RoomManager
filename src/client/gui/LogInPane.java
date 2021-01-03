@@ -65,8 +65,8 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
         HBox boxAvatar = new HBox();
         boxAvatar.setOnMouseClicked(e->{
-            txt_username.setText("a21270359@isec.pt");
-            txt_password.setText("Pilanocu123");
+            txt_username.setText("pedrito@hotmail.com");
+            txt_password.setText("1234");
         } );
         boxAvatar.setAlignment(Pos.CENTER);
         boxAvatar.setPadding(new Insets(20));
