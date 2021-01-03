@@ -216,6 +216,11 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
                 alert.setContentText( "É obrigatório aceitar as condições de registo." );
                 alert.showAndWait();
             }
+            else if(!observable.isPasswordAccepted(txt_password.getText())){
+                alert.setHeaderText("Password Fraca!");
+                alert.setContentText("A password tem de conter pelo menos 8 caracteres, 1 letra maiúscula e 1 número.");
+                alert.showAndWait();
+            }
             else if(!observable.Register(txt_name.getText(), txt_email.getText(), txt_password.getText())){
                 alert.setHeaderText( "Erro ao criar novo registo!" );
                 alert.setContentText( "Já existe uma conta com este email." );

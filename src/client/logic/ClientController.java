@@ -94,24 +94,22 @@ public class ClientController {
     }
 
     public boolean CreateEvent(int idRoom, String nameGroup, String name, LocalDateTime initialDate, int durationMin){
-
         return communication.CreateEvent(idRoom, nameGroup, name, getUsername(), initialDate, durationMin);
     }
 
-
-    public ArrayList<Room> getRooms(){
-
-//        return communication.getRooms();
-        return null;
+    public boolean isPasswordAccepted(String password){
+        return password.length() >= 8 && !password.equals(password.toLowerCase()) && password.matches(".*\\d.*");
     }
 
-    public boolean isRoomAvailable(int id){
-//        return communication.isRoomAvailable(id);
+    public ArrayList<Room> getRooms(){
+        return communication.getRooms();
+    }
+
+    public boolean isRoomAvailable(int roomId, LocalDateTime startDate, int durationInMinutes){
         return true;
     }
 
     public ArrayList<Event> getEventsCreated() {
-
         return communication.getEventsCreated();
     }
 

@@ -1,11 +1,7 @@
 package shared_data.entities;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.lang.Object;
 
 public class Event implements Serializable {
     private final int id;
@@ -13,16 +9,16 @@ public class Event implements Serializable {
     private Room room;
     private Group group;
     private final User creator;
-    private LocalDateTime start;
+    private LocalDateTime startDate;
     private int duration;
 
-    public Event(int id, String name, Room room, Group group, User creator, LocalDateTime start, int duration){
+    public Event(int id, String name, Room room, Group group, User creator, LocalDateTime startDate, int duration){
         this.id=id;
         this.name=name;
         this.room=room;
         this.group=group;
         this.creator = creator;
-        this.start=start;
+        this.startDate = startDate;
         this.duration=duration;
     }
 
@@ -41,8 +37,8 @@ public class Event implements Serializable {
         return creator;
     }
 
-    public LocalDateTime getStart(){return start;}
-    public void setStart(LocalDateTime start){this.start=start;}
+    public LocalDateTime getStartDate(){return startDate;}
+    public void setStartDate(LocalDateTime startDate){this.startDate = startDate;}
 
     public int getDuration(){return duration;}
     public void setDuration(int duration){this.duration=duration;}
