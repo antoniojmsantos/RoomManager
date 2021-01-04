@@ -60,10 +60,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     FilteredList<Room> filteredRoomsList;
     ObservableList<Room> roomsList;
 
-    /**
-     *
-     * @param observable
-     */
+
     public CreateEventPane(ClientObservable observable){
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
@@ -158,10 +155,10 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
             return c;
         };
         TextFormatter<Integer> priceFormatter = new TextFormatter<Integer>(
-                new IntegerStringConverter(), 60, filter);
+                new IntegerStringConverter(), 1, filter);
 
         spDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                1, 1000));
+                1, 1000, 1));
         spDuration.setEditable(true);
         spDuration.getEditor().setTextFormatter(priceFormatter);
         spDuration.editorProperty().get().setAlignment(Pos.CENTER);
@@ -396,15 +393,13 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
                     int resultCode = observable.createEvent(txtEventName.getText(), idRoom, (String) txtGroup.getValue(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
                     switch (resultCode) {
                         case -1:
-                            alert.setAlertType(Alert.AlertType.ERROR);
                             alert.setHeaderText("Erro ao criar evento!");
-                            alert.setContentText("A data do evento sobrepõe um evento já existente.");
+                            alert.setContentText("A data do evento sobrepõe um evento já existente!");
                             alert.showAndWait();
                             break;
                         case 0:
-                            alert.setAlertType(Alert.AlertType.ERROR);
-                            alert.setHeaderText("Erro ao criar evento!");
-                            alert.setContentText("Ocorreu um erro inesperado.\nTente novamente.");
+                            alert.setHeaderText("Erro ao criar novo registo!");
+                            alert.setContentText("Ocorreu um erro na base de dados, tente outra vez...");
                             alert.showAndWait();
                             break;
                         default:
@@ -413,26 +408,25 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
                             alert.setHeaderText("Sucesso!");
                             alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
                             alert.showAndWait();
-                            break;
                     }
                     } else {
-                        alert.setAlertType(Alert.AlertType.ERROR);
+                        alert.setAlertType(Alert.AlertType.INFORMATION);
                         alert.setTitle("");
-                        alert.setHeaderText("Erro ao criar evento!");
-                        alert.setContentText("É necessário selecionar um Grupo.");
+                        alert.setHeaderText("Evento não criado!");
+                        alert.setContentText("Selecione um Grupo.");
                         alert.showAndWait();
                     }
                 } else {
 
-                    alert.setAlertType(Alert.AlertType.ERROR);
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setTitle("");
-                    alert.setHeaderText("Erro ao criar evento!");
+                    alert.setHeaderText("Evento não criado!");
                     alert.setContentText("Dê um nome ao evento.");
                     alert.showAndWait();
                 }
             } else if(lvRooms.getSelectionModel().isEmpty()) {
                 alert.setTitle("");
-                alert.setHeaderText("Erro ao criar evento!");
+                alert.setHeaderText("Ocorreu um erro!");
                 alert.setContentText("É necessário selecionar uma sala da lista!");
                 alert.showAndWait();
             }
