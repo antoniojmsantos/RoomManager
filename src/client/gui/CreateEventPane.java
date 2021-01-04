@@ -157,13 +157,13 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
             }
             return c;
         };
-        TextFormatter<Integer> priceFormatter = new TextFormatter<Integer>(
+        TextFormatter<Integer> durationFormatter = new TextFormatter<Integer>(
                 new IntegerStringConverter(), 60, filter);
 
         spDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                1, 1000));
+                1, 1000, 60));
         spDuration.setEditable(true);
-        spDuration.getEditor().setTextFormatter(priceFormatter);
+        spDuration.getEditor().setTextFormatter(durationFormatter);
         spDuration.editorProperty().get().setAlignment(Pos.CENTER);
         HBox boxAuxDuration = new HBox(lbDuration, spDuration);
         boxAuxDuration.setSpacing(10);
