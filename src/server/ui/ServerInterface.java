@@ -78,6 +78,7 @@ public class ServerInterface extends Thread {
                 break;
             default:
                 System.out.println("Choose a valid option");
+                manageRooms();
                 break;
         }
 
@@ -215,7 +216,7 @@ public class ServerInterface extends Thread {
         }
     }
 
-    //FUNÇÃO QUE PERMITE EDITAR NOME, CAPACIDAD E FEATURES DUMA SALA. PERMITE TAMBÉM APAGAR UMA SALA POR COMPLETO
+    //FUNÇÃO QUE PERMITE EDITAR NOME, CAPACIDADE E FEATURES DUMA SALA. PERMITE TAMBÉM APAGAR UMA SALA POR COMPLETO
     private void editRoom() {
 
         System.out.println("--Choose the room you wish to edit--");
@@ -265,26 +266,19 @@ public class ServerInterface extends Thread {
                     }
                     else if(choice2 == 2){
                         System.out.println("-----Choose one of the Feature Options-----");
-                        int k=0;
-                        for(RoomFeature rF : RoomFeature.values()){
-                            System.out.println(k + "->" + rF.getValue());
-                            k++;
+
+                        List<RoomFeature> getFeatures = serverLogic.getFeatures(room_id);
+                        for(int z=0; z<getFeatures.size(); z++){
+                            System.out.println(z+"->"+getFeatures.get(z).getValue());
                         }
-                        System.out.println("-------------------------");
+
                         int feature = scan.nextInt();
-                        switch(feature){
-                            case 1:serverLogic.removeFeatures(room_id, RoomFeature.AR_CONDICIONADO);break;
-                            case 2:serverLogic.removeFeatures(room_id, RoomFeature.COMPUTADORES_MAC);break;
-                            case 3:serverLogic.removeFeatures(room_id, RoomFeature.COMPUTADORES_WINDOWS);break;
-                            case 4:serverLogic.removeFeatures(room_id, RoomFeature.PROJETOR);break;
-                            case 5:serverLogic.removeFeatures(room_id, RoomFeature.MESA_REUNIAO);break;
-                            case 6:serverLogic.removeFeatures(room_id, RoomFeature.QUADRO_INTERATIVO);break;
-                        }
-                        break;
+                        serverLogic.removeFeatures(room_id, getFeatures.get(feature));
                     }
+            case 4: serverLogic.removeRoom(room_id);break;
 
         }
-        manageGroups();
+        manageRooms();
     }
 
     //FUNÇÃO QUE VALIDA NOME DUMA SALA. RETORNA FALSE SE O NOME DA SALA JÁ EXISTIR NA BASE DE DADOS
@@ -295,67 +289,6 @@ public class ServerInterface extends Thread {
                 return false;
         }
         return true;
-    }
-
-
-    public void addFeature(String addFeatures, int roomId) {
-
-        if (addFeatures.equals("Ar Condicionado"))
-            serverLogic.updateFeatures(roomId, RoomFeature.AR_CONDICIONADO);
-        else {
-            if (addFeatures.equals("Computadores MacOS"))
-                serverLogic.updateFeatures(roomId, RoomFeature.COMPUTADORES_MAC);
-            else {
-                if (addFeatures.equals("Computadores Windows"))
-                    serverLogic.updateFeatures(roomId, RoomFeature.COMPUTADORES_WINDOWS);
-                else {
-                    if (addFeatures.equals("Projetor"))
-                        serverLogic.updateFeatures(roomId, RoomFeature.PROJETOR);
-                    else {
-                        if (addFeatures.equals("Quadro Interativo"))
-                            serverLogic.updateFeatures(roomId, RoomFeature.QUADRO_INTERATIVO);
-                        else{
-                            if(addFeatures.equals("Mesa de Reunião"))
-                                serverLogic.updateFeatures(roomId, RoomFeature.MESA_REUNIAO);
-                            else
-                                System.out.println("Invalid Feature.");
-                        }
-
-                    }
-                }
-
-            }
-        }
-    }
-
-    public void removeFeature(String addFeatures, int roomId) {
-
-        if (addFeatures.equals("Ar Condicionado"))
-            serverLogic.removeFeatures(roomId, RoomFeature.AR_CONDICIONADO);
-        else {
-            if (addFeatures.equals("Computadores MacOS"))
-                serverLogic.removeFeatures(roomId, RoomFeature.COMPUTADORES_MAC);
-            else {
-                if (addFeatures.equals("Computadores Windows"))
-                    serverLogic.removeFeatures(roomId, RoomFeature.COMPUTADORES_WINDOWS);
-                else {
-                    if (addFeatures.equals("Projetor"))
-                        serverLogic.removeFeatures(roomId, RoomFeature.PROJETOR);
-                    else {
-                        if (addFeatures.equals("Quadro Interativo"))
-                            serverLogic.removeFeatures(roomId, RoomFeature.QUADRO_INTERATIVO);
-                        else{
-                            if(addFeatures.equals("Mesa de Reunião"))
-                                serverLogic.removeFeatures(roomId, RoomFeature.MESA_REUNIAO);
-                            else
-                                System.out.println("Invalid Feature.");
-                        }
-
-                    }
-                }
-
-            }
-        }
     }
 
 

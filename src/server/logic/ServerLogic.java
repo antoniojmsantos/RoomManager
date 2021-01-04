@@ -123,6 +123,8 @@ public final class ServerLogic {
         DBManager.getRoomDao().delete(roomId);
     }
 
+    public List<RoomFeature> getFeatures(int roomId){return DBManager.getRoomDao().getFeatures(roomId);}
+
     public void updateFeatures(int roomId, RoomFeature rF){
         DBManager.getRoomDao().insertFeature(roomId, rF);
     }
