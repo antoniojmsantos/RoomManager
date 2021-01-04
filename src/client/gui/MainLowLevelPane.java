@@ -99,17 +99,26 @@ public class MainLowLevelPane extends HBox implements Constants, PropertyChangeL
         setVisible(observable.isStateMain() && !observable.isHighPermission());
 
         if(observable.isAuthenticated()){
+
             lbUser.setText("Autenticado como: " + observable.getUsername());
             listEvents = observable.getUserEvents();
             if(!listEvents.isEmpty()){
-                calendar.refresh(listEvents);
+                try{
+                    calendar.refresh(listEvents);
+                } catch (Exception e){
+
+                }
             }
 
-
             listPendingEvents = observable.getPendingEvents();
+
             if(!listPendingEvents.isEmpty()){
-                ObservableList<Event> items = FXCollections.observableArrayList(listPendingEvents);
-                lvPendingEvents.setItems(items);
+                try{
+                    ObservableList<Event> items = FXCollections.observableArrayList(listPendingEvents);
+                    lvPendingEvents.setItems(items);
+                } catch (Exception e){
+
+                }
             }
             else
                 lvPendingEvents.setItems(null);

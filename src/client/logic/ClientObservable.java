@@ -162,6 +162,7 @@ public class ClientObservable {
     }
 
     public void refreshEvents() {
+        support.firePropertyChange(null, null, null);
         //chamaar a função que vai ao server buscar os pending events
         //fazer o fire property change
     }

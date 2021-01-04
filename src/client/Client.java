@@ -6,6 +6,7 @@ import client.gui.auxiliar.Images;
 import client.gui.auxiliar.PaneOrganizer;
 import client.logic.ClientObservable;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -19,7 +20,7 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        Platform.setImplicitExit(false);
         MyMutex mutex = new MyMutex();
 
         ClientObservable observable = new ClientObservable(mutex);
@@ -30,6 +31,7 @@ public class Client extends Application {
 
         PaneOrganizer organizer = new PaneOrganizer(observable);
         Scene scene = new Scene(organizer.getRoot());
+
 
         primaryStage.getIcons().add(Images.getImage(Constants.ICON));
         primaryStage.setResizable(false);

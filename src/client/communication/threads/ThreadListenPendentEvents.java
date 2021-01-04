@@ -19,7 +19,7 @@ public class ThreadListenPendentEvents extends Thread {
     public ThreadListenPendentEvents(Socket socketCallBack,MyMutex mutex) throws SocketException {
         this.socketCallBack = socketCallBack;
         this.mutex = mutex;
-        this.socketCallBack.setSoTimeout(2000);
+        this.socketCallBack.setSoTimeout(50);
     }
 
     @Override

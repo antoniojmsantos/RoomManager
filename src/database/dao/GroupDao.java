@@ -168,7 +168,7 @@ public class GroupDao implements IGroupDao {
             st.setString(1, name);
             rs = st.executeQuery();
             while (rs.next()) {
-                users.add(DBManager.getUserDao().get(rs.getString("vc_user_username")));
+                users.add(DBManager.getUserDao().get(rs.getString("vc_username")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

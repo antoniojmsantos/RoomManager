@@ -69,10 +69,10 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
         //TODO: APAGAR ISTOOOO!!!!!!!!!
         boxAvatar.setOnMouseClicked(e->{
-            txt_username.setText("antonio@isec.pt");
+            txt_username.setText("antonio@isec.docentes.pt");
             txt_password.setText("Pilanocu123");
             if(e.getButton() == MouseButton.SECONDARY){
-                txt_username.setText("a21270359@isec.pt");
+                txt_username.setText("a21270359@isec.alunos.pt");
                 txt_password.setText("Pilanocu123");
             }
         } );
