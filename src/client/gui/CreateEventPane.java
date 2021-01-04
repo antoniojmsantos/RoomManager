@@ -25,6 +25,7 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     VBox boxEventFilters;
 
     TextField txtEventName, txtRoomName;
-    ComboBox txtGroup;
+    ComboBox cbGroup;
     DateTimePicker dtInitialDate;
     Spinner<Integer> spDuration, spCapacity;
 
@@ -70,7 +71,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
         txtRoomName = new TextField();
         txtEventName= new TextField();
-        txtGroup= new ComboBox();
+        cbGroup= new ComboBox();
         dtInitialDate = new DateTimePicker();
         spDuration = new Spinner<>();
 
@@ -100,11 +101,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         HBox boxFilters1 = new HBox(10);
 
         txtEventName.setPromptText("Nome Evento");
-        List<Group> grupos = observable.getGroups();
-        for(Group g : grupos){
-            txtGroup.getItems().addAll(g.getName());
-        }
-        txtGroup.setValue("Selecione um grupo:");
+
 
         Label lbInitialDate = new Label("Hora Inicio:");
         dtInitialDate.setDateTimeValue(LocalDateTime.now());
@@ -114,13 +111,13 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         boxAuxDate.setSpacing(10);
         boxAuxDate.setAlignment(Pos.CENTER);
 
-        boxFilters1.getChildren().addAll(txtEventName, txtGroup, boxAuxDate);
+        boxFilters1.getChildren().addAll(txtEventName, cbGroup, boxAuxDate);
 
         lbInitialDate.setMinWidth(Region.USE_PREF_SIZE);
         dtInitialDate.prefWidthProperty().bind(boxAuxDate.widthProperty());
 
         txtEventName.prefWidthProperty().bind(boxFilters1.widthProperty());
-        txtGroup.prefWidthProperty().bind(boxFilters1.widthProperty());
+        cbGroup.prefWidthProperty().bind(boxFilters1.widthProperty());
         boxAuxDate.prefWidthProperty().bind(boxFilters1.widthProperty());
 
 
@@ -387,13 +384,18 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            // Solucao temporaria!!!! O étodo getDateTime() do DateTimePicker nao está a funcionar!
+            String str = dtInitialDate.getEditor().getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            LocalDateTime initialDate = LocalDateTime.parse(str, formatter);
 
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
                 if (!txtEventName.getText().isEmpty()) {
-                    if(!txtGroup.getSelectionModel().isEmpty()){
-                    int resultCode = observable.createEvent(txtEventName.getText(), idRoom, (String) txtGroup.getValue(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                    if(!cbGroup.getSelectionModel().isEmpty()){
+                    int resultCode = observable.createEvent(txtEventName.getText(), idRoom, cbGroup.getValue().toString(),
+                            initialDate, spDuration.getValue());
                     switch (resultCode) {
                         case -1:
                             alert.setAlertType(Alert.AlertType.ERROR);
@@ -442,8 +444,20 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        setVisible(observable.isStateCreate());
+        if(observable.isStateCreate()){
+            setVisible(true);
+            txtRoomName.clear();
+            txtEventName.clear();
+//            dtInitialDate.setDateTimeValue(LocalDateTime.now());
+//            spCapacity.getValueFactory().setValue(0);
+//            spDuration.getValueFactory().setValue(60);
+            ObservableList<Group> groups = FXCollections.observableArrayList(observable.getGroups()); //List of String
+            cbGroup.setItems(groups);
+            cbGroup.setPromptText("Selecione um grupo:");
 
+        }
+        else
+            setVisible(false);
 
     }
 }

@@ -60,6 +60,7 @@ public class DateTimePicker extends DatePicker {
                 boolean forceUpdate = dateValue.equals(valueProperty().get());
                 // Make sure the display is updated even when the date itself wasn't changed
                 setValue(dateValue);
+
                 if (forceUpdate) setConverter(new InternalConverter());
             } else {
                 setValue(null);
