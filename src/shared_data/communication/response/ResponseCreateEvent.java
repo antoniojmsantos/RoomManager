@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public class ResponseCreateEvent extends Response implements Serializable {
 
+    private static final long serialVersionUID = 42L;
     private Event event;
     private int errorCode;
 

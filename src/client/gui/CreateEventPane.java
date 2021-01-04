@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
+import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.entities.RoomFeature;
 import shared_data.entities.RoomType;
@@ -26,6 +27,7 @@ import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
@@ -35,7 +37,8 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
     VBox boxEventFilters;
 
-    TextField txtEventName, txtGroup, txtRoomName;
+    TextField txtEventName, txtRoomName;
+    ComboBox txtGroup;
     DateTimePicker dtInitialDate;
     Spinner<Integer> spDuration, spCapacity;
 
@@ -64,7 +67,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
         txtRoomName = new TextField();
         txtEventName= new TextField();
-        txtGroup= new TextField();
+        txtGroup= new ComboBox();
         dtInitialDate = new DateTimePicker();
         spDuration = new Spinner<>();
 
@@ -94,9 +97,11 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         HBox boxFilters1 = new HBox(10);
 
         txtEventName.setPromptText("Nome Evento");
-        txtGroup.setPromptText("Grupo Pertencente");
-        Button btListGroups = new Button("?");
-//        btListGroups.setOnAction(e-> );
+        List<Group> grupos = observable.getGroups();
+        for(Group g : grupos){
+            txtGroup.getItems().addAll(g.getName());
+        }
+        txtGroup.setValue("Selecione um grupo:");
 
         Label lbInitialDate = new Label("Hora Inicio:");
         dtInitialDate.setDateTimeValue(LocalDateTime.now());
@@ -106,14 +111,13 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         boxAuxDate.setSpacing(10);
         boxAuxDate.setAlignment(Pos.CENTER);
 
-        boxFilters1.getChildren().addAll(txtEventName, txtGroup, btListGroups, boxAuxDate);
+        boxFilters1.getChildren().addAll(txtEventName, txtGroup, boxAuxDate);
 
         lbInitialDate.setMinWidth(Region.USE_PREF_SIZE);
         dtInitialDate.prefWidthProperty().bind(boxAuxDate.widthProperty());
 
         txtEventName.prefWidthProperty().bind(boxFilters1.widthProperty());
         txtGroup.prefWidthProperty().bind(boxFilters1.widthProperty());
-        btListGroups.setMinWidth(Region.USE_PREF_SIZE);
         boxAuxDate.prefWidthProperty().bind(boxFilters1.widthProperty());
 
 
@@ -384,35 +388,46 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
 
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
-
-                int resultCode = observable.createEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
-                switch (resultCode) {
-                    case -1:
-                        alert.setHeaderText( "Erro ao criar evento!");
-                        alert.setContentText( "A data do evento sobrepõe um evento já existente!");
-                        alert.showAndWait();
-                        break;
-                    case 0:
-                        alert.setHeaderText( "Erro ao criar novo registo!");
-                        alert.setContentText( "Ocorreu um erro na base de dados, tente outra vez...");
-                        alert.showAndWait();
-                        break;
-                    default:
+                if (!txtEventName.getText().isEmpty()) {
+                    if(!txtGroup.getSelectionModel().isEmpty()){
+                    int resultCode = observable.createEvent(txtEventName.getText(), idRoom, (String) txtGroup.getValue(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                    switch (resultCode) {
+                        case -1:
+                            alert.setHeaderText("Erro ao criar evento!");
+                            alert.setContentText("A data do evento sobrepõe um evento já existente!");
+                            alert.showAndWait();
+                            break;
+                        case 0:
+                            alert.setHeaderText("Erro ao criar novo registo!");
+                            alert.setContentText("Ocorreu um erro na base de dados, tente outra vez...");
+                            alert.showAndWait();
+                            break;
+                        default:
+                            alert.setAlertType(Alert.AlertType.INFORMATION);
+                            alert.setTitle("");
+                            alert.setHeaderText("Sucesso!");
+                            alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                            alert.showAndWait();
+                    }
+                    } else {
                         alert.setAlertType(Alert.AlertType.INFORMATION);
                         alert.setTitle("");
-                        alert.setHeaderText("Sucesso!");
-                        alert.setContentText("Evento '" + txtEventName.getText() + "' criado com sucesso!");
+                        alert.setHeaderText("Evento não criado!");
+                        alert.setContentText("Selecione um Grupo.");
                         alert.showAndWait();
+                    }
+                } else {
+
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
+                    alert.setTitle("");
+                    alert.setHeaderText("Evento não criado!");
+                    alert.setContentText("Dê um nome ao evento.");
+                    alert.showAndWait();
                 }
             } else if(lvRooms.getSelectionModel().isEmpty()) {
                 alert.setTitle("");
                 alert.setHeaderText("Ocorreu um erro!");
                 alert.setContentText("É necessário selecionar uma sala da lista!");
-                alert.showAndWait();
-            } else {
-                alert.setTitle("");
-                alert.setHeaderText("Ocorreu um erro!");
-                alert.setContentText("Não foi possível criar o evento.\nVerifique os dados introduzidos e tente novamente!");
                 alert.showAndWait();
             }
         }

@@ -2,11 +2,13 @@ package client.logic;
 
 import client.communication.ClientCommunication;
 import shared_data.entities.Event;
+import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.helper.MyMutex;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientController {
 
@@ -147,5 +149,9 @@ public class ClientController {
 
     public void cancelEvent(int id) {
         communication.cancelEventSubscription(id);
+    }
+
+    public List<Group> getGroups() {
+        return communication.getAllGroups();
     }
 }

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
  *  e criar e retornar um objeto Event.
  * */
 public class Event implements Serializable {
+    private static final long serialVersionUID = 42L;
     private final int id;
     private String name;
     private Room room;

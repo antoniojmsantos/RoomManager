@@ -166,4 +166,7 @@ public class ClientObservable {
         //chamaar a função que vai ao server buscar os pending events
         //fazer o fire property change
     }
+    public List<Group> getGroups() {
+        return controller.getGroups();
+    }
 }
