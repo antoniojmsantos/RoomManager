@@ -58,7 +58,8 @@ public class Calendar extends VBox {
         for (Text txt : dayNames) {
             AnchorPane ap = new AnchorPane();
             ap.setPrefSize(200, 10);
-            ap.setBottomAnchor(txt, 5.0);
+            AnchorPane.setBottomAnchor(txt, 3.0);
+            AnchorPane.setLeftAnchor(txt, 40.0);
             ap.getChildren().add(txt);
             dayLabels.add(ap, col++, 0);
         }
@@ -85,11 +86,11 @@ public class Calendar extends VBox {
         titleBar.setStyle("-fx-background-color: lightgrey;" + "-fx-border-color: black");
 
         AnchorPane.setLeftAnchor(calendarTitle, 400.0);
-        AnchorPane.setTopAnchor(calendarTitle, 5.0);
+        AnchorPane.setTopAnchor(calendarTitle, 3.0);
 
         AnchorPane.setLeftAnchor(imgButtonPrevious, 5.0);
-        AnchorPane.setBottomAnchor(imgButtonPrevious, 4.0);
-        AnchorPane.setBottomAnchor(imgButtonNext, 4.0);
+        AnchorPane.setBottomAnchor(imgButtonPrevious, 3.0);
+        AnchorPane.setBottomAnchor(imgButtonNext, 3.0);
         AnchorPane.setRightAnchor(imgButtonNext, 5.0);
 
         // Populate calendar with the appropriate day numbers
@@ -100,8 +101,6 @@ public class Calendar extends VBox {
     }
 
     public void populateCalendar() {
-        LocalDate currentDate = LocalDate.now();
-
         // Get the date we want to start with on the calendar
         LocalDate calendarDate = LocalDate.of(currentYearMonth.getYear(), currentYearMonth.getMonthValue(), 1);
 

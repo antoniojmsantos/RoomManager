@@ -63,6 +63,10 @@ public class ClientObservable {
         return controller.getUsername();
     }
 
+    public String getName(){
+        return controller.getName();
+    }
+
     public void setStateRegister(){
         controller.setStateRegister();
         support.firePropertyChange(null, null, null);
@@ -161,10 +165,8 @@ public class ClientObservable {
         support.firePropertyChange(null, null, null);
     }
 
-    public void refreshEvents() {
+    public void refresh() {
         support.firePropertyChange(null, null, null);
-        //chamaar a função que vai ao server buscar os pending events
-        //fazer o fire property change
     }
     public List<Group> getGroups() {
         return controller.getGroups();

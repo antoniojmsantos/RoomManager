@@ -107,7 +107,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem deleteItem = new MenuItem();
-            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+            deleteItem.textProperty().bind(Bindings.format("Apagar evento \"%s\"", cell.itemProperty()));
             deleteItem.setOnAction(event -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Tem certeza que deseja apagar o evento '"
                         + cell.itemProperty().get().toString() + "' ?\n\nEsta operação não é reversível.", ButtonType.YES, ButtonType.NO);
@@ -156,22 +156,17 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
         setVisible(observable.isStateMain() && observable.isHighPermission());
 
         if(observable.isAuthenticated()){
-            lbUser.setText("Autenticado como: " + observable.getUsername());
+            lbUser.setText("Autenticado como: " + observable.getName());
             listEvents = observable.getEventsCreated();
-            if(!listEvents.isEmpty()){
-                try{
-                    calendar.refresh(listEvents);
-                    ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
-                    lvCreatedEvents.setItems(items);
-                }catch (Exception e){
-
-                }
-            }
-            else
+            try{
+                calendar.refresh(listEvents);
+                ObservableList<Event> items = FXCollections.observableArrayList(listEvents);
+                lvCreatedEvents.setItems(items);
+            }catch (Exception e){
                 lvCreatedEvents.setItems(null);
+
+            }
         }
-
-
     }
 
 }

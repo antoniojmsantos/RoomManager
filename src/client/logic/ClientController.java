@@ -151,7 +151,12 @@ public class ClientController {
         communication.cancelEventSubscription(id);
     }
 
+
     public List<Group> getGroups() {
         return communication.getAllGroups();
+    }
+
+    public String getName() {
+        return communication.getLoggedUser().getName();
     }
 }

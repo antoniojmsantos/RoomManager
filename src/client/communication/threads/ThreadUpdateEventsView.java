@@ -23,7 +23,7 @@ public class ThreadUpdateEventsView extends Thread{
             synchronized (mutex) {
                 try {
                     mutex.wait();
-                    Platform.runLater(() -> observable.refreshEvents());
+                    Platform.runLater(() -> observable.refresh());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

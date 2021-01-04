@@ -1,9 +1,11 @@
 package client.gui.custom_controls;
 
 import client.logic.ClientObservable;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -86,14 +88,20 @@ public class CalendarItem extends VBox {
                     tooltip.setShowDuration(Duration.INDEFINITE);
                     Tooltip.install(boxEvent, tooltip);
 
-                    ContextMenu contextMenu = new ContextMenu();
                     MenuItem menuItemCancelSubscription = new MenuItem("Cancelar Inscrição");
+                    ContextMenu contextMenu = new ContextMenu(menuItemCancelSubscription);
 
+                    boxEvent.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (event.isSecondaryButtonDown()) {
+                                contextMenu.show(boxEvent, event.getScreenX(), event.getScreenY());
+                            }
+                        }
+                    });
                     menuItemCancelSubscription.setOnAction((event) -> {
                         observable.cancelEvent(e.getId());
                     });
-                    contextMenu.getItems().addAll(menuItemCancelSubscription);
-                    lb.setContextMenu(contextMenu);
 
                     this.getChildren().add(boxEvent);
                 }
