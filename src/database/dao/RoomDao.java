@@ -7,10 +7,8 @@ import shared_data.entities.RoomType;
 import shared_data.helper.TimePeriod;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class RoomDao implements IRoomDao {
 

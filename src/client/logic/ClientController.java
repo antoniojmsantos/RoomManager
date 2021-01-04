@@ -100,7 +100,7 @@ public class ClientController {
     }
 
     public int CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
-        int errorCode = communication.CreateEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
+        int errorCode = communication.createEvent(name, idRoom, nameGroup, getUsername(), initialDate, durationMin);
         if (errorCode > 0) {
             setStateMain();
         }
@@ -116,7 +116,7 @@ public class ClientController {
     }
 
     public ArrayList<Room> getRooms(){
-        return communication.getRooms();
+        return communication.getAllRooms();
     }
 
     public boolean isRoomAvailable(int roomId, LocalDateTime startDate, int durationInMinutes){

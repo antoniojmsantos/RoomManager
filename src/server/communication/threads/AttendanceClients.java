@@ -12,12 +12,11 @@ import shared_data.helper.SendAndReceiveData;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class AttendanceClients extends Thread{
 
-    private Socket socketClient;
-    private ServerLogic serverLogic;
+    private final Socket socketClient;
+    private final ServerLogic serverLogic;
     private Socket socketCallBack;
 
     public AttendanceClients(Socket socketNewClient, ServerLogic serverLogic){

@@ -28,8 +28,7 @@ public class ThreadListenPendentEvents extends Thread {
         while(KeepAlive.getKeepAlive()){
             synchronized (mutex){
                 try {
-                    RequestThreadNotification requestThreadNotification = (RequestThreadNotification)SendAndReceiveData.receiveData(socketCallBack);
-                    lastNotification = requestThreadNotification;
+                    lastNotification = (RequestThreadNotification)SendAndReceiveData.receiveData(socketCallBack);
                     mutex.notify();
                 }catch (SocketTimeoutException e){
                     continue;

@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 public class CalendarItem extends VBox {
 
-    private ClientObservable observable;
+    private final ClientObservable observable;
 
     // Date associated with this pane
-    private LocalDate date;;
+    private LocalDate date;
     ArrayList<Event> events;
 
-    LocalDate currentDate;
+    final LocalDate currentDate;
 
     public CalendarItem(ClientObservable observable) {
         this.observable = observable;

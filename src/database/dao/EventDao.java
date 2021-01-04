@@ -138,8 +138,8 @@ public class EventDao implements IEventDao {
     * Esta função verifica se é possível ser criado um evento.
     * */
     private boolean canCreateEvent(int eventRoomId, LocalDateTime eventStartDate, LocalDateTime eventEndDate) {
-        PreparedStatement st = null;
-        ResultSet rs = null;
+        PreparedStatement st;
+        ResultSet rs;
 
         boolean canCreate = true;
         try {

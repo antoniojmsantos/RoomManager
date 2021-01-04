@@ -1,6 +1,5 @@
 package client.gui;
 
-import client.logic.ClientController;
 import client.logic.ClientObservable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

@@ -1,16 +1,13 @@
 package server.ui;
 
-import database.dao.RoomDao;
 import server.logic.ServerLogic;
 import shared_data.entities.*;
-import shared_data.helper.ClientInfo;
 import shared_data.helper.KeepAlive;
 
 import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.SynchronousQueue;
 
 public class ServerInterface extends Thread {
 
@@ -440,7 +437,6 @@ public class ServerInterface extends Thread {
         List<User> allUsersDb = serverLogic.getAllUsers();
         for(int i = 0; i< allUsersDb.size(); i++)
             System.out.println(i + "-> " + allUsersDb.get(i).getName());
-        return;
     }
 
     //VALIDA SE O USER EXISTE NA BASE DE DADOS, RETURN TRUE SE EXISTIR

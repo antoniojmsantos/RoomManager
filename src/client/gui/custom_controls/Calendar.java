@@ -5,7 +5,6 @@ import client.gui.auxiliar.Constants;
 import client.gui.auxiliar.Images;
 import client.logic.ClientObservable;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -15,17 +14,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import shared_data.entities.Event;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
 public class Calendar extends VBox {
-    private ArrayList<CalendarItem> allCalendarDays = new ArrayList();
-    private Text calendarTitle;
+    private final ArrayList<CalendarItem> allCalendarDays = new ArrayList<>();
+    private final Text calendarTitle;
     private YearMonth currentYearMonth;
 
-    ClientObservable observable;
+    final ClientObservable observable;
 
     ArrayList<Event> events;
 

@@ -6,8 +6,8 @@ import java.net.Socket;
 
 public class ClientInfo {
 
-    private Socket callBackSocket;
-    private User user;
+    private final Socket callBackSocket;
+    private final User user;
 
     public ClientInfo(Socket callBackSocket, User user) {
         this.callBackSocket = callBackSocket;

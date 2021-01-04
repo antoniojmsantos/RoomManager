@@ -9,8 +9,8 @@ import java.net.Socket;
 
 public class AcceptClients extends Thread {
 
-    private ServerSocket serverSocket;
-    private ServerLogic serverLogic;
+    private final ServerSocket serverSocket;
+    private final ServerLogic serverLogic;
     public AcceptClients(ServerSocket socketAttendanceClient, ServerLogic serverLogic){
         this.serverSocket = socketAttendanceClient;
         this.serverLogic = serverLogic;

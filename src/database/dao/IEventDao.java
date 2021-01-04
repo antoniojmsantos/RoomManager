@@ -4,10 +4,8 @@ import shared_data.entities.Event;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /*
  * A interface IEventDao reúne um conjunto de funções
@@ -66,7 +64,7 @@ public interface IEventDao {
      * e chama uma função específica para atualizar o estado
      * do utilizador em relação ao evento ("cancelled")
      * */
-    public boolean cancelEvent(int eventId, String userUsername);
+    boolean cancelEvent(int eventId, String userUsername);
 
 
     /*

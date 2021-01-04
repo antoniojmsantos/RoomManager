@@ -106,7 +106,7 @@ public class MainLowLevelPane extends HBox implements Constants, PropertyChangeL
 
             try{
                 calendar.refresh(listEvents);
-            } catch (Exception e){
+            } catch (Exception ignored){
 
             }
 

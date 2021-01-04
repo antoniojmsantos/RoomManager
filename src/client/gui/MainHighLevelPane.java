@@ -5,16 +5,13 @@ import client.gui.auxiliar.Images;
 import client.gui.custom_controls.Calendar;
 import client.logic.ClientObservable;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.TableColumn;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,8 +20,6 @@ import java.util.ArrayList;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import shared_data.entities.Event;
-import shared_data.entities.Room;
-
 
 
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
@@ -116,7 +111,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
                 alert.showAndWait();
 
                 if (alert.getResult() == ButtonType.YES) {
-                    observable.deleteEvent(lvCreatedEvents.getSelectionModel().getSelectedItem().getId());
+                    observable.deleteEvent(cell.itemProperty().get().getId());
                 }
 
             });

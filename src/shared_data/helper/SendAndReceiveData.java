@@ -47,7 +47,7 @@ public class SendAndReceiveData {
                 DatagramPacket feedbackPacket ;
 
                 if(resultByte != null) {
-                    String checksum = ConstructPacket.calculateChecksum(resultByte,0,resultByte.length);;
+                    String checksum = ConstructPacket.calculateChecksum(resultByte,0,resultByte.length);
                     if(!lastChecksum.equals(checksum)){
                         infoObject.add(resultByte);
                         lastChecksum = checksum;

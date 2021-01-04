@@ -7,7 +7,6 @@ import shared_data.entities.RoomType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 /*
  * A interface IRoomDao reúne um conjunto de funções

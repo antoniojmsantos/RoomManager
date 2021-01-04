@@ -2,20 +2,17 @@ package client.logic;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.lang.reflect.Array;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.communication.threads.ThreadUpdateEventsView;
 import shared_data.entities.*;
 import shared_data.helper.MyMutex;
 
 public class ClientObservable {
 
-    private ClientController controller;
-    private PropertyChangeSupport support;
+    private final ClientController controller;
+    private final PropertyChangeSupport support;
 
     public ClientObservable(MyMutex mutex) {
         controller = new ClientController(mutex);
