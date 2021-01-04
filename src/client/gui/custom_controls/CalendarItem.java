@@ -88,20 +88,23 @@ public class CalendarItem extends VBox {
                     tooltip.setShowDuration(Duration.INDEFINITE);
                     Tooltip.install(boxEvent, tooltip);
 
-                    MenuItem menuItemCancelSubscription = new MenuItem("Cancelar Inscrição");
-                    ContextMenu contextMenu = new ContextMenu(menuItemCancelSubscription);
+                    if(!observable.isHighPermission()){ //SE FOR ALUNO ADICIONA A OPCAO DE CANCELAR INSCRICAO
+                        MenuItem menuItemCancelSubscription = new MenuItem("Cancelar Inscrição");
+                        ContextMenu contextMenu = new ContextMenu(menuItemCancelSubscription);
 
-                    boxEvent.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            if (event.isSecondaryButtonDown()) {
-                                contextMenu.show(boxEvent, event.getScreenX(), event.getScreenY());
+                        boxEvent.setOnMousePressed(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                if (event.isSecondaryButtonDown()) {
+                                    contextMenu.show(boxEvent, event.getScreenX(), event.getScreenY());
+                                }
                             }
-                        }
-                    });
-                    menuItemCancelSubscription.setOnAction((event) -> {
-                        observable.cancelEvent(e.getId());
-                    });
+                        });
+                        menuItemCancelSubscription.setOnAction((event) -> {
+                            observable.cancelEvent(e.getId());
+                        });
+                    }
+
 
                     this.getChildren().add(boxEvent);
                 }
