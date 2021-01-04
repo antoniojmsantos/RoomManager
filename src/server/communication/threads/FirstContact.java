@@ -18,6 +18,12 @@ public class FirstContact extends Thread{
     private ServerLogic serverLogic;
     private int portTCP;
 
+    /**
+     * Tem como objetivo preparar o multicast para receber pedidos de entrada de clientes
+     * @param logic logica do programa
+     * @param portTCP porto do serversocket do Server para enviar na resposta ao cliente
+     * @throws IOException
+     */
     public FirstContact(ServerLogic logic,int portTCP) throws IOException {
         this.PORT_MULTICAST = 54321;
         this.multicastGroup = "239.3.2.1";
@@ -36,6 +42,10 @@ public class FirstContact extends Thread{
         this.portTCP = portTCP;
     }
 
+    /**
+     * Recebe através do multicast um request que indica de onde vem o request
+     * Envia uma resposta onde envia o ip e o porto TCP do server para o cliente se ligar
+     */
     @Override
     public void run() {
         while (KeepAlive.getKeepAlive()){

@@ -16,6 +16,9 @@ public class AcceptClients extends Thread {
         this.serverLogic = serverLogic;
     }
 
+    /**
+     * Thread responsável por atribuir uma thread que irá atender cada cliente
+     */
     @Override
     public void run() {
         while (KeepAlive.getKeepAlive()){

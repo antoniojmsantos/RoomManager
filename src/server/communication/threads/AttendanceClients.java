@@ -15,15 +15,20 @@ import java.net.Socket;
 
 public class AttendanceClients extends Thread{
 
-    private final Socket socketClient;
-    private final ServerLogic serverLogic;
-    private Socket socketCallBack;
 
+    private final Socket socketClient; //socket responsável por enviar requests e receber responses
+    private final ServerLogic serverLogic;
+    private Socket socketCallBack; //socket call back para quando necessário uma notificação do servidor
+    private User user;
     public AttendanceClients(Socket socketNewClient, ServerLogic serverLogic){
         this.socketClient = socketNewClient;
         this.serverLogic = serverLogic;
     }
 
+    /**
+     * Função encarregue de receber requests
+     * Chama a função verifyRequest para verificar tipo
+     */
     @Override
     public void run() {
         while (KeepAlive.getKeepAlive()){
@@ -31,7 +36,8 @@ public class AttendanceClients extends Thread{
                 Request request = (Request)SendAndReceiveData.receiveData(socketClient);
                 verifyRequest(request);
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                serverLogic.removeClientInfo(this.user);
                 break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -41,8 +47,44 @@ public class AttendanceClients extends Thread{
     }
 
     /**
-     *
-     * @param request
+     * Verifica o tipo de request e trata-o consoante o tipo
+     * @param request request enviado pelo cliente
+     *                Todos os requests derivam de Request para facilitar depois a disntinção com o instanceOf
+     *                e na altura do receive receber um objeto mais genérico
+     * RequestAuthentication: corresponde ao pedido do cliente de Login na aplicação
+     *                        Vai á logica verificar a Base de Dados e retorna um user
+     *                        Após isso é enviado uam resposta (ResponseAuthentication) e é feito uma conexão de
+     *                        um novo socket (socketCallBack) usado nas notificações
+     * RequestRegister: corresponde ao pedido do cliente de Registo na aplicação
+     *                  Vai á logica inserir o User na BD e envia uma resposta(ResponseRegister)
+     * RequestCreateEvent: corresponde ao pedido do cliente de criar um novo envento na aplicação,
+     *                     após enviar uma resposta (ResponseCreateEvent) ao utilizador,
+     *                     notifica através da Thread NotifyPendentEvents
+     *                     os clientes que estão no grupo do evento criado
+     * RequestGetRooms: corresponde ao pedido do cliente de obter as salas do sistema
+     *                  Vai á logica buscar uma lista de salas e envia ao cliente numa resposta(ResponseGetRooms)
+     * RequestGetGroups: corresponde ao pedido do cliente de obter os groupos do sistema
+     *                   Vai á logica buscar uma lista de grupos e envia ao cliente numa resposta(ResponseGetGroups)
+     * RequestUserEvents: corresponde ao pedido do cliente de obter os eventos a que está inscrito
+     *                    Vai á logica buscar uma lista de eventos inscritos e envia ao cliente numa resposta(ResponseUserEvents)
+     * RequestPendingEvents: corresponde ao pedido do cliente de obter os eventos por aceitar/recusar
+     *                      Vai á logica buscar uma lista de eventos por responder
+     *                      e envia ao cliente numa resposta(ResponsePendingEvents)
+     * RequestCreatedEvents: corresponde ao pedido do cliente de obter os eventos por ele criado
+     *                      Vai á logica buscar uma lista de eventos criados
+     *                      e envia ao cliente numa resposta(ResponseCreatedEvents)
+     * RequestDeleteEvent: corresponde ao pedido do cliente de apagar um evento por ele criado,
+     *                     após enviar uma resposta(ResponseDeleteEvent) ao utilizador, notifica através da Thread NotifyPendentEvents
+     *                     os clientes que estão no grupo do evento apagado
+     * RequestCancelSubscription: corresponde ao pedido do cliente de cancelar uma inscrição num evento
+     *                          Vai á logica cancelar a inscrição do user num evento
+     *                          e envia ao cliente uma resposta(ResponseCancelSubscription)
+     * RequestAcceptEvent: corresponde ao pedido do cliente de se increver num evento
+     *                Vai á logica aceitar a inscrição do user num evento
+     *                e envia ao cliente uma resposta(ResponseAcceptEvent)
+     * RequestDeclineEvent: corresponde ao pedido do cliente de recusar um evento
+     *                Vai á logica rejeitar a inscrição do user num evento
+     *                e envia ao cliente uma resposta(ResponseDeclineEvent)
      * @throws IOException
      */
     public void verifyRequest(Request request) throws IOException {
@@ -62,6 +104,7 @@ public class AttendanceClients extends Thread{
 
                 SendAndReceiveData.sendData(responseAuthentication,socketClient);
                 socketCallBack = new Socket(authentication.getIp(),authentication.getSocketTCPclient());
+                this.user = user;
                 serverLogic.addToClientInfo(socketCallBack,user);
             }else{
                 responseAuthentication = new ResponseAuthentication(InetAddress.getLocalHost().getHostAddress(), socketClient.getPort(), false, null,null,null);

@@ -19,6 +19,11 @@ public class ServerCommunication {
         this.socketAttendanceClient = new ServerSocket(0);
     }
 
+    /**
+     * função responsável por lançar as threads necessárias à comunicação
+     * thread firstContact serve para os clientes obterem o ip e porto do tcp
+     * thread AcceptClients é a thread que vai aceitar clientes e posteriormente antendelos
+     */
     public void run(){
         try {
             FirstContact firstContact = new FirstContact(this.serverLogic,socketAttendanceClient.getLocalPort());

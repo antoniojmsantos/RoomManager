@@ -8,8 +8,17 @@ import java.util.ArrayList;
 
 public class SendAndReceiveData {
 
+    /*
+    Tamanho do Buffer
+     */
     public static final  int BUFFER_SIZE = 5000;
 
+    /**
+     * Envio de informação por TCP
+     * @param sendingObjectTCP objeto a enviar
+     * @param socket socket que vai enviar
+     * @throws IOException
+     */
     public static void sendData(Object sendingObjectTCP, Socket socket) throws IOException {
 
         byte[] objBytes = Serializer.objectToByteArray(sendingObjectTCP);
@@ -19,12 +28,27 @@ public class SendAndReceiveData {
         out.flush();
     }
 
+    /**
+     * Recebe informação por TCP
+     * @param socket socket que recebe a informação
+     * @return o objeto que recebeu
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Object receiveData(Socket socket) throws IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
         return Serializer.byteArrayToObject((byte[]) in.readObject());
     }
 
+    /**
+     * Recebe Um objeto por Multicast
+     * Sempre que recebe um packet verifica a checksum para verificar se o apcket evem em condições
+     * @param socket scoket multicast que vai receber
+     * @return o Objeto recebido
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Object receiveDataUDP(MulticastSocket socket) throws IOException, ClassNotFoundException {
         ArrayList<byte[]> infoObject = new ArrayList<>();
         String lastChecksum = "";
@@ -95,6 +119,14 @@ public class SendAndReceiveData {
         }
     }
 
+    /**
+     * Recebe um objeto por UDP
+     * Sempre que recebe um packet verifica a checksum para verificar se o apcket evem em condições
+     * @param socket socket que vai recever
+     * @return o objeto
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Object receiveDataUDP(DatagramSocket socket) throws IOException, ClassNotFoundException {
         ArrayList<byte[]> infoObject = new ArrayList<>();
         String lastChecksum = "";
@@ -160,7 +192,8 @@ public class SendAndReceiveData {
         }
     }
     /**
-     *
+     * ENvia informação por UDP de maneira que assegura que chega ao outro lado com sucesso
+     * Sempre que envia uma packet recebe um resposta se recebeu bem ou mal através da checksum
      * @param sendingObjectUdp objeto a enviar
      * @param socket socket udp aberto
      * @param ip  ip UDP do server

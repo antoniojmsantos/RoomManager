@@ -21,6 +21,12 @@ public class NotifyPendentEvents extends Thread {
         this.type = type;
     }
 
+    /**
+     * Envia uma notificação ao cliente através do socketCallback
+     *
+     * Primeiro vai buscar a lista dos users logados no momento e verifica se estão no grupo do evento
+     * Depois envia uma notificação através do socketCallBack
+     */
     @Override
     public void run() {
         ArrayList<ClientInfo> clientToSendNotification = serverLogic.getClientInfo(event);
