@@ -2,8 +2,11 @@ package shared_data.helper;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimePeriod implements Serializable {
+
+    public static DateTimeFormatter DEFAULT_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
@@ -22,7 +25,7 @@ public class TimePeriod implements Serializable {
     }
 
     public static LocalDateTime periodToDate(LocalDateTime date, int durationInMinutes) {
-        return date.plusMinutes(durationInMinutes);
+        return normalize(date).plusMinutes(durationInMinutes);
     }
 
     public static boolean overlaps(
@@ -34,8 +37,13 @@ public class TimePeriod implements Serializable {
         return isBetween(fromA, toA, fromB) || isBetween(fromA, toA, toB);
     }
 
+    public static LocalDateTime normalize(LocalDateTime date) {
+        return LocalDateTime.parse(date.format(DEFAULT_FORMAT),DEFAULT_FORMAT);
+    }
+
     public static boolean isBetween(LocalDateTime from, LocalDateTime to, LocalDateTime candidate) {
-        return candidate.isAfter(from) && candidate.isBefore(to);
+        return normalize(candidate).isAfter(normalize(from)) && normalize(candidate).isBefore(normalize(to));
+        //return candidate.isAfter(from) && candidate.isBefore(to);
     }
 
     public static boolean isBetween(LocalDateTime from, int durationInMinutes, LocalDateTime candidate) {
@@ -43,20 +51,21 @@ public class TimePeriod implements Serializable {
     }
 
     public boolean intersects(LocalDateTime date) {
-        return date.isAfter(startDate) && date.isBefore(endDate);
+        return normalize(date).isAfter(normalize(startDate)) && normalize(date).isBefore(normalize(endDate));
+        //return date.isAfter(startDate) && date.isBefore(endDate);
     }
 
     public static TimePeriod make(LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate.isBefore(endDate) && endDate.isAfter(startDate)) {
-            return new TimePeriod(startDate, endDate);
+        if (normalize(startDate).isBefore(normalize(endDate)) && normalize(endDate).isAfter(normalize(startDate))) {
+            return new TimePeriod(normalize(startDate), normalize(endDate));
         }
         throw new IllegalArgumentException();
     }
 
     public static TimePeriod make(LocalDateTime startDate, int durationInMinutes) {
         LocalDateTime endDate = startDate.plusMinutes(durationInMinutes);
-        if (startDate.isBefore(endDate) && endDate.isAfter(startDate)) {
-            return new TimePeriod(startDate, endDate);
+        if (normalize(startDate).isBefore(normalize(endDate)) && normalize(endDate).isAfter(normalize(startDate))) {
+            return new TimePeriod(normalize(startDate), normalize(endDate));
         }
         throw new IllegalArgumentException();
     }

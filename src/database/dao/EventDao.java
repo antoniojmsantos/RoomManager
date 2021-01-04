@@ -111,8 +111,6 @@ public class EventDao implements IEventDao {
         PreparedStatement st = null;
         ResultSet rs= null;
 
-        System.out.println(username);
-
         List<Event> events = new ArrayList<>();
         try{
             st = conn.prepareStatement(
@@ -129,8 +127,6 @@ public class EventDao implements IEventDao {
             DBManager.closeStatement(st);
             DBManager.closeResultSet(rs);
         }
-        for(Event e : events)
-            System.out.println(e);
         return events;
     }
 
@@ -184,11 +180,6 @@ public class EventDao implements IEventDao {
         try {
             // check if event can be created
             if (!canCreateEvent(roomId, startDate, startDate.plusMinutes(duration))) return -1;
-
-            System.out.println("Event name: "+name);
-            System.out.println("Event room: "+roomId);
-            System.out.println("Event group: "+groupName);
-            System.out.println("Event creator: "+creatorUsername);
 
             st = conn.prepareStatement(
                     "insert into tb_event(vc_name, i_room_id, vc_group_name, vc_creator_username, d_date_start, i_duration) " +
