@@ -3,6 +3,7 @@ package client.gui.custom_controls;
 
 import client.gui.auxiliar.Constants;
 import client.gui.auxiliar.Images;
+import client.logic.ClientObservable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -24,9 +25,13 @@ public class Calendar extends VBox {
     private Text calendarTitle;
     private YearMonth currentYearMonth;
 
+    ClientObservable observable;
+
     ArrayList<Event> events;
 
-    public Calendar(){
+    public Calendar(ClientObservable observable){
+        this.observable = observable;
+
         currentYearMonth = YearMonth.now();
 
         GridPane calendar = new GridPane();
@@ -36,7 +41,7 @@ public class Calendar extends VBox {
         // Create rows and columns with anchor panes for the calendar
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) {
-                CalendarItem ap = new CalendarItem();
+                CalendarItem ap = new CalendarItem(observable);
                 calendar.add(ap,j,i);
                 allCalendarDays.add(ap);
             }

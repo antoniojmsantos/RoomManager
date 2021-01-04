@@ -385,7 +385,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
 
-                int resultCode = observable.CreateEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
+                int resultCode = observable.createEvent(txtEventName.getText(), idRoom, txtGroup.getText(), dtInitialDate.getDateTimeValue(), spDuration.getValue());
                 switch (resultCode) {
                     case -1:
                         alert.setHeaderText( "Erro ao criar evento!");

@@ -104,7 +104,7 @@ public class ClientObservable {
         }
     }
 
-    public int CreateEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
+    public int createEvent(String name, int idRoom, String nameGroup, LocalDateTime initialDate, int durationMin){
         int errorCode = controller.CreateEvent(name, idRoom, nameGroup, initialDate, durationMin);
         if(errorCode > 0) {
             support.firePropertyChange(null, null, null);
@@ -137,9 +137,8 @@ public class ClientObservable {
         return controller.getPendingEvents();
     }
 
-    public boolean deleteEvent(int id){
-
-        if(controller.deleteEvent(id)){
+    public boolean deleteEvent(int eventId){
+        if(controller.deleteEvent(eventId)){
             support.firePropertyChange(null, null, null);
             return true;
         }
@@ -147,13 +146,18 @@ public class ClientObservable {
             return false;
     }
 
-    public void acceptEvent(int id){
-        controller.acceptEvent(id);
+    public void acceptEvent(int eventId){
+        controller.acceptEvent(eventId);
         support.firePropertyChange(null, null, null);
     }
 
-    public void declineEvent(int id){
-        controller.declineEvent(id);
+    public void declineEvent(int eventId){
+        controller.declineEvent(eventId);
+        support.firePropertyChange(null, null, null);
+    }
+
+    public void cancelEvent(int eventId) {
+        controller.cancelEvent(eventId);
         support.firePropertyChange(null, null, null);
     }
 

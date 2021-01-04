@@ -145,5 +145,7 @@ public class ClientController {
         communication.declineEventSubscription(id);
     }
 
-
+    public void cancelEvent(int id) {
+        communication.cancelEventSubscription(id);
+    }
 }

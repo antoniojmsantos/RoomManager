@@ -1,9 +1,9 @@
 package client.gui.custom_controls;
 
+import client.logic.ClientObservable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -16,13 +16,17 @@ import java.util.ArrayList;
 
 public class CalendarItem extends VBox {
 
+    private ClientObservable observable;
+
     // Date associated with this pane
     private LocalDate date;;
     ArrayList<Event> events;
 
     LocalDate currentDate;
 
-    public CalendarItem() {
+    public CalendarItem(ClientObservable observable) {
+        this.observable = observable;
+
         this.setSpacing(2);
         this.setPrefSize(200,200);
         this.setPadding(new Insets(5));
@@ -81,6 +85,15 @@ public class CalendarItem extends VBox {
                     tooltip.setShowDelay(Duration.millis(200));
                     tooltip.setShowDuration(Duration.INDEFINITE);
                     Tooltip.install(boxEvent, tooltip);
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem menuItemCancelSubscription = new MenuItem("Cancelar Inscrição");
+
+                    menuItemCancelSubscription.setOnAction((event) -> {
+                        observable.cancelEvent(e.getId());
+                    });
+                    contextMenu.getItems().addAll(menuItemCancelSubscription);
+                    lb.setContextMenu(contextMenu);
 
                     this.getChildren().add(boxEvent);
                 }

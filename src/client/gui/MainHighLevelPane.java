@@ -30,14 +30,12 @@ import shared_data.entities.Room;
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
     private ClientObservable observable;
 
-
     Label lbUser;
     ListView<Event> lvCreatedEvents;
 
     ArrayList<Event> listEvents;
 
     Calendar calendar;
-
 
     public MainHighLevelPane(ClientObservable observable){
         this.observable = observable;
@@ -148,7 +146,7 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
     }
 
     public void setupEventCalendar(){
-        calendar = new Calendar();
+        calendar = new Calendar(observable);
         this.getChildren().addAll(calendar);
     }
 

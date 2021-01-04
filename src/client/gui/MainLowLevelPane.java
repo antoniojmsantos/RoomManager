@@ -89,7 +89,7 @@ public class MainLowLevelPane extends HBox implements Constants, PropertyChangeL
     }
 
     public void setupEventCalendar(){
-        calendar = new Calendar();
+        calendar = new Calendar(observable);
         this.getChildren().addAll(calendar);
     }
 
