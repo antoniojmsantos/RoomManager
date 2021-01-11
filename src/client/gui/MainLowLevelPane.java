@@ -19,6 +19,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+/**
+ * O MainLowLevelPane é o painel principal que é apresentado a um Aluno/Funcionário.
+ */
 public class MainLowLevelPane extends HBox implements Constants, PropertyChangeListener {
     private ClientObservable observable;
 
@@ -96,6 +99,11 @@ public class MainLowLevelPane extends HBox implements Constants, PropertyChangeL
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        /**
+         * Apresenta o painel se o estado atual for corresponder a "Main"(Principal)
+         * e for um utilizador com premissões baixas.
+         * Sempre que acontecer uma alteração na aplicação (propertyChange) vai pedir uma atualização dos eventos à logica.
+         */
         setVisible(observable.isStateMain() && !observable.isHighPermission());
 
         if(observable.isAuthenticated()){

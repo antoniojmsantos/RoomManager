@@ -18,6 +18,14 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
+/**
+ * Classe responsável pelo Calendário do painel inicial de cada utilizador.
+ * É um controlo que extende da VBox porque vai ser apresentado verticalmente
+ * Armazena um vetor com todos os dias do calendario
+ * Armazena um vetor de Eventos
+ * Para cada evento vai apresenta-lo no calendario do seu dia correspondente
+ *
+ */
 public class Calendar extends VBox {
     private final ArrayList<CalendarItem> allCalendarDays = new ArrayList<>();
     private final Text calendarTitle;
@@ -98,6 +106,10 @@ public class Calendar extends VBox {
         this.getChildren().addAll(titleBar, dayLabels, calendar);
     }
 
+    /**
+     * Método responsável por preencher os dias do calendario
+     * e por os eventos do utilizador em cada dia
+     */
     public void populateCalendar() {
         // Get the date we want to start with on the calendar
         LocalDate calendarDate = LocalDate.of(currentYearMonth.getYear(), currentYearMonth.getMonthValue(), 1);
@@ -120,16 +132,25 @@ public class Calendar extends VBox {
         calendarTitle.setText(currentYearMonth.getMonth().toString() + " " + String.valueOf(currentYearMonth.getYear()));
     }
 
+    /**
+     * Método responsável por atualizar os eventos no calendario
+     */
     public void refresh(ArrayList<Event> events){
         this.events = events;
         populateCalendar();
     }
 
+    /**
+     * Método responsável por andar para tras 1 mes no calendario
+     */
     private void previousMonth() {
         currentYearMonth = currentYearMonth.minusMonths(1);
         populateCalendar();
     }
 
+    /**
+     * Método responsável por adiantar 1 mes no calendario
+     */
     private void nextMonth() {
         currentYearMonth = currentYearMonth.plusMonths(1);
         populateCalendar();

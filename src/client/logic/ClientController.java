@@ -26,10 +26,13 @@ public class ClientController {
         communication.run();
     }
 
+    /**
+     * métodos para obter e definir o estado atual da aplicação
+     */
+
     public State getState(){
         return state;
     }
-
 
     public boolean isStateRegister(){ return state.isRegister();}
 
@@ -72,6 +75,10 @@ public class ClientController {
         state.setType(State.TYPE.REGISTER);
     }
 
+
+    /**
+     * métodos de lógica da aplicação.
+     */
 
     public void Logout(){
         setStateAuthentication();

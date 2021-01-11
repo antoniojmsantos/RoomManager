@@ -1,5 +1,9 @@
 package client.gui.auxiliar;
 
+/**
+ * Interface responsável por todas as Constantes do programa
+ * (Dimensoes, caminhos de imagens, etc)
+ */
 public interface Constants {
 
     int DIM_X_FRAME = 1280;

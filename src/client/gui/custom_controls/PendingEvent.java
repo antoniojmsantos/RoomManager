@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import shared_data.entities.Event;
 
 
+/**
+ * Classe responsavel por armazenar informações do evento pendente atual
+ */
 public class PendingEvent extends AnchorPane {
 
     public PendingEvent(ClientObservable observable, Event event){

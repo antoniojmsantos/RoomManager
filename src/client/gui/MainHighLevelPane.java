@@ -21,7 +21,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import shared_data.entities.Event;
 
-
+/**
+ * O MainHighLevelPane é o painel principal que é apresentado a um Docente/Responsável/Chefe de Equipa.
+ */
 public class MainHighLevelPane extends HBox implements Constants, PropertyChangeListener {
     private ClientObservable observable;
 
@@ -148,6 +150,11 @@ public class MainHighLevelPane extends HBox implements Constants, PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        /**
+         * Apresenta o painel o estado atual for corresponder a "Main"(Principal)
+         * e for um utilizador com premissões altas.
+         * Sempre que acontecer uma alteração na aplicação (propertyChange) vai pedir uma atualização dos eventos à logica.
+         */
         setVisible(observable.isStateMain() && observable.isHighPermission());
 
         if(observable.isAuthenticated()){

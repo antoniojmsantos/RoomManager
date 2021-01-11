@@ -23,6 +23,11 @@ public class Client extends Application {
         Platform.setImplicitExit(false);
         MyMutex mutex = new MyMutex();
 
+        /**
+         * cria o observabel que vai conter os métodos que vão evocar os métodos
+         * do controlador e faz o propertyChange após a sua evocação, para que
+         * deste modo os paineis da GUI consigam atualizar.
+         */
         ClientObservable observable = new ClientObservable(mutex);
         observable.init();
 
@@ -31,7 +36,6 @@ public class Client extends Application {
 
         PaneOrganizer organizer = new PaneOrganizer(observable);
         Scene scene = new Scene(organizer.getRoot());
-
 
         primaryStage.getIcons().add(Images.getImage(Constants.ICON));
         primaryStage.setResizable(false);

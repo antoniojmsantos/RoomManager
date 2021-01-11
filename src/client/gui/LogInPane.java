@@ -16,6 +16,9 @@ import javafx.scene.layout.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * O LoginPane é o painel que encapsula os campos necessários para a autenticação de um utilizador registado.
+ */
 public class LogInPane extends VBox implements Constants, PropertyChangeListener {
 
     private ClientObservable observable;
@@ -66,19 +69,6 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
         HBox boxAvatar = new HBox();
 
-
-        //TODO: APAGAR ISTOOOO!!!!!!!!!
-        boxAvatar.setOnMouseClicked(e->{
-            txt_username.setText("antonio@isec.docentes.pt");
-            txt_password.setText("Pilanocu123");
-            if(e.getButton() == MouseButton.SECONDARY){
-                txt_username.setText("a21270359@isec.alunos.pt");
-                txt_password.setText("Pilanocu123");
-            }
-        } );
-        /////////////////////////////
-
-
         boxAvatar.setAlignment(Pos.CENTER);
         boxAvatar.setPadding(new Insets(20));
         boxAvatar.getChildren().add(img_avatar);
@@ -128,6 +118,10 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
     }
 
+    /**
+     * Este método é evocado se o utilizador clicar na tecla ENTER em qualquer uma das caixas de texto.
+     * Evoca o método que faz o login.
+     */
     class EnterListener implements EventHandler<KeyEvent> {
         @Override
         public void handle(KeyEvent k) {
@@ -138,6 +132,12 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
         }
     }
 
+    /**
+     * Este método vai ser evocado sempre que for clicado o botão login.
+     * Faz todas as verificacoes necessárias dos campos introduzidos.
+     * Apresenta mensagens de erro se existir algum erro nos campos.
+     * Se tudo correr bem o utilizador fica autenticado.
+     */
     public void doLogin(){
         Alert alert = new Alert( Alert.AlertType.ERROR);
         alert.setTitle("");
@@ -156,10 +156,12 @@ public class LogInPane extends VBox implements Constants, PropertyChangeListener
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //ESTE MÉTODO É EXECUTADO SEMPRE QUE É FEITO ALGUM FIRE (HOUVER ALTERACAO)
+        /**
+         * Se o estado atual for "Authentication" poe este painel visivel
+         * Se não for dá reset aos controlos e poe invisivel.
+         */
 
         resetControls();
-//        setVisible(observable.isStateAuthentication());
 
         if(observable.isStateAuthentication()) {
             setVisible(true);

@@ -3,6 +3,8 @@ package client.gui;
 import client.gui.auxiliar.Constants;
 import client.gui.custom_controls.DateTimePicker;
 import client.logic.ClientObservable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,7 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.DateTimeStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import shared_data.entities.Group;
 import shared_data.entities.Room;
 import shared_data.entities.RoomFeature;
@@ -23,6 +27,7 @@ import shared_data.entities.RoomType;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +37,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
+
+/**
+ * O CreateEventPane é o painel que é apresentado a quando o utilizador (premissoes altas) quer criar um evento.
+ */
 public class CreateEventPane extends VBox implements Constants, PropertyChangeListener {
 
     private ClientObservable observable;
@@ -61,10 +70,7 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
     FilteredList<Room> filteredRoomsList;
     ObservableList<Room> roomsList;
 
-    /**
-     *
-     * @param observable
-     */
+
     public CreateEventPane(ClientObservable observable){
         this.observable = observable;
         this.observable.addPropertyChangeListener(this);
@@ -154,7 +160,9 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
             }
             return c;
         };
-        TextFormatter<Integer> durationFormatter = new TextFormatter<Integer>(
+
+
+        TextFormatter<Integer> durationFormatter = new TextFormatter<>(
                 new IntegerStringConverter(), 60, filter);
 
         spDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
@@ -265,7 +273,9 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         paneRooms.setContent(lvRooms);
         boxEventFilters.getChildren().add(paneRooms);
     }
-
+    /**
+     * Método responsável pelos listeners dos controlos que chamam a funcao de filtragem
+     */
     private void registerListeners() {
         txtRoomName.textProperty().addListener(obs->{
             calculatePredicate();
@@ -317,6 +327,9 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         });
     }
 
+    /**
+     * Método responsável por fazer a filtragem das salas
+     */
     private void calculatePredicate() {
         String filterRoomName = txtRoomName.getText();
         int filterRoomCapacity = spCapacity.getValue();
@@ -379,17 +392,33 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         boxEventFilters.getChildren().add(boxCreate);
     }
 
+    /**
+     * Este método vai ser evocado sempre que for clicado o botão CreateEvent.
+     * Faz todas as verificacoes necessárias dos campos introduzidos.
+     * Apresenta mensagens de erro se existir algum erro nos campos.
+     * Se tudo correr bem é criado um evento.
+     */
     class CreateEventListener implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent actionEvent) {
 
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+
             // Solucao temporaria!!!! O étodo getDateTime() do DateTimePicker nao está a funcionar!
             String str = dtInitialDate.getEditor().getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            LocalDateTime initialDate = LocalDateTime.parse(str, formatter);
+            LocalDateTime initialDate;
+            try{
+                initialDate = LocalDateTime.parse(str, formatter);
+            }catch (Exception e){
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText("Erro ao criar evento!");
+                alert.setContentText("A data introduzida não é valida.");
+                alert.showAndWait();
+                return;
+            }
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
             if(!lvRooms.getSelectionModel().isEmpty()){
                 int idRoom = lvRooms.getSelectionModel().getSelectedItem().getId();
                 if (!txtEventName.getText().isEmpty()) {
@@ -441,16 +470,25 @@ public class CreateEventPane extends VBox implements Constants, PropertyChangeLi
         }
     }
 
+    public void resetControls(){
+        txtRoomName.clear();
+        txtEventName.clear();
+        dtInitialDate.setDateTimeValue(LocalDateTime.now());
+        spCapacity.getValueFactory().setValue(0);
+        spDuration.getValueFactory().setValue(60);
+    }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        /**
+         * Apresenta o painel o estado atual for corresponder a CreateEvent
+         * (só entra neste estado se for um utilizador com premissoes altas)
+         * Sempre que acontecer uma alteração na aplicação (propertyChange) vai pedir uma atualização dos eventos à logica.
+         */
         if(observable.isStateCreate()){
             setVisible(true);
-            txtRoomName.clear();
-            txtEventName.clear();
-//            dtInitialDate.setDateTimeValue(LocalDateTime.now());
-//            spCapacity.getValueFactory().setValue(0);
-//            spDuration.getValueFactory().setValue(60);
+            resetControls();
             ObservableList<Group> groups = FXCollections.observableArrayList(observable.getGroups()); //List of String
             cbGroup.setItems(groups);
             cbGroup.setPromptText("Selecione um grupo:");

@@ -2,6 +2,10 @@ package client.logic;
 
 import java.io.Serializable;
 
+/**
+ * Classe responsável por armazenar todos os estados possíveis da aplicação.
+ * O controlador manipula os estados a partir do que vai decorrendo na interação do utilizador.
+ */
 public class State implements Serializable {
 
     private static final long serialVersionUID = 42L;

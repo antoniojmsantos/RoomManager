@@ -4,6 +4,10 @@ import client.logic.ClientObservable;
 import javafx.scene.control.ListCell;
 import shared_data.entities.Event;
 
+/**
+ * Classe que é uma celula da lista de eventos pendentes
+ * por cada evento pendente cria um PendingEvent e apresenta-o nesta celula
+ */
 public class ListCellPendingEvent extends ListCell<Event> {
 
     ClientObservable observable;

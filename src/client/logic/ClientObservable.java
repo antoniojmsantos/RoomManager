@@ -27,12 +27,17 @@ public class ClientObservable {
         return controller;
     }
 
-    /* property change support */
+    /**
+     * adiciona o listener ao properyChangeSupport
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    // state
+    /**
+     * métodos para obter e definir o estado atual da aplicação.
+     * A partir deste estado os paineis da GUI vao ficar visiveis ou não visiveis.
+     */
 
     public boolean isStateAuthentication(){
         return controller.isStateAuthentication();
@@ -78,6 +83,11 @@ public class ClientObservable {
         controller.setStateMain();
         support.firePropertyChange(null, null, null);
     }
+
+
+    /**
+     * chama os métodos do controlador da lógica da aplicação.
+     */
 
     public void Logout(){
         controller.Logout();

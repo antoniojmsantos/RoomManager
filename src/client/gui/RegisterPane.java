@@ -15,6 +15,9 @@ import javafx.scene.layout.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * O RegisterPane é o painel que encapsula os campos necessários para o registo de um novo utilizador.
+ */
 public class RegisterPane extends VBox implements Constants, PropertyChangeListener{
 
     private ClientObservable observable;
@@ -72,29 +75,6 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         boxRegisterInfo.setAlignment(Pos.CENTER_LEFT);
 
 
-
-//        HBox boxType = new HBox(10);
-//        boxType.setPadding(new Insets(0,0,60,0));
-//        boxType.setAlignment(Pos.CENTER_LEFT);
-//
-//        Label lblType = new Label("Registar como:");
-//        cb_rank.getItems().add("Aluno/Funcionário");
-//        cb_rank.getItems().add("Docente/Encarregado/Chefe de Equipa");
-//        cb_rank.setValue("Aluno/Funcionário");
-//
-//        ImageView img_question = new ImageView(Images.getImage(Constants.QUESTION));
-//        img_question.setFitHeight(20);
-//        img_question.setFitWidth(20);
-//        img_question.setPreserveRatio(true);
-//
-//        Tooltip tooltip = new Tooltip("Este estatuto terá de ser aprovado pelo administrador.");
-//        tooltip.setShowDelay(Duration.seconds(0.1));
-//        Tooltip.install(img_question, tooltip);
-//
-//        boxType.getChildren().addAll(lblType, cb_rank, img_question);
-
-
-
         txt_name.setPromptText("Nome");
         txt_email.setPromptText("Email da Organização");
         txt_password.setPromptText("Palavra-Passe");
@@ -103,18 +83,12 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         boxRegisterInfo.getChildren().addAll(txt_name, txt_email, txt_password );
 
 
-
-
-
         VBox boxAvatar = new VBox();
-
         boxAvatar.setMinWidth(500);
         boxAvatar.setAlignment(Pos.CENTER);
-//        boxAvatar.setPadding(new Insets(0,100,0,0));
 
 
         ImageView imgAvatar = new ImageView(Images.getImage(Constants.AVATAR));
-
         imgAvatar.setFitHeight(150);
         imgAvatar.setFitWidth(150);
         imgAvatar.setPreserveRatio(true);
@@ -142,7 +116,6 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         boxAvatar.getChildren().addAll(boxAvatarControls, imgAvatar);
 
 
-
         HBox boxMergeInfoAvatar = new HBox();
         boxMergeInfoAvatar.getChildren().addAll(boxRegisterInfo, boxAvatar);
 
@@ -152,19 +125,15 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
     public void setupRegister() {
         AnchorPane boxMerge = new AnchorPane();
-//        boxMerge.setPadding(new Insets(100,0,0,100));
         VBox boxEntrar = new VBox(15);
 
 
         boxEntrar.setPrefWidth(DIM_X_FRAME-600);
-//
 
-//        boxEntrar.setAlignment(Pos.CENTER);
 
        cbAccept = new CheckBox("Concordo que os meus dados irão ser submetidos de modo a serem analisados," +
                 " para que o administrador proceda à aprovação do meu estatuto.");
         cbAccept.setWrapText(true);
-//        check.setAlignment(Pos.CENTER_RIGHT);
 
         btRegister = new Button("Efetuar registo");
         btRegister.setMaxWidth(Double.MAX_VALUE);
@@ -175,14 +144,12 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         Hyperlink hlLogin = new Hyperlink("Já tem uma conta? Efetuar Autenticação");
         hlLogin.setOnAction(e-> observable.Logout());
         hlLogin.setFocusTraversable(false);
-//        setMargin(hl_registo, new Insets(500,0,0,0));
         boxLogin.getChildren().add(hlLogin);
 
         btRegister.setOnAction(new RegisterPane.RegisterListener());
 
         boxEntrar.getChildren().addAll(cbAccept, btRegister);
 
-//        boxMerge.setStyle("-fx-background-color: black");
 
         boxMerge.getChildren().addAll(boxEntrar, boxLogin);
 
@@ -196,6 +163,12 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
 
     }
 
+    /**
+     * Este método vai ser evocado sempre que for clicado o botão registar.
+     * Faz todas as verificacoes necessárias dos campos introduzidos.
+     * Apresenta mensagens de erro se existir algum erro nos campos.
+     * Se tudo correr bem o utilizador fica registado.
+     */
     class RegisterListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e){
@@ -248,8 +221,13 @@ public class RegisterPane extends VBox implements Constants, PropertyChangeListe
         }
     }
 
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        /**
+         * Se o estado atual for "Register" poe este painel visivel
+         * Se não for dá reset aos controlos e poe invisivel.
+         */
         if(observable.isStateRegister())
             setVisible(true);
         else{

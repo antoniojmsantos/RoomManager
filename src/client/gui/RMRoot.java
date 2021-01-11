@@ -17,6 +17,12 @@ import shared_data.helper.KeepAlive;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * O RMRoot é o painel mais abaixo da janela.
+ * Contém um RMPane que vai ser o painel que vai encapsular todos os paineis consoante o estado atual da aplicacao.
+ * Contem uma barra de menus (ações, configuracoes, etc)
+ */
+
 public class RMRoot extends VBox implements PropertyChangeListener {
 
     private final ClientObservable observable;
@@ -87,6 +93,9 @@ public class RMRoot extends VBox implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        /**
+         * Se ainda não está autenticado o submenu de terminar sessão fica inacessível.
+         */
         logoutMenuItem.setDisable((observable.isStateAuthentication() || observable.isStateRegister()));
     }
 }

@@ -5,6 +5,10 @@ import javafx.scene.image.Image;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Classe com membro estático responsável por armazenar um mapa de imagens
+ * Tem um método get pelo nome, assim sempre que for preciso uma imagem é so chamar pelo seu nome
+ */
 public class Images implements Constants {
     private static final Map<String, Image> images = new HashMap<>();
 

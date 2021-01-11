@@ -16,6 +16,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * Classe responsável por cada dia do Calendario
+ * (É um item do calendario)
+ * É um controlo que extende da VBox porque os eventos vao ser apresentado verticalmente
+ * Armazena um vetor de Eventos
+ */
 public class CalendarItem extends VBox {
 
     private final ClientObservable observable;
@@ -57,10 +63,13 @@ public class CalendarItem extends VBox {
         populateEvents(calendarDate);
     }
 
+    /**
+     * Método responsável por preencher os eventos para cada dia
+     * se for um evento num dia que ja passou aparece a cinzento
+     * se for um evento num dia que ja passou aparece a azul
+     * responsável também pela mensagem com informações do evento se passar com o rato por cima do mesmo
+     */
     public void populateEvents(LocalDate calendarDate){
-        //TODO: NAO ESQUECER DE FAZER A TOOLTIP COM A INFORMACAO DO EVENTO
-
-        //TODO PEDE OS EVENTOS AO SERVIDOR
 
         if(events != null){
             for(Event e : events){ //FOR EACH OF THE USER EVENTS POPULATE IT ON THE CALENDAR

@@ -7,6 +7,10 @@ import javafx.scene.layout.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * O RMPane que vai ser o painel que vai encapsular todos os paineis consoante o estado atual da aplicacao.
+ * Cada painel de interação que for adicionado tem de ser declarado nesta classe(objeto).
+ */
 public class RMPane extends StackPane implements Constants, PropertyChangeListener {
     private final ClientObservable observable;
 
@@ -37,7 +41,9 @@ public class RMPane extends StackPane implements Constants, PropertyChangeListen
         mainHighLevelPane = new MainHighLevelPane(observable);
         mainLowLevelPane = new MainLowLevelPane(observable);
 
-        //CRIA SE O PAINEL E ADICIONA SE SEMPRE AOS FILHOS DO PAINEL "PAI(RMPane)"
+        /**
+         * ADICIONA SE SEMPRE AOS FILHOS DO PAINEL "PAI(RMPane)"
+         */
         getChildren().addAll(loginPane, registerPane, mainHighLevelPane, mainLowLevelPane, createEventPane);
     }
 
