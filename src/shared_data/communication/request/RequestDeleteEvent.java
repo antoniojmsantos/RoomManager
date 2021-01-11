@@ -5,6 +5,9 @@ import shared_data.entities.User;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa o cancelamento de um evento pelo criador
+ */
 public class RequestDeleteEvent extends Request implements Serializable {
 
     private int idEvent;

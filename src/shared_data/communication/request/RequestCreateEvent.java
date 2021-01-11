@@ -5,6 +5,9 @@ import shared_data.communication.Request;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Request que representa a criação de um evento
+ */
 public class RequestCreateEvent extends Request implements Serializable {
     private int roomId;
     private int duration;

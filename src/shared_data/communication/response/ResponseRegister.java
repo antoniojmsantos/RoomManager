@@ -4,6 +4,9 @@ import shared_data.communication.Response;
 
 import java.io.Serializable;
 
+/**
+ * Resposta ao pedido de registo
+ */
 public class ResponseRegister extends Response implements Serializable {
 
     private int result;

@@ -2,6 +2,10 @@ package shared_data.helper;
 
 import java.io.*;
 
+/**
+ * Classe que possui os métodos de Serializar e deserialiazar objeto
+ * Métodos estáticos para não instanciar um objeto deste tipo
+ */
 public class Serializer {
 
 

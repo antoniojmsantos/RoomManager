@@ -5,7 +5,9 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 
 public class ConstructPacket {
+    //Tabela com valores primos random para calcular a checksum
     private final static int[] hashTable = { 41, 17, 13, 31, 5, 23, 11};
+    //Tamanho da tabela de hash
     private final static int HASH_TABLE_SIZE = 7;
 
     /**

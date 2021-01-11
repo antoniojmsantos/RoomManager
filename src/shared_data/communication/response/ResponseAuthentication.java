@@ -7,6 +7,13 @@ import shared_data.entities.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Representa a resposta ao Login
+ * Boolean representa sucesso ou falha no login
+ * User dados do utilizador que se logou
+ * ArrayList dos eventos pendentes
+ * ArrayList dos eventos já inscritos
+ */
 public class ResponseAuthentication extends Response implements Serializable {
 
     private final boolean authenticated;

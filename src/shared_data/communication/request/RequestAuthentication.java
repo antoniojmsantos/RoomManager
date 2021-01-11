@@ -4,6 +4,9 @@ import shared_data.communication.Request;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa o login
+ */
 public class RequestAuthentication extends Request implements Serializable {
 
     private String username;

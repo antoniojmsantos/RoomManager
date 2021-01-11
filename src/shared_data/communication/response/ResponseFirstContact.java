@@ -4,6 +4,12 @@ import shared_data.communication.Response;
 
 import java.io.Serializable;
 
+/**
+ * Resposta ao pedido de ligação primeiro contacto
+ * ipServerTCP: ip do server
+ * portTCP: porto onde está o ServerSocket à escuta
+ * Objetivo: enviar dados TCP para o cliente se ligar
+ */
 public class ResponseFirstContact extends Response implements Serializable {
 
     private String ipServerTCP;

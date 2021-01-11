@@ -6,6 +6,9 @@ import shared_data.entities.Group;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Resposta para o pedido de obtenção de todos os grupos
+ */
 public class ResponseGetGroup extends Response implements Serializable {
     private ArrayList<Group> groups;
 

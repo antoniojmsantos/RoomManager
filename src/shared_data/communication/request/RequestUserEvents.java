@@ -5,6 +5,9 @@ import shared_data.entities.User;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa um pedido de listas de eventos inscritos
+ */
 public class RequestUserEvents extends Request implements Serializable {
 
     private User user;

@@ -2,6 +2,9 @@ package shared_data.communication;
 
 import java.io.Serializable;
 
+/**
+ * Classe que representa um request
+ */
 public class Request implements Serializable {
 
     private String ip;
