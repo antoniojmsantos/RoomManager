@@ -4,6 +4,9 @@ import shared_data.communication.Response;
 
 import java.io.Serializable;
 
+/**
+ * Resposta ao pedido de apagar um evento
+ */
 public class ResponseDeleteEvent extends Response implements Serializable {
 
     private boolean result;

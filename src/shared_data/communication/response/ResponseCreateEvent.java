@@ -5,6 +5,11 @@ import shared_data.entities.Event;
 
 import java.io.Serializable;
 
+/**
+ * Resposta para o pedido de criar evento
+ * event: dados relativos ao evento
+ * errorCode: caso de erro, mostrar qul é
+ */
 public class ResponseCreateEvent extends Response implements Serializable {
 
     private static final long serialVersionUID = 42L;

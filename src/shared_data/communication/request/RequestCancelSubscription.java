@@ -5,6 +5,9 @@ import shared_data.entities.User;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa o cancelamento de uma inscrição de um evento
+ */
 public class RequestCancelSubscription extends Request implements Serializable {
 
     private int idEvent;

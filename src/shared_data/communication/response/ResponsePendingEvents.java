@@ -6,6 +6,9 @@ import shared_data.entities.Event;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Resposta onde devolve os eventos pendentes do user
+ */
 public class ResponsePendingEvents extends Response implements Serializable {
 
     private ArrayList<Event> userEvents;

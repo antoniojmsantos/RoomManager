@@ -5,6 +5,9 @@ import shared_data.entities.User;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa um evento recusado
+ */
 public class RequestDeclineEvent extends Request implements Serializable {
 
     private int idEvent;

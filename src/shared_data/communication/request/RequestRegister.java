@@ -4,6 +4,9 @@ import shared_data.communication.Request;
 
 import java.io.Serializable;
 
+/**
+ * Request que representa o registo no sistema de um user
+ */
 public class RequestRegister extends Request implements Serializable {
 
     private String username;
